@@ -31,7 +31,10 @@ try:
     github_token = os.getenv("GITHUB_TOKEN")
     print("GitHub token available:", bool(github_token))
     if github_token:
-        print("Token starts with:", github_token[:4] + "..." if len(github_token) > 4 else "")
+        print(
+            "Token starts with:",
+            f"{github_token[:4]}..." if len(github_token) > 4 else "",
+        )
 except Exception as e:
     print("Error loading environment variables:", e)
 
