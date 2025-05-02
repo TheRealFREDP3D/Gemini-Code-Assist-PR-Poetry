@@ -247,6 +247,12 @@ def get_poem_with_client(prompt, client_filename):
         else:
             return result
 
+    except FileNotFoundError as e:
+        print(f"    Client file not found: {e}")
+        return None
+    except subprocess.CalledProcessError as e:
+        print(f"    Client execution failed: {e}")
+        return None
     except Exception as e:
         print(f"    Error using client {client_filename}: {e}")
         return None
