@@ -1,2 +1,10 @@
 /.history
 /.snapshots
+/.env
+/.dev-notes
+/.venv
+/.dev_notes
+/logs
+/__pycache__
+*.pyc
+*.pyo
