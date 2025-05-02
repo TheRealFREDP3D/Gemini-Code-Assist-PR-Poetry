@@ -66,6 +66,14 @@ All notable changes to this project will be documented in this file.
 - Updated documentation with new features
 - Reorganized project structure for better maintainability
 
+## [1.4.1] - 2025-05-05
+
+### Changed
+
+- Updated poem formatting in `gem-flowers.md` to remove Markdown blockquote formatting (removed '>' prefix from each line)
+- Modified code to exclude "NO_POEM" entries from the markdown file while preserving them in the JSON file
+- Updated both `get_new_flowers.py` and development utilities to maintain consistent formatting
+
 ## [Future Plans]
 
 - Web interface for browsing the collection

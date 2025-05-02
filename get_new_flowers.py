@@ -671,10 +671,13 @@ def main():
             with open(md_file, 'w', encoding='utf-8') as f:
                 f.write("# Gemini Code Assist - PR Poetry\n\n")
 
-                for poem in all_poems:
+                # Filter out NO_POEM entries for the markdown file
+                filtered_poems = [poem for poem in all_poems if not (len(poem.get("poem", [])) == 1 and poem.get("poem", [""])[0] == "\"NO_POEM\"")]
+
+                for poem in filtered_poems:
                     f.write("---\n\n")
                     for line in poem.get("poem", []):
-                        f.write(f"  > {line}\n")
+                        f.write(f"  {line}\n")
                     f.write("\n")
                     f.write(f"  <{poem.get('link')}>\n")
                     f.write(f"  \n  _From: {poem.get('repository')}_\n\n")
