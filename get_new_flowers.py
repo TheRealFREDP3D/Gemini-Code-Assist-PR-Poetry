@@ -45,8 +45,11 @@ def load_custom_llm_models():
             data = json.load(f)
 
         # Clean up the model names (remove trailing commas)
-        models = [model.rstrip(',') for model in data.get("litellm_models", [])]
-        return models
+        try:
+            models = [model.rstrip(',') for model in data.get("litellm_models", [])]
+        except Exception as e:
+            print(f"Error processing model names: {e}")
+            return []
     except Exception as e:
         print(f"Error loading custom LLM models: {e}")
         return []
