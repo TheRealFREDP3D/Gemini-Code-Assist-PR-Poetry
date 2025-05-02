@@ -161,16 +161,17 @@ def get_review_comments_for_pr(owner, repo, pr_number):
     reviews = response.json()
     print(f"Found {len(reviews)} reviews for PR #{pr_number}")
 
-    # Extract the body from each review
-    review_comments = []
-    for review in reviews:
-        if review.get("body") and review.get("user") and "bot" in review["user"].get("login", ""):
-            review_comments.append({
-                "body": review["body"],
-                "user": review["user"],
-                "html_url": review.get("html_url", "")
-            })
-
+    review_comments = [
+        {
+            "body": review["body"],
+            "user": review["user"],
+            "html_url": review.get("html_url", ""),
+        }
+        for review in reviews
+        if review.get("body")
+        and review.get("user")
+        and "bot" in review["user"].get("login", "")
+    ]
     print(f"Found {len(review_comments)} review comments from bots for PR #{pr_number}")
     return review_comments
 
