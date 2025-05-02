@@ -10,10 +10,8 @@
 
   <https://github.com/TheRealFREDP3D/George_Was_Right/pull/12#pullrequestreview-2811844426>
   
-  _From: TheRealFREDP3D/George_Was_Right_
-
 ---
-
+  
   > A manager's plight,
   > Names clashing in the night,
   > Rename, refactor,
