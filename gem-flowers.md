@@ -1,6 +1,6 @@
 # Gemini Code Assist - PR Poetry
   
-Here they are are:  
+Here they are:
   
 ---
   
