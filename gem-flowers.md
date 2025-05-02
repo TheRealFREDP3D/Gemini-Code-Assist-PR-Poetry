@@ -22,3 +22,9 @@ Here they are are:
   
   ---
 
+>A git ignore file,  
+>Keeps secrets safe and sound,  
+>Snapshots hidden now.
+  https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/1#pullrequestreview-2811851372
+
+  ---  
