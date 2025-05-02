@@ -99,6 +99,8 @@ See [CHANGELOG.md](./CHANGELOG.md) for version history and updates.
 - `llm_client/` - LLM client implementations and configuration
 - `logs/` - Log files with detailed information about collection runs
 - `tests/` - Test scripts and utilities
+- `utils/` - Utility scripts and tools
+  - `get-pr-conversations/` - Tool for fetching and saving complete PR conversations
 
 ---
 

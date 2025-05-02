@@ -8,3 +8,7 @@
 /__pycache__
 *.pyc
 *.pyo
+.sourcetrail/Gemini-PR-Review-Poetry.srctrlbm
+.sourcetrail/Gemini-PR-Review-Poetry.srctrldb
+.sourcetrail/Gemini-PR-Review-Poetry.srctrlprj
+docs/header.jfif

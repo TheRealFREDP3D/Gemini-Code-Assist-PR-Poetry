@@ -53,6 +53,11 @@ All notable changes to this project will be documented in this file.
 - Automatic fallback to alternative models when rate limits are encountered
 - Comprehensive logging system with log rotation
 - JSON format for easier programmatic access to poems
+- PR conversation fetcher utility in `utils/get-pr-conversations/`
+  - Fetches complete PR conversations including comments, reviews, and details
+  - Supports Markdown and JSON output formats
+  - Uses GitHub token from `.env` file
+  - Can fetch single PR, multiple PRs, or latest PRs
 
 ### Changed
 
