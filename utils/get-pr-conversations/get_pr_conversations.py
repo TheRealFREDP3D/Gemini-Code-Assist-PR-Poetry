@@ -208,10 +208,11 @@ def parse_args():
     return parser.parse_args()
 
 def fetch_latest_prs(owner: str, repo: str, count: int, headers: Dict[str, str]) -> List[int]:
-    """Fetch the latest N pull request numbers."""
     url = f"{GITHUB_API_BASE_URL}/repos/{owner}/{repo}/pulls?state=all&sort=updated&direction=desc&per_page={count}"
     response = requests.get(url, headers=headers)
     response.raise_for_status()
+    return [pr["number"] for pr in response.json()]
+
     return [pr["number"] for pr in response.json()]
 
 def process_pr(owner: str, repo: str, pr_number: int, token: str, output_path: str, format_type: str = "md") -> None:
