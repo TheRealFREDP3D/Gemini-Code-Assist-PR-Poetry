@@ -278,5 +278,7 @@ if __name__ == "__main__":
             print(f"Processed {len(pr_numbers)} pull requests. Results saved in {args.output_dir}")
     except requests.HTTPError as e:
         print(f"HTTP error occurred: {e}")
+    except OSError as e:
+        print(f"OS error occurred: {e}")
     except Exception as e:
         print(f"An error occurred: {e}")
