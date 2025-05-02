@@ -14,7 +14,7 @@ But maybe weird is good. Maybe it's beautiful.
 
 ---
 
-📖 A growing collection lives in [`flowers.md`](./gem-flowers.md)
+📖 A growing collection lives in [`gem-flowers.md`](./gem-flowers.md)
 
 ---
 
