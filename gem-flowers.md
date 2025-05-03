@@ -1,31 +1,33 @@
 # Gemini Code Assist - PR Poetry
 
-<<<<<<< HEAD
----
-
-  he models churn,
-  poem sought in the code,
-  rrors now tamed.
-
-  <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/13#pullrequestreview-2813236452>
-=======
 ## Collection Statistics
 
 | Metric | Value |
 |--------|-------|
-| Total Poems | 5 |
+| Total Poems | 6 |
 | Repositories Scanned | 1 |
-| PRs Scanned | 4 |
-| Last Updated | 2025-05-03 10:37:16 |
+| PRs Scanned | 5 |
+| New Poems (This Run) | 6 |
+| Duplicates Found | 0 |
+| Last Updated | 2025-05-03 11:50:00 |
 
 ---
 
-   **Extracted Poem Lines:**
-   ```
+   The models speak in verse,
+   A poem from the codeiverse,
+   If one should fail,
+   Another will prevail,
+   In poetry, we immerse.
+
+  <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/14#pullrequestreview-2813252899>
+  
+  _From: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry_
+
+---
+
    The models churn,
    A poem sought in the code,
    Errors now tamed.
-   ```
 
   <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/13#pullrequestreview-2813236452>
   
@@ -33,29 +35,9 @@
 
 ---
 
-   **Extracted Poem Lines:**
-    * The addition of .gitignore entries is good practice.
-    * The gem-flowers.md file is an interesting way to document PR reviews.
-
-  <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/1#pullrequestreview-2811851484>
->>>>>>> bc3a557bc97e3891683aa8a4013ca846176b5eba
-  
-  _From: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry_
-
----
-
-<<<<<<< HEAD
-  From poetry's hold,
-  A tool for PR tales unfolds,
-  PullPal stands alone.
-=======
-   **Extracted Poem Lines:**
-   ```
-   From poetry's hold,
-   A tool for PR tales unfolds,
+   From poetry's hold,  
+   A tool for PR tales unfolds,  
    PullPal stands alone.
-   ```
->>>>>>> bc3a557bc97e3891683aa8a4013ca846176b5eba
 
   <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/12#pullrequestreview-2812797068>
   
@@ -63,16 +45,9 @@
 
 ---
 
-<<<<<<< HEAD
-  A bot's gentle verse,
-  LLM's wisdom to immerse,
-  Code's poetry blooms.
-=======
-   **Extracted Poem Lines:**
    A bot's gentle verse,
    LLM's wisdom to immerse,
    Code's poetry blooms.
->>>>>>> bc3a557bc97e3891683aa8a4013ca846176b5eba
 
   <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/2#pullrequestreview-2812381557>
   
@@ -80,93 +55,21 @@
 
 ---
 
-<<<<<<< HEAD
-   A template's gentle guide,
-   Placeholders where models reside,
-   Clarity's soft grace,
-   In the `.env` space,
-   For agents, plans, side by side.
-
-  <https://github.com/TheRealFREDP3D/George_Was_Right/pull/12#pullrequestreview-2811844426>
-  
-  _From: TheRealFREDP3D/George_Was_Right_
-
----
-
-  A manager's plight,
-  Names clashing in the night,
-  Rename, refactor,
-  Code satisfaction factor,
-  Now clarity shines bright.
-
-  <https://github.com/TheRealFREDP3D/Making-BanditGUI/pull/1#pullrequestreview-2792740907>
-  
-  _From: TheRealFREDP3D/Making-BanditGUI_
-
----
-
-  A terminal's tale,
-  With SSH, no fail,
-  Bandit's secrets unfold,
-  In code, brave and bold,
-  A GUI to prevail.
-
-  <https://github.com/TheRealFREDP3D/Making-BanditGUI/pull/7#pullrequestreview-2796453558>
-  
-  _From: TheRealFREDP3D/Making-BanditGUI_
-
----
-
-  A system's context,
-  Diagrams draw the clear path,
-  Code's intent shown.
-
-  <https://github.com/TheRealFREDP3D/Making-BanditGUI/pull/10#pullrequestreview-2809083426>
-  
-  _From: TheRealFREDP3D/Making-BanditGUI_
-
----
-
-  A git ignore file,
-  Keeps secrets safe and sound,
-  Snapshots hidden now.
-
-  <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/1#pullrequestreview-2811851372>
-  
-  _From: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry_
-
----
-
-  A clean refactor,
-  Code shines, bugs take flight now,
-  A better system.
-
-  <https://github.com/TheRealFREDP3D/George_Was_Right/pull/11#pullrequestreview-2811030571>
-  
-  _From: TheRealFREDP3D/George_Was_Right_
-
----
-
-  A template's gentle guide,
-  Placeholders where models reside,
-  Clarity's soft grace,
-  In the .env space,
-  For agents, plans, side by side.
-
-  <https://github.com/TheRealFREDP3D/George_Was_Right/pull/12?notification_referrer_id=NT_kwDOBzL_7LUxNjE4OTA2MDczMDoxMjA3ODI4Mjg#pullrequestreview-2811844426>
-  
-  _From: TheRealFREDP3D/George_Was_Right_
-
-=======
-   **Extracted Poem Lines:**
-   ```
    A git ignore file,
    Keeps secrets safe and sound,
    Snapshots hidden now.
-   ```
 
   <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/1#pullrequestreview-2811851372>
   
   _From: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry_
 
->>>>>>> bc3a557bc97e3891683aa8a4013ca846176b5eba
+---
+
+   **Extracted Poem Lines:**
+   - The addition of .gitignore entries is good practice.
+   - The gem-flowers.md file is an interesting way to document PR reviews.
+
+  <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/1#pullrequestreview-2811851484>
+  
+  _From: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry_
+
