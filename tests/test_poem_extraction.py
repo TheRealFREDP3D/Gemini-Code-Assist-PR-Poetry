@@ -51,7 +51,7 @@ The changes look good, but please consider adding more documentation.
 
         self.assertIsNotNone(poem_lines)
         self.assertIsNotNone(link)
-        self.assertEqual(len(poem_lines), 4)  # 3 poem lines + 1 empty line
+        self.assertEqual(len(poem_lines), 3)  # 3 poem lines
         self.assertEqual(poem_lines[0], " A system's context,")
         self.assertEqual(link, "<https://github.com/TheRealFREDP3D/Making-BanditGUI/pull/10#pullrequestreview-2809083426>")
 

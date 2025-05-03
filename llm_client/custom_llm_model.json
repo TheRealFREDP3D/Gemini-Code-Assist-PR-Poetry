@@ -5,5 +5,5 @@
     "gemini/gemini-1.5-flash-8b",
     "ollama/qwen2.5:1.5b",
     "ollama/3.2:1b-instruct"
-    ]
+]
 }

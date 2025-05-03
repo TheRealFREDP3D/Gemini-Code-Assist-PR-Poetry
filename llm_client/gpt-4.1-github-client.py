@@ -18,7 +18,7 @@ response = client.complete(
         UserMessage("What is the capital of France?"),
     ],
     temperature=1,
-    top_p=1
+    top_p=1,
     model=model
 )
 
