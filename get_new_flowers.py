@@ -452,7 +452,7 @@ def extract_poem_from_comment(comment_body):
         # Extract poem lines and preserve formatting
         ai_poem_lines = poem_text.strip().splitlines()
         # Preserve original formatting but ensure each line has at least one space prefix
-        ai_poem_lines = [f" {line}" if not line.startswith(" ") else line for line in ai_poem_lines if line.strip() or line == ""]
+        ai_poem_lines = [line if line.startswith(" ") else f" {line}" for line in ai_poem_lines if line.strip() or line == ""]
 
         # Look for a GitHub link in the comment
         for line in lines:
