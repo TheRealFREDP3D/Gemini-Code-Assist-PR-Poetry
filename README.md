@@ -10,26 +10,26 @@ A snippet of poetry — inspired by the PR itself.
 It took me off guard. For a moment I wondered:
 **"This is a weird feature… why?"**
 
-I know it's weird...  
-But maybe weird is good.  
-Maybe it's beautiful.  
+I know it's weird...
+But maybe weird is good.
+Maybe it's beautiful.
 
 ---
 
 📖 A growing collection of these poetry nuggets lives in [`gem-flowers.md`](./gem-flowers.md) and [`gem-flowers.json`](./gem-flowers.json).
 
-💻 A made a tool to automatically collect these gems from your GitHub repositories and any public repositories. Go try it out and start a collection of your own!  
+💻 A made a tool to automatically collect these gems from your GitHub repositories and any public repositories. Go try it out and start a collection of your own!
 
 ---
-  
-![Collection Stats](/docs/stats.jpg)  
-  
+
+![Collection Stats](/docs/stats.jpg)
+
 ## 🌱 Contributing
 
 Add your poetic PR discoveries to the collection and give a better home for these poetic snippets than their obscure Pull Request comments bottom lines. Give them some light and air.
 
-I bet some gems will surface soon enough. ✨  
-  
+I bet some gems will surface soon enough. ✨
+
 ### Automated Collection
 
 You can use the `get_new_flowers.py` script to automatically collect poems from GitHub repositories:
@@ -76,6 +76,7 @@ GEMINI_API_KEY=your_gemini_api_key
 - Includes metadata about the source repository and PR
 - Uses LLM models to identify poems in comments
 - Automatically falls back to alternative models when rate limits are encountered
+- Intelligently tracks failed models to avoid retrying them
 - Logs detailed information about the collection process
 - Supports multiple LLM providers (OpenAI, Azure, Gemini, Ollama, etc.)
 

@@ -31,11 +31,14 @@ LLM_CLIENTS = [
     "phi4-client.py"
 ]
 
-# Keep track of which clients have been tried
-tried_clients = []
+# Keep track of which clients have been tried and failed
+failed_clients = []
 
-# Keep track of which litellm models have been tried
-tried_litellm_models = []
+# Keep track of which litellm models have been tried and failed
+failed_litellm_models = []
+
+# Primary LiteLLM models to try in order
+PRIMARY_LITELLM_MODELS = ["github/gpt-4.1", "github/gpt-4o"]
 
 def load_custom_llm_models():
     """Load custom LLM models from the JSON file."""
@@ -47,6 +50,7 @@ def load_custom_llm_models():
         # Clean up the model names (remove trailing commas)
         try:
             models = [model.rstrip(',') for model in data.get("litellm_models", [])]
+            return models
         except Exception as e:
             print(f"Error processing model names: {e}")
             return []
@@ -203,27 +207,30 @@ def get_poem_with_client(prompt, client_filename):
         # Create a temporary modified version of the client
         temp_client_path = os.path.join("llm_client", f"temp_{client_filename}")
 
+        # Clean up the prompt - replace newlines with spaces and escape quotes
+        clean_prompt = prompt.replace('\n', ' ').replace('"', '\\"')
+
         # Replace the example prompt with our poem extraction prompt
         if "azure.ai.inference" in client_code:
             # Azure AI Inference client pattern
             client_code = client_code.replace(
                 'UserMessage("What is the capital of France?")',
-                'UserMessage("' + prompt.replace('"', '\\"') + '")'
+                'UserMessage("' + clean_prompt + '")'
             ).replace(
                 'UserMessage("Can you explain the basics of machine learning?")',
-                'UserMessage("' + prompt.replace('"', '\\"') + '")'
+                'UserMessage("' + clean_prompt + '")'
             )
         elif "openai" in client_code:
             # OpenAI client pattern
             client_code = client_code.replace(
                 '"content": "What is the capital of France?"',
-                '"content": "' + prompt.replace('"', '\\"') + '"'
+                '"content": "' + clean_prompt + '"'
             )
         elif "mistralai" in client_code:
             # Mistral client pattern
             client_code = client_code.replace(
                 'UserMessage("What is the capital of France?")',
-                'UserMessage("' + prompt.replace('"', '\\"') + '")'
+                'UserMessage("' + clean_prompt + '")'
             )
 
         # Write the modified client to a temporary file
@@ -249,13 +256,22 @@ def get_poem_with_client(prompt, client_filename):
             return result
 
     except FileNotFoundError as e:
-        print(f"    Client file not found: {e}")
+        error_msg = f"Client file not found: {e}"
+        print(f"    {error_msg}")
+        run_stats["errors"].append(error_msg)
+        failed_clients.append(client_filename)
         return None
     except subprocess.CalledProcessError as e:
-        print(f"    Client execution failed: {e}")
+        error_msg = f"Client execution failed: {e}"
+        print(f"    {error_msg}")
+        run_stats["errors"].append(error_msg)
+        failed_clients.append(client_filename)
         return None
     except Exception as e:
-        print(f"    Error using client {client_filename}: {e}")
+        error_msg = f"Error using client {client_filename}: {e}"
+        print(f"    {error_msg}")
+        run_stats["errors"].append(error_msg)
+        failed_clients.append(client_filename)
         return None
 
 def extract_poem_from_comment(comment_body):
@@ -272,7 +288,8 @@ def extract_poem_from_comment(comment_body):
     for line in lines:
         stripped = line.strip()
         if stripped.startswith(" ") or (in_poem and stripped == ''):
-            poem_lines.append(stripped)
+            # Preserve the original line with its formatting
+            poem_lines.append(line)
             in_poem = True
         elif re.match(r"<https://github\.com/.+?>", stripped):
             link_line = stripped
@@ -296,41 +313,19 @@ def extract_poem_from_comment(comment_body):
     Extract ONLY the poem lines (if any):
     """
 
-    # Try with primary model first (github/gpt-4.1)
-    try:
-        print("    Trying to extract poem using LiteLLM with github/gpt-4.1...")
-        model_name = "github/gpt-4.1"
-        response = litellm.completion(
-            model=model_name,
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.1,
-            max_tokens=500
-        )
+    # Try primary LiteLLM models in order
+    poem_text = None
+    rate_limit_error = False
+    wait_time = 0
 
-        # Track model usage
-        run_stats["models_used"].add(model_name)
+    # Try each primary model that hasn't failed yet
+    for model_name in PRIMARY_LITELLM_MODELS:
+        if model_name in failed_litellm_models:
+            print(f"    Skipping {model_name} - previously failed")
+            continue
 
-        poem_text = response.choices[0].message.content.strip()
-        print(f"    LiteLLM response: {poem_text[:100]}...")
-
-    except Exception as e:
-        error_msg = f"Error using github/gpt-4.1: {e}"
-        print(f"    {error_msg}")
-        run_stats["errors"].append(error_msg)
-        # Check if it's a rate limit error
-        rate_limit_error = False
-        wait_time = 0
-        if "rate limit" in str(e).lower() or "429" in str(e):
-            rate_limit_error = True
-            # Try to extract wait time
-            wait_match = re.search(r"wait (\d+) seconds", str(e))
-            if wait_match:
-                wait_time = int(wait_match.group(1))
-
-        # Try with fallback model (github/gpt-4o)
         try:
-            print("    Trying fallback model github/gpt-4o...")
-            model_name = "github/gpt-4o"
+            print(f"    Trying to extract poem using LiteLLM with {model_name}...")
             response = litellm.completion(
                 model=model_name,
                 messages=[{"role": "user", "content": prompt}],
@@ -342,63 +337,101 @@ def extract_poem_from_comment(comment_body):
             run_stats["models_used"].add(model_name)
 
             poem_text = response.choices[0].message.content.strip()
-            print(f"    LiteLLM fallback response: {poem_text[:100]}...")
+            print(f"    LiteLLM response from {model_name}: {poem_text[:100]}...")
 
-        except Exception as e2:
-            error_msg = f"Error using fallback model github/gpt-4o: {e2}"
+            # If we got a valid response, break the loop
+            if poem_text and poem_text != "NO_POEM":
+                break
+
+        except Exception as e:
+            error_msg = f"Error using {model_name}: {e}"
             print(f"    {error_msg}")
             run_stats["errors"].append(error_msg)
 
-            # If both models failed, try custom LiteLLM models
-            poem_text = None
-            custom_models = load_custom_llm_models()
+            # Add this model to the failed models list
+            failed_litellm_models.append(model_name)
 
-            # Try custom LiteLLM models first
-            for model in custom_models:
-                if model not in tried_litellm_models:
-                    tried_litellm_models.append(model)
+            # Check if it's a rate limit error
+            if "rate limit" in str(e).lower() or "429" in str(e):
+                rate_limit_error = True
+                # Try to extract wait time
+                wait_match = re.search(r"wait (\d+) seconds", str(e))
+                if wait_match:
+                    wait_time = int(wait_match.group(1))
 
-                    # Skip Ollama models if Ollama is not running
-                    if model.startswith("ollama/") and not is_ollama_running():
-                        print(f"    Skipping {model} - Ollama server is not running")
-                        continue
+    # If primary models failed or returned NO_POEM, try custom LiteLLM models
+    if not poem_text or poem_text == "NO_POEM":
+        custom_models = load_custom_llm_models()
 
-                    try:
-                        print(f"    Trying custom LiteLLM model: {model}")
-                        response = litellm.completion(
-                            model=model,
-                            messages=[{"role": "user", "content": prompt}],
-                            temperature=0.1,
-                            max_tokens=500
-                        )
+        # Try each custom model that hasn't failed yet
+        for model in custom_models:
+            if model in failed_litellm_models:
+                print(f"    Skipping {model} - previously failed")
+                continue
 
-                        # Track model usage
-                        run_stats["models_used"].add(model)
+            # Skip Ollama models if Ollama is not running
+            if model.startswith("ollama/") and not is_ollama_running():
+                print(f"    Skipping {model} - Ollama server is not running")
+                continue
 
-                        poem_text = response.choices[0].message.content.strip()
-                        print(f"    Custom model response: {poem_text[:100]}...")
+            try:
+                print(f"    Trying custom LiteLLM model: {model}")
+                response = litellm.completion(
+                    model=model,
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.1,
+                    max_tokens=500
+                )
 
-                        if poem_text and poem_text != "NO_POEM":
-                            break
-                    except Exception as e:
-                        error_msg = f"Error using custom model {model}: {e}"
-                        print(f"    {error_msg}")
-                        run_stats["errors"].append(error_msg)
+                # Track model usage
+                run_stats["models_used"].add(model)
 
-            # If custom models failed, try alternative clients
-            if not poem_text or poem_text == "NO_POEM":
-                for client in LLM_CLIENTS:
-                    if client not in tried_clients:
-                        tried_clients.append(client)
-                        poem_text = get_poem_with_client(prompt, client)
-                        if poem_text and poem_text != "NO_POEM":
-                            break
+                poem_text = response.choices[0].message.content.strip()
+                print(f"    Custom model response: {poem_text[:100]}...")
 
+                if poem_text and poem_text != "NO_POEM":
+                    break
+            except Exception as e:
+                error_msg = f"Error using custom model {model}: {e}"
+                print(f"    {error_msg}")
+                run_stats["errors"].append(error_msg)
+
+                # Add this model to the failed models list
+                failed_litellm_models.append(model)
+
+        # If custom models failed or returned NO_POEM, try alternative clients
+        if not poem_text or poem_text == "NO_POEM":
+            for client in LLM_CLIENTS:
+                if client in failed_clients:
+                    print(f"    Skipping client {client} - previously failed")
+                    continue
+
+                try:
+                    client_poem = get_poem_with_client(prompt, client)
+                    if client_poem and client_poem != "NO_POEM":
+                        poem_text = client_poem
+                        break
+                except Exception as e:
+                    error_msg = f"Error using client {client}: {e}"
+                    print(f"    {error_msg}")
+                    run_stats["errors"].append(error_msg)
+
+                    # Add this client to the failed clients list
+                    failed_clients.append(client)
+
+            # If all models and clients failed, exit with appropriate message
             if not poem_text or poem_text == "NO_POEM":
                 if rate_limit_error:
                     print(f"    All LLM models and clients failed or rate limited. Need to wait {wait_time} seconds.")
                 else:
                     print("    All LLM models and clients failed.")
+
+                # If all models have failed, exit the program
+                if (len(failed_litellm_models) >= len(PRIMARY_LITELLM_MODELS) + len(load_custom_llm_models()) and
+                    len(failed_clients) >= len(LLM_CLIENTS)):
+                    print("ERROR: All available LLM models have failed. Exiting program.")
+                    sys.exit(1)
+
                 return (None, None)
 
     # Process the response
@@ -407,9 +440,10 @@ def extract_poem_from_comment(comment_body):
             print("    No poem found by LLM")
             return (None, None)
 
-        # Extract poem lines
+        # Extract poem lines and preserve formatting
         ai_poem_lines = poem_text.strip().splitlines()
-        ai_poem_lines = [f" {line}" for line in ai_poem_lines if line.strip()]
+        # Preserve original formatting but ensure each line has at least one space prefix
+        ai_poem_lines = [f" {line}" if not line.startswith(" ") else line for line in ai_poem_lines if line.strip() or line == ""]
 
         # Look for a GitHub link in the comment
         for line in lines:
@@ -442,8 +476,19 @@ def extract_poem_from_comment(comment_body):
 
 def create_poem_entry(poem_lines, link, repo_owner, repo_name, pr_number):
     """Create a JSON-friendly poem entry."""
-    # Clean up poem lines (remove '>' prefix and trim)
-    cleaned_lines = [line[2:].strip() if line.startswith(" ") else line.strip() for line in poem_lines if line.strip()]
+    # Clean up poem lines (remove '>' prefix but preserve indentation and formatting)
+    cleaned_lines = []
+    for line in poem_lines:
+        if line.strip():  # Skip empty lines
+            if line.startswith(" "):
+                # Remove the first two characters (space and '>') if it's a quoted line
+                # but preserve the rest of the formatting
+                if len(line) > 2 and line[1] == '>':
+                    cleaned_lines.append(line[2:])
+                else:
+                    cleaned_lines.append(line)
+            else:
+                cleaned_lines.append(line.strip())
 
     # Clean up link
     if link.startswith("<") and link.endswith(">"):
@@ -676,8 +721,20 @@ def main():
 
                 for poem in filtered_poems:
                     f.write("---\n\n")
+                    # Ensure each line is written separately with proper formatting
                     for line in poem.get("poem", []):
-                        f.write(f"  {line}\n")
+                        # Preserve the original formatting but ensure consistent indentation
+                        # Add two spaces at the beginning for consistent indentation
+                        if line.strip():
+                            # If the line doesn't start with spaces, add indentation
+                            if not line.startswith(" "):
+                                f.write(f"  {line}\n")
+                            else:
+                                # If it already has spaces, preserve them
+                                f.write(f"  {line}\n")
+                        else:
+                            # For empty lines, just write a newline
+                            f.write("\n")
                     f.write("\n")
                     f.write(f"  <{poem.get('link')}>\n")
                     f.write(f"  \n  _From: {poem.get('repository')}_\n\n")

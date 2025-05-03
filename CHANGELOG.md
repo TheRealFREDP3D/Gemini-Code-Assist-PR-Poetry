@@ -74,6 +74,23 @@ All notable changes to this project will be documented in this file.
 - Modified code to exclude "NO_POEM" entries from the markdown file while preserving them in the JSON file
 - Updated both `get_new_flowers.py` and development utilities to maintain consistent formatting
 
+## [1.4.2] - 2025-05-06
+
+### Fixed
+
+- Improved LLM fallback logic to properly track and exclude failed models
+- Fixed JSON format issues in `custom_llm_model.json` to prevent parsing errors
+- Enhanced client script handling with better prompt cleaning for newlines and escape quotes
+- Added proper error tracking and logging for all model execution failures
+- Fixed syntax errors in LLM client scripts when processing multi-line prompts
+- Added system exit when all available LLM models have failed
+
+### Changed
+
+- Reorganized model fallback order: primary LiteLLM models → custom LiteLLM models → alternative client scripts
+- Improved error messages to provide more context about failures
+- Enhanced logging to track which models were tried and which failed
+
 ## [Future Plans]
 
 - Web interface for browsing the collection
