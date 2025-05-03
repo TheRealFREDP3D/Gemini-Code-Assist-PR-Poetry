@@ -1,0 +1,52 @@
+[
+  {
+    "poem": [
+      " **Extracted Poem Lines:**",
+      " ```",
+      " From poetry's hold,",
+      " A tool for PR tales unfolds,",
+      " PullPal stands alone.",
+      " ```"
+    ],
+    "link": "https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/12#pullrequestreview-2812797068",
+    "repository": "TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry",
+    "pr_number": 12,
+    "collected_at": "2025-05-03T09:33:50.707975"
+  },
+  {
+    "poem": [
+      " **Extracted Poem Lines:**",
+      " A bot's gentle verse,",
+      " LLM's wisdom to immerse,",
+      " Code's poetry blooms."
+    ],
+    "link": "https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/2#pullrequestreview-2812381557",
+    "repository": "TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry",
+    "pr_number": 2,
+    "collected_at": "2025-05-03T09:33:58.628619"
+  },
+  {
+    "poem": [
+      " **NO_POEM**",
+      " The GitHub comment does not contain any poetic content or lines from a poem."
+    ],
+    "link": "https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/2#pullrequestreview-2812382198",
+    "repository": "TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry",
+    "pr_number": 2,
+    "collected_at": "2025-05-03T09:33:59.667989"
+  },
+  {
+    "poem": [
+      " **Extracted Poem Lines:**",
+      " ```",
+      " A git ignore file,",
+      " Keeps secrets safe and sound,",
+      " Snapshots hidden now.",
+      " ```"
+    ],
+    "link": "https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/1#pullrequestreview-2811851372",
+    "repository": "TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry",
+    "pr_number": 1,
+    "collected_at": "2025-05-03T09:34:03.140708"
+  }
+]

@@ -1,5 +1,6 @@
 # Gemini Code Assist - PR Poetry
 
+<<<<<<< HEAD
 ---
 
   he models churn,
@@ -7,14 +8,54 @@
   rrors now tamed.
 
   <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/13#pullrequestreview-2813236452>
+=======
+## Collection Statistics
+
+| Metric | Value |
+|--------|-------|
+| Total Poems | 5 |
+| Repositories Scanned | 1 |
+| PRs Scanned | 4 |
+| Last Updated | 2025-05-03 10:37:16 |
+
+---
+
+   **Extracted Poem Lines:**
+   ```
+   The models churn,
+   A poem sought in the code,
+   Errors now tamed.
+   ```
+
+  <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/13#pullrequestreview-2813236452>
   
   _From: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry_
 
 ---
 
+   **Extracted Poem Lines:**
+    * The addition of .gitignore entries is good practice.
+    * The gem-flowers.md file is an interesting way to document PR reviews.
+
+  <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/1#pullrequestreview-2811851484>
+>>>>>>> bc3a557bc97e3891683aa8a4013ca846176b5eba
+  
+  _From: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry_
+
+---
+
+<<<<<<< HEAD
   From poetry's hold,
   A tool for PR tales unfolds,
   PullPal stands alone.
+=======
+   **Extracted Poem Lines:**
+   ```
+   From poetry's hold,
+   A tool for PR tales unfolds,
+   PullPal stands alone.
+   ```
+>>>>>>> bc3a557bc97e3891683aa8a4013ca846176b5eba
 
   <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/12#pullrequestreview-2812797068>
   
@@ -22,9 +63,16 @@
 
 ---
 
+<<<<<<< HEAD
   A bot's gentle verse,
   LLM's wisdom to immerse,
   Code's poetry blooms.
+=======
+   **Extracted Poem Lines:**
+   A bot's gentle verse,
+   LLM's wisdom to immerse,
+   Code's poetry blooms.
+>>>>>>> bc3a557bc97e3891683aa8a4013ca846176b5eba
 
   <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/2#pullrequestreview-2812381557>
   
@@ -32,6 +80,7 @@
 
 ---
 
+<<<<<<< HEAD
    A template's gentle guide,
    Placeholders where models reside,
    Clarity's soft grace,
@@ -108,3 +157,16 @@
   
   _From: TheRealFREDP3D/George_Was_Right_
 
+=======
+   **Extracted Poem Lines:**
+   ```
+   A git ignore file,
+   Keeps secrets safe and sound,
+   Snapshots hidden now.
+   ```
+
+  <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/1#pullrequestreview-2811851372>
+  
+  _From: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry_
+
+>>>>>>> bc3a557bc97e3891683aa8a4013ca846176b5eba

@@ -1,0 +1,471 @@
+$ powershell
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Try the new cross-platform PowerShell https://aka.ms/pscore6
+
+Warning: PowerShell detected that you might be using a screen reader and has disabled PSReadLine for compatibility purposes. If you want to re-enable it, run 'Import-Module PSReadLine'.
+
+PS F:\BACKUP\FRED\PROJECTS\__GITHUB-TheRealFredP3D\Gemini-Code-Assist-PR-Poetry> python .\get_new_flowers.py
+Starting script...
+GitHub token available: True
+Starting Gemini Code Assist poem collection script
+Configuration: owner=TheRealFREDP3D, repo=Gemini-Code-Assist-PR-Poetry, search=False, max_repos=5, max_prs=100
+GitHub token available: True
+Checking specified repository: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry    
+Collecting poems from TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry...
+Fetching PRs from https://api.github.com/repos/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pulls?page=1&state=all&per_page=100
+Got 3 results for page 1
+Fetching PRs from https://api.github.com/repos/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pulls?page=2&state=all&per_page=100
+Got 0 results for page 2
+Found 3 PRs in TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry
+  Processing PR #12...
+Fetching comments from https://api.github.com/repos/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/issues/12/comments
+Found 1 comments for PR #12
+    Comment from user: sourcery-ai[bot]
+Fetching review comments from https://api.github.com/repos/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pulls/12/reviews
+Found 3 reviews for PR #12
+Found 3 review comments from bots for PR #12
+    Review from user: gemini-code-assist[bot]
+    Found review from Gemini Code Assist: gemini-code-assist[bot]
+    Trying to extract poem using LiteLLM with github/gpt-4.1...
+09:30:47 - LiteLLM:WARNING: utils.py:428 - `litellm.set_verbose` is deprecated. Please set `os.environ['LITELLM_LOG'] = 'DEBUG'` for debug logs.
+SYNC kwargs[caching]: False; litellm.cache: None; kwargs.get('cache')['no-cache']: False
+Final returned optional params: {'temperature': 0.1, 'max_tokens': 500, 'extra_body': {}}
+openai.py: Received openai error - Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 50 per 86400s exceeded for UserByModelByDay. Please wait 2932 seconds before retrying.', 'details': 'Rate limit of 50 per 86400s exceeded for UserByModelByDay. Please wait 2932 seconds before retrying.'}}
+RAW RESPONSE:
+Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 50 per 86400s exceeded for UserByModelByDay. Please wait 2932 seconds before retrying.', 'details': 'Rate limit of 50 per 86400s exceeded for UserByModelByDay. Please wait 2932 seconds before retrying.'}}
+
+
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new       
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+    Error using github/gpt-4.1: litellm.RateLimitError: RateLimitError: GithubException - Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 50 per 86400s exceeded for UserByModelByDay. Please wait 2932 seconds before retrying.', 'details': 'Rate limit of 50 per 86400s exceeded for UserByModelByDay. Please wait 2932 seconds before retrying.'}}
+    Trying to extract poem using LiteLLM with github/gpt-4o...
+09:30:50 - LiteLLM:WARNING: utils.py:428 - `litellm.set_verbose` is deprecated. Please set `os.environ['LITELLM_LOG'] = 'DEBUG'` for debug logs.
+SYNC kwargs[caching]: False; litellm.cache: None; kwargs.get('cache')['no-cache']: False
+Final returned optional params: {'temperature': 0.1, 'max_tokens': 500, 'extra_body': {}}
+openai.py: Received openai error - Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 50 per 86400s exceeded for UserByModelByDay. Please wait 4243 seconds before retrying.', 'details': 'Rate limit of 50 per 86400s exceeded for UserByModelByDay. Please wait 4243 seconds before retrying.'}}
+RAW RESPONSE:
+Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 50 per 86400s exceeded for UserByModelByDay. Please wait 4243 seconds before retrying.', 'details': 'Rate limit of 50 per 86400s exceeded for UserByModelByDay. Please wait 4243 seconds before retrying.'}}
+
+
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new       
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+    Error using github/gpt-4o: litellm.RateLimitError: RateLimitError: GithubException - Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 50 per 86400s exceeded for UserByModelByDay. Please wait 4243 
+seconds before retrying.', 'details': 'Rate limit of 50 per 86400s exceeded for UserByModelByDay. Please wait 4243 seconds before retrying.'}}
+    Trying custom LiteLLM model: gemini/gemini-1.5-pro
+09:30:51 - LiteLLM:WARNING: utils.py:428 - `litellm.set_verbose` is deprecated. Please set `os.environ['LITELLM_LOG'] = 'DEBUG'` for debug logs.
+SYNC kwargs[caching]: False; litellm.cache: None; kwargs.get('cache')['no-cache']: False
+Final returned optional params: {'temperature': 0.1, 'max_output_tokens': 500}
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+    Error using custom model gemini/gemini-1.5-pro: litellm.BadRequestError: VertexAIException BadRequestError - {
+  "error": {
+    "code": 403,
+    "message": "Generative Language API has not been used in project 559923935330 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=559923935330 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.",
+    "status": "PERMISSION_DENIED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+        "reason": "SERVICE_DISABLED",
+        "domain": "googleapis.com",
+        "metadata": {
+          "activationUrl": "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=559923935330",
+          "serviceTitle": "Generative Language API",
+          "service": "generativelanguage.googleapis.com",
+          "containerInfo": "559923935330",
+          "consumer": "projects/559923935330"
+        }
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.LocalizedMessage",
+        "locale": "en-US",
+        "message": "Generative Language API has not been used in project 559923935330 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=559923935330 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Google developers console API activation",        
+            "url": "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=559923935330"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+    Trying custom LiteLLM model: gemini/gemini-1.5-flash
+09:32:17 - LiteLLM:WARNING: utils.py:428 - `litellm.set_verbose` is deprecated. Please set `os.environ['LITELLM_LOG'] = 'DEBUG'` for debug logs.
+SYNC kwargs[caching]: False; litellm.cache: None; kwargs.get('cache')['no-cache']: False
+Final returned optional params: {'temperature': 0.1, 'max_output_tokens': 500}
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+    Error using custom model gemini/gemini-1.5-flash: litellm.BadRequestError: VertexAIException BadRequestError - {
+  "error": {
+    "code": 403,
+    "message": "Generative Language API has not been used in project 559923935330 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=559923935330 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.",
+    "status": "PERMISSION_DENIED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+        "reason": "SERVICE_DISABLED",
+        "domain": "googleapis.com",
+        "metadata": {
+          "activationUrl": "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=559923935330",
+          "serviceTitle": "Generative Language API",
+          "service": "generativelanguage.googleapis.com",
+          "containerInfo": "559923935330",
+          "consumer": "projects/559923935330"
+        }
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.LocalizedMessage",
+        "locale": "en-US",
+        "message": "Generative Language API has not been used in project 559923935330 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=559923935330 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Google developers console API activation",        
+            "url": "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=559923935330"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+    Trying custom LiteLLM model: gemini/gemini-1.0-pro
+09:33:01 - LiteLLM:WARNING: utils.py:428 - `litellm.set_verbose` is deprecated. Please set `os.environ['LITELLM_LOG'] = 'DEBUG'` for debug logs.
+SYNC kwargs[caching]: False; litellm.cache: None; kwargs.get('cache')['no-cache']: False
+Final returned optional params: {'temperature': 0.1, 'max_output_tokens': 500}
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+    Error using custom model gemini/gemini-1.0-pro: litellm.BadRequestError: VertexAIException BadRequestError - {
+  "error": {
+    "code": 403,
+    "message": "Generative Language API has not been used in project 559923935330 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=559923935330 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.",
+    "status": "PERMISSION_DENIED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+        "reason": "SERVICE_DISABLED",
+        "domain": "googleapis.com",
+        "metadata": {
+          "service": "generativelanguage.googleapis.com",
+          "serviceTitle": "Generative Language API",
+          "activationUrl": "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=559923935330",
+          "consumer": "projects/559923935330",
+          "containerInfo": "559923935330"
+        }
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.LocalizedMessage",
+        "locale": "en-US",
+        "message": "Generative Language API has not been used in project 559923935330 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=559923935330 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Google developers console API activation",        
+            "url": "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=559923935330"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+    Trying custom LiteLLM model: gemini/gemini-1.5-flash-8b
+09:33:02 - LiteLLM:WARNING: utils.py:428 - `litellm.set_verbose` is deprecated. Please set `os.environ['LITELLM_LOG'] = 'DEBUG'` for debug logs.
+SYNC kwargs[caching]: False; litellm.cache: None; kwargs.get('cache')['no-cache']: False
+Final returned optional params: {'temperature': 0.1, 'max_output_tokens': 500}
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+    Error using custom model gemini/gemini-1.5-flash-8b: litellm.BadRequestError: VertexAIException BadRequestError - {
+  "error": {
+    "code": 403,
+    "message": "Generative Language API has not been used in project 559923935330 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=559923935330 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.",
+    "status": "PERMISSION_DENIED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+        "reason": "SERVICE_DISABLED",
+        "domain": "googleapis.com",
+        "metadata": {
+          "consumer": "projects/559923935330",
+          "serviceTitle": "Generative Language API",
+          "service": "generativelanguage.googleapis.com",
+          "activationUrl": "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=559923935330",
+          "containerInfo": "559923935330"
+        }
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.LocalizedMessage",
+        "locale": "en-US",
+        "message": "Generative Language API has not been used in project 559923935330 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=559923935330 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+      },
+      {
+        "@type": "type.googleapis.com/google.rpc.Help",
+        "links": [
+          {
+            "description": "Google developers console API activation",        
+            "url": "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=559923935330"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+    Trying custom LiteLLM model: ollama/qwen2.5:1.5b
+09:33:04 - LiteLLM:WARNING: utils.py:428 - `litellm.set_verbose` is deprecated. Please set `os.environ['LITELLM_LOG'] = 'DEBUG'` for debug logs.
+SYNC kwargs[caching]: False; litellm.cache: None; kwargs.get('cache')['no-cache']: False
+Final returned optional params: {'temperature': 0.1, 'num_predict': 500}      
+    Custom model response: **Extracted Poem Lines:**
+
+```
+From poetry's hold,
+A tool for PR tales unfolds,
+PullPal stands alone...
+    Found poem using LLM with 7 lines
+    Found poem in PR #12 from review
+    Review from user: gemini-code-assist[bot]
+    Found review from Gemini Code Assist: gemini-code-assist[bot]
+    Skipping github/gpt-4.1 - previously failed
+    Skipping github/gpt-4o - previously failed
+    Skipping gemini/gemini-1.5-pro - previously failed
+    Skipping gemini/gemini-1.5-flash - previously failed
+    Skipping gemini/gemini-1.0-pro - previously failed
+    Skipping gemini/gemini-1.5-flash-8b - previously failed
+    Trying custom LiteLLM model: ollama/qwen2.5:1.5b
+09:33:50 - LiteLLM:WARNING: utils.py:428 - `litellm.set_verbose` is deprecated. Please set `os.environ['LITELLM_LOG'] = 'DEBUG'` for debug logs.
+SYNC kwargs[caching]: False; litellm.cache: None; kwargs.get('cache')['no-cache']: False
+Final returned optional params: {'temperature': 0.1, 'num_predict': 500}      
+    Custom model response: NO_POEM...
+    Trying custom LiteLLM model: ollama/3.2:1b-instruct
+09:33:51 - LiteLLM:WARNING: utils.py:428 - `litellm.set_verbose` is deprecated. Please set `os.environ['LITELLM_LOG'] = 'DEBUG'` for debug logs.
+SYNC kwargs[caching]: False; litellm.cache: None; kwargs.get('cache')['no-cache']: False
+Final returned optional params: {'temperature': 0.1, 'num_predict': 500}      
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new       
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+    Error using custom model ollama/3.2:1b-instruct: litellm.APIConnectionError: OllamaException - {"error":"model '3.2:1b-instruct' not found"}
+    Trying to extract poem using client: gpt-4.1-github-client.py
+  File "F:\BACKUP\FRED\PROJECTS\__GITHUB-TheRealFredP3D\Gemini-Code-Assist-PR-Poetry\llm_client\temp_gpt-4.1-github-client.py", line 21
+    top_p=1
+          ^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+    Client response: ...
+    Trying to extract poem using client: gpt-4o-client.py
+Traceback (most recent call last):
+  File "F:\BACKUP\FRED\PROJECTS\__GITHUB-TheRealFredP3D\Gemini-Code-Assist-PR-Poetry\llm_client\temp_gpt-4o-client.py", line 15, in <module>
+    response = client.chat.completions.create(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bloga\AppData\Roaming\Python\Python312\site-packages\openai\_utils\_utils.py", line 279, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bloga\AppData\Roaming\Python\Python312\site-packages\openai\resources\chat\completions\completions.py", line 914, in create
+    return self._post(
+           ^^^^^^^^^^^
+  File "C:\Users\bloga\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 1242, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bloga\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 919, in request
+    return self._request(
+           ^^^^^^^^^^^^^^
+  File "C:\Users\bloga\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 1023, in _request
+    raise self._make_status_error_from_response(err.response) from None       
+openai.BadRequestError: publisher is required
+    Client response: ...
+    Trying to extract poem using client: deepseek-v3-client.py
+  File "F:\BACKUP\FRED\PROJECTS\__GITHUB-TheRealFredP3D\Gemini-Code-Assist-PR-Poetry\llm_client\temp_deepseek-v3-client.py", line 21
+    top_p=0.1
+          ^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+    Client response: ...
+    Trying to extract poem using client: llama-3.1-8b-inst-client.py
+Traceback (most recent call last):
+  File "F:\BACKUP\FRED\PROJECTS\__GITHUB-TheRealFredP3D\Gemini-Code-Assist-PR-Poetry\llm_client\temp_llama-3.1-8b-inst-client.py", line 6, in <module>      
+    from azure.ai.inference import ChatCompletionsClient
+ModuleNotFoundError: No module named 'azure'
+    Client response: ...
+    Trying to extract poem using client: llama4-maverik-client.py
+  File "F:\BACKUP\FRED\PROJECTS\__GITHUB-TheRealFredP3D\Gemini-Code-Assist-PR-Poetry\llm_client\temp_llama4-maverik-client.py", line 21
+    top_p=0.1
+          ^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+    Client response: ...
+    Trying to extract poem using client: mistral-large-client.py
+Traceback (most recent call last):
+  File "F:\BACKUP\FRED\PROJECTS\__GITHUB-TheRealFredP3D\Gemini-Code-Assist-PR-Poetry\llm_client\temp_mistral-large-client.py", line 6, in <module>
+    from mistralai import Mistral, UserMessage, SystemMessage
+ModuleNotFoundError: No module named 'mistralai'
+    Client response: ...
+    Trying to extract poem using client: phi4-client.py
+Traceback (most recent call last):
+  File "F:\BACKUP\FRED\PROJECTS\__GITHUB-TheRealFredP3D\Gemini-Code-Assist-PR-Poetry\llm_client\temp_phi4-client.py", line 6, in <module>
+    from azure.ai.inference import ChatCompletionsClient
+ModuleNotFoundError: No module named 'azure'
+    Client response: ...
+    All LLM models and clients failed.
+    No poem found in review from gemini-code-assist[bot]
+    Review from user: sourcery-ai[bot]
+  Processing PR #2...
+Fetching comments from https://api.github.com/repos/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/issues/2/comments
+Found 1 comments for PR #2
+    Comment from user: sourcery-ai[bot]
+Fetching review comments from https://api.github.com/repos/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pulls/2/reviews
+Found 3 reviews for PR #2
+Found 3 review comments from bots for PR #2
+    Review from user: gemini-code-assist[bot]
+    Found review from Gemini Code Assist: gemini-code-assist[bot]
+    Skipping github/gpt-4.1 - previously failed
+    Skipping github/gpt-4o - previously failed
+    Skipping gemini/gemini-1.5-pro - previously failed
+    Skipping gemini/gemini-1.5-flash - previously failed
+    Skipping gemini/gemini-1.0-pro - previously failed
+    Skipping gemini/gemini-1.5-flash-8b - previously failed
+    Trying custom LiteLLM model: ollama/qwen2.5:1.5b
+09:33:55 - LiteLLM:WARNING: utils.py:428 - `litellm.set_verbose` is deprecated. Please set `os.environ['LITELLM_LOG'] = 'DEBUG'` for debug logs.
+SYNC kwargs[caching]: False; litellm.cache: None; kwargs.get('cache')['no-cache']: False
+Final returned optional params: {'temperature': 0.1, 'num_predict': 500}      
+    Custom model response: **Extracted Poem Lines:**
+
+A bot's gentle verse,
+LLM's wisdom to immerse,
+Code's poetry blooms....
+    Found poem using LLM with 5 lines
+    Found poem in PR #2 from review
+    Review from user: gemini-code-assist[bot]
+    Found review from Gemini Code Assist: gemini-code-assist[bot]
+    Skipping github/gpt-4.1 - previously failed
+    Skipping github/gpt-4o - previously failed
+    Skipping gemini/gemini-1.5-pro - previously failed
+    Skipping gemini/gemini-1.5-flash - previously failed
+    Skipping gemini/gemini-1.0-pro - previously failed
+    Skipping gemini/gemini-1.5-flash-8b - previously failed
+    Trying custom LiteLLM model: ollama/qwen2.5:1.5b
+09:33:58 - LiteLLM:WARNING: utils.py:428 - `litellm.set_verbose` is deprecated. Please set `os.environ['LITELLM_LOG'] = 'DEBUG'` for debug logs.
+SYNC kwargs[caching]: False; litellm.cache: None; kwargs.get('cache')['no-cache']: False
+Final returned optional params: {'temperature': 0.1, 'num_predict': 500}      
+    Custom model response: **NO_POEM**
+
+The GitHub comment does not contain any poetic content or lines from a poem....
+    Found poem using LLM with 3 lines
+    Found poem in PR #2 from review
+    Review from user: sourcery-ai[bot]
+  Processing PR #1...
+Fetching comments from https://api.github.com/repos/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/issues/1/comments
+Found 1 comments for PR #1
+    Comment from user: sourcery-ai[bot]
+Fetching review comments from https://api.github.com/repos/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pulls/1/reviews
+Found 3 reviews for PR #1
+Found 3 review comments from bots for PR #1
+    Review from user: gemini-code-assist[bot]
+    Found review from Gemini Code Assist: gemini-code-assist[bot]
+    Skipping github/gpt-4.1 - previously failed
+    Skipping github/gpt-4o - previously failed
+    Skipping gemini/gemini-1.5-pro - previously failed
+    Skipping gemini/gemini-1.5-flash - previously failed
+    Skipping gemini/gemini-1.0-pro - previously failed
+    Skipping gemini/gemini-1.5-flash-8b - previously failed
+    Trying custom LiteLLM model: ollama/qwen2.5:1.5b
+09:34:01 - LiteLLM:WARNING: utils.py:428 - `litellm.set_verbose` is deprecated. Please set `os.environ['LITELLM_LOG'] = 'DEBUG'` for debug logs.
+SYNC kwargs[caching]: False; litellm.cache: None; kwargs.get('cache')['no-cache']: False
+Final returned optional params: {'temperature': 0.1, 'num_predict': 500}      
+    Custom model response: **Extracted Poem Lines:**
+
+```
+A git ignore file,
+Keeps secrets safe and sound,
+Snapshots hidden now...
+    Found poem using LLM with 7 lines
+    Found poem in PR #1 from review
+    Review from user: gemini-code-assist[bot]
+    Found review from Gemini Code Assist: gemini-code-assist[bot]
+    Skipping github/gpt-4.1 - previously failed
+    Skipping github/gpt-4o - previously failed
+    Skipping gemini/gemini-1.5-pro - previously failed
+    Skipping gemini/gemini-1.5-flash - previously failed
+    Skipping gemini/gemini-1.0-pro - previously failed
+    Skipping gemini/gemini-1.5-flash-8b - previously failed
+    Trying custom LiteLLM model: ollama/qwen2.5:1.5b
+09:34:03 - LiteLLM:WARNING: utils.py:428 - `litellm.set_verbose` is deprecated. Please set `os.environ['LITELLM_LOG'] = 'DEBUG'` for debug logs.
+SYNC kwargs[caching]: False; litellm.cache: None; kwargs.get('cache')['no-cache']: False
+Final returned optional params: {'temperature': 0.1, 'num_predict': 500}      
+    Custom model response: NO_POEM...
+    Skipping ollama/3.2:1b-instruct - previously failed
+    Trying to extract poem using client: gpt-4.1-github-client.py
+  File "F:\BACKUP\FRED\PROJECTS\__GITHUB-TheRealFredP3D\Gemini-Code-Assist-PR-Poetry\llm_client\temp_gpt-4.1-github-client.py", line 21
+    top_p=1
+          ^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+    Client response: ...
+    Trying to extract poem using client: gpt-4o-client.py
+Traceback (most recent call last):
+  File "F:\BACKUP\FRED\PROJECTS\__GITHUB-TheRealFredP3D\Gemini-Code-Assist-PR-Poetry\llm_client\temp_gpt-4o-client.py", line 15, in <module>
+    response = client.chat.completions.create(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bloga\AppData\Roaming\Python\Python312\site-packages\openai\_utils\_utils.py", line 279, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bloga\AppData\Roaming\Python\Python312\site-packages\openai\resources\chat\completions\completions.py", line 914, in create
+    return self._post(
+           ^^^^^^^^^^^
+  File "C:\Users\bloga\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 1242, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bloga\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 919, in request
+    return self._request(
+           ^^^^^^^^^^^^^^
+  File "C:\Users\bloga\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 1023, in _request
+    raise self._make_status_error_from_response(err.response) from None       
+openai.BadRequestError: publisher is required
+    Client response: ...
+    Trying to extract poem using client: deepseek-v3-client.py
+  File "F:\BACKUP\FRED\PROJECTS\__GITHUB-TheRealFredP3D\Gemini-Code-Assist-PR-Poetry\llm_client\temp_deepseek-v3-client.py", line 21
+    top_p=0.1
+          ^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+    Client response: ...
+    Trying to extract poem using client: llama-3.1-8b-inst-client.py
+Traceback (most recent call last):
+  File "F:\BACKUP\FRED\PROJECTS\__GITHUB-TheRealFredP3D\Gemini-Code-Assist-PR-Poetry\llm_client\temp_llama-3.1-8b-inst-client.py", line 6, in <module>      
+    from azure.ai.inference import ChatCompletionsClient
+ModuleNotFoundError: No module named 'azure'
+    Client response: ...
+    Trying to extract poem using client: llama4-maverik-client.py
+  File "F:\BACKUP\FRED\PROJECTS\__GITHUB-TheRealFredP3D\Gemini-Code-Assist-PR-Poetry\llm_client\temp_llama4-maverik-client.py", line 21
+    top_p=0.1
+          ^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+    Client response: ...
+    Trying to extract poem using client: mistral-large-client.py
+Traceback (most recent call last):
+  File "F:\BACKUP\FRED\PROJECTS\__GITHUB-TheRealFredP3D\Gemini-Code-Assist-PR-Poetry\llm_client\temp_mistral-large-client.py", line 6, in <module>
+    from mistralai import Mistral, UserMessage, SystemMessage
+ModuleNotFoundError: No module named 'mistralai'
+    Client response: ...
+    Trying to extract poem using client: phi4-client.py
+Traceback (most recent call last):
+  File "F:\BACKUP\FRED\PROJECTS\__GITHUB-TheRealFredP3D\Gemini-Code-Assist-PR-Poetry\llm_client\temp_phi4-client.py", line 6, in <module>
+    from azure.ai.inference import ChatCompletionsClient
+ModuleNotFoundError: No module named 'azure'
+    Client response: ...
+    All LLM models and clients failed.
+    No poem found in review from gemini-code-assist[bot]
+    Review from user: sourcery-ai[bot]
+Collected 4 poems from TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry
+Script completed.
