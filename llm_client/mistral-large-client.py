@@ -1,6 +1,6 @@
 """Run this model in Python
 
-> pip install mistralai>=1.0.0
+ pip install mistralai>=1.0.0
 """
 import os
 from mistralai import Mistral, UserMessage, SystemMessage

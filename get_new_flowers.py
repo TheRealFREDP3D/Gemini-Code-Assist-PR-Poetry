@@ -271,7 +271,7 @@ def extract_poem_from_comment(comment_body):
     in_poem = False
     for line in lines:
         stripped = line.strip()
-        if stripped.startswith("> ") or (in_poem and stripped == ''):
+        if stripped.startswith(" ") or (in_poem and stripped == ''):
             poem_lines.append(stripped)
             in_poem = True
         elif re.match(r"<https://github\.com/.+?>", stripped):
@@ -409,7 +409,7 @@ def extract_poem_from_comment(comment_body):
 
         # Extract poem lines
         ai_poem_lines = poem_text.strip().splitlines()
-        ai_poem_lines = [f"> {line}" for line in ai_poem_lines if line.strip()]
+        ai_poem_lines = [f" {line}" for line in ai_poem_lines if line.strip()]
 
         # Look for a GitHub link in the comment
         for line in lines:
@@ -443,7 +443,7 @@ def extract_poem_from_comment(comment_body):
 def create_poem_entry(poem_lines, link, repo_owner, repo_name, pr_number):
     """Create a JSON-friendly poem entry."""
     # Clean up poem lines (remove '>' prefix and trim)
-    cleaned_lines = [line[2:].strip() if line.startswith("> ") else line.strip() for line in poem_lines if line.strip()]
+    cleaned_lines = [line[2:].strip() if line.startswith(" ") else line.strip() for line in poem_lines if line.strip()]
 
     # Clean up link
     if link.startswith("<") and link.endswith(">"):

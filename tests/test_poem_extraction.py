@@ -27,9 +27,9 @@ class TestPoemExtraction(unittest.TestCase):
         self.poem_comment = """
 I've reviewed your PR and here are my thoughts:
 
-> A system's context,
-> Diagrams draw the clear path,
-> Code's intent shown.
+ A system's context,
+ Diagrams draw the clear path,
+ Code's intent shown.
 
 <https://github.com/TheRealFREDP3D/Making-BanditGUI/pull/10#pullrequestreview-2809083426>
 
@@ -52,7 +52,7 @@ The changes look good, but please consider adding more documentation.
         self.assertIsNotNone(poem_lines)
         self.assertIsNotNone(link)
         self.assertEqual(len(poem_lines), 4)  # 3 poem lines + 1 empty line
-        self.assertEqual(poem_lines[0], "> A system's context,")
+        self.assertEqual(poem_lines[0], " A system's context,")
         self.assertEqual(link, "<https://github.com/TheRealFREDP3D/Making-BanditGUI/pull/10#pullrequestreview-2809083426>")
 
     def test_load_custom_llm_models(self):
@@ -71,7 +71,7 @@ The changes look good, but please consider adding more documentation.
 
     def test_create_poem_entry(self):
         """Test creating a poem entry."""
-        poem_lines = ["> A system's context,", "> Diagrams draw the clear path,", "> Code's intent shown."]
+        poem_lines = [" A system's context,", " Diagrams draw the clear path,", " Code's intent shown."]
         link = "<https://github.com/TheRealFREDP3D/Making-BanditGUI/pull/10#pullrequestreview-2809083426>"
         owner = "TheRealFREDP3D"
         repo = "Making-BanditGUI"

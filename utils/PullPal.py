@@ -41,14 +41,14 @@ GITHUB_API_BASE_URL = "https://api.github.com"
 DEFAULT_REPO_OWNER = "octocat"  # Default repository owner
 DEFAULT_REPO_NAME = "hello-world"  # Default repository name
 
-def get_headers(token: str) -> Dict[str, str]:
+def get_headers(token: str) - Dict[str, str]:
     """Get headers for GitHub API requests."""
     return {
         "Authorization": f"token {token}",
         "Accept": "application/vnd.github.v3+json"
     }
 
-def fetch_review_comments(owner: str, repo: str, pr_number: int, headers: Dict[str, str]) -> List[Dict[str, Any]]:
+def fetch_review_comments(owner: str, repo: str, pr_number: int, headers: Dict[str, str]) - List[Dict[str, Any]]:
     """Fetch review comments from the pull request."""
     url = f"{GITHUB_API_BASE_URL}/repos/{owner}/{repo}/pulls/{pr_number}/comments"
     comments = []
@@ -59,7 +59,7 @@ def fetch_review_comments(owner: str, repo: str, pr_number: int, headers: Dict[s
         url = response.links.get("next", {}).get("url")  # Handle pagination
     return comments
 
-def fetch_issue_comments(owner: str, repo: str, pr_number: int, headers: Dict[str, str]) -> List[Dict[str, Any]]:
+def fetch_issue_comments(owner: str, repo: str, pr_number: int, headers: Dict[str, str]) - List[Dict[str, Any]]:
     """Fetch issue comments from the pull request."""
     url = f"{GITHUB_API_BASE_URL}/repos/{owner}/{repo}/issues/{pr_number}/comments"
     comments = []
@@ -70,7 +70,7 @@ def fetch_issue_comments(owner: str, repo: str, pr_number: int, headers: Dict[st
         url = response.links.get("next", {}).get("url")  # Handle pagination
     return comments
 
-def fetch_reviews(owner: str, repo: str, pr_number: int, headers: Dict[str, str]) -> List[Dict[str, Any]]:
+def fetch_reviews(owner: str, repo: str, pr_number: int, headers: Dict[str, str]) - List[Dict[str, Any]]:
     """Fetch reviews from the pull request."""
     url = f"{GITHUB_API_BASE_URL}/repos/{owner}/{repo}/pulls/{pr_number}/reviews"
     reviews = []
@@ -81,14 +81,14 @@ def fetch_reviews(owner: str, repo: str, pr_number: int, headers: Dict[str, str]
         url = response.links.get("next", {}).get("url")  # Handle pagination
     return reviews
 
-def fetch_pr_details(owner: str, repo: str, pr_number: int, headers: Dict[str, str]) -> Dict[str, Any]:
+def fetch_pr_details(owner: str, repo: str, pr_number: int, headers: Dict[str, str]) - Dict[str, Any]:
     """Fetch basic details about the pull request."""
     url = f"{GITHUB_API_BASE_URL}/repos/{owner}/{repo}/pulls/{pr_number}"
     response = requests.get(url, headers=headers)
     response.raise_for_status()
     return response.json()
 
-def fetch_conversation(owner: str, repo: str, pr_number: int, token: str) -> Dict[str, Any]:
+def fetch_conversation(owner: str, repo: str, pr_number: int, token: str) - Dict[str, Any]:
     """Fetch the full conversation of a pull request."""
     headers = get_headers(token)
     return {
@@ -98,7 +98,7 @@ def fetch_conversation(owner: str, repo: str, pr_number: int, token: str) -> Dic
         "reviews": fetch_reviews(owner, repo, pr_number, headers)
     }
 
-def format_conversation_as_markdown(conversation: Dict[str, Any]) -> str:
+def format_conversation_as_markdown(conversation: Dict[str, Any]) - str:
     """Format the conversation as Markdown."""
     pr_details = conversation.get("pr_details", {})
     md = []
@@ -145,7 +145,7 @@ def format_conversation_as_markdown(conversation: Dict[str, Any]) -> str:
     
     return "\n".join(md)
 
-def save_conversation(conversation: Dict[str, Any], output_file: str, format_type: str = "md") -> None:
+def save_conversation(conversation: Dict[str, Any], output_file: str, format_type: str = "md") - None:
     """Save the conversation to a file in the specified format."""
     with open(output_file, "w", encoding="utf-8") as f:
         if format_type == "json":
@@ -207,14 +207,14 @@ def parse_args():
     )
     return parser.parse_args()
 
-def fetch_latest_prs(owner: str, repo: str, count: int, headers: Dict[str, str]) -> List[int]:
+def fetch_latest_prs(owner: str, repo: str, count: int, headers: Dict[str, str]) - List[int]:
     """Fetch the latest N pull request numbers."""
     url = f"{GITHUB_API_BASE_URL}/repos/{owner}/{repo}/pulls?state=all&sort=updated&direction=desc&per_page={count}"
     response = requests.get(url, headers=headers)
     response.raise_for_status()
     return [pr["number"] for pr in response.json()]
 
-def process_pr(owner: str, repo: str, pr_number: int, token: str, output_path: str, format_type: str = "md") -> None:
+def process_pr(owner: str, repo: str, pr_number: int, token: str, output_path: str, format_type: str = "md") - None:
     """Process a single PR and save its conversation."""
     print(f"Fetching pull request #{pr_number} conversation from {owner}/{repo}...")
     try:

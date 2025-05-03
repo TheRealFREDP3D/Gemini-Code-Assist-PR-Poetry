@@ -10,21 +10,26 @@ A snippet of poetry — inspired by the PR itself.
 It took me off guard. For a moment I wondered:
 **"This is a weird feature… why?"**
 
-But maybe weird is good. Maybe it's beautiful.
+I know it's weird...  
+But maybe weird is good.  
+Maybe it's beautiful.  
 
 ---
 
-📖 A growing collection lives in [`gem-flowers.md`](./gem-flowers.md)
+📖 A growing collection of these poetry nuggets lives in [`gem-flowers.md`](./gem-flowers.md) and [`gem-flowers.json`](./gem-flowers.json).
+
+💻 A made a tool to automatically collect these gems from your GitHub repositories and any public repositories. Go try it out and start a collection of your own!  
 
 ---
   
-![Collection Stats](docs/stats.jpg)  
+![Collection Stats](/docs/stats.jpg)  
   
 ## 🌱 Contributing
 
-Add your poetic PR snippets to the collection.
-I bet some gems will surface soon enough. ✨
+Add your poetic PR discoveries to the collection and give a better home for these poetic snippets than their obscure Pull Request comments bottom lines. Give them some light and air.
 
+I bet some gems will surface soon enough. ✨  
+  
 ### Automated Collection
 
 You can use the `get_new_flowers.py` script to automatically collect poems from GitHub repositories:
@@ -33,7 +38,8 @@ You can use the `get_new_flowers.py` script to automatically collect poems from 
 # Install dependencies
 pip install requests gitpython tqdm litellm
 
-# Set your GitHub token (recommended to avoid rate limits)
+# Set your GitHub token (will work without it but recommended to avoid rate limits)
+# It's free to get one from https://github.com/marketplace/a
 export GITHUB_TOKEN=your_github_token
 
 # Basic usage - collect from this repository
@@ -106,5 +112,5 @@ See [CHANGELOG.md](./CHANGELOG.md) for version history and updates.
 
 ---
 
-> *It's like a gorgeous tiny flower growing on a big pile of snips*
-> — `\x02\xM4\xNY\xC0\xFF\x55`
+ *It's like a gorgeous tiny flower growing on a big pile of snips*
+ — `\x02\xM4\xNY\xC0\xFF\x55`

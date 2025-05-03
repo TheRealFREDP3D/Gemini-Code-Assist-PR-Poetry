@@ -1,6 +1,6 @@
 """Run this model in Python
 
-> pip install azure-ai-inference
+ pip install azure-ai-inference
 """
 import os
 from azure.ai.inference import ChatCompletionsClient

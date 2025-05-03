@@ -1,6 +1,6 @@
 """Run this model in Python
 
-> pip install openai
+ pip install openai
 """
 import os
 from openai import OpenAI
