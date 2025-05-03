@@ -18,7 +18,7 @@ Maybe it's beautiful.
 
 📖 A growing collection of these poetry nuggets lives in [`gem-flowers.md`](./gem-flowers.md) and [`gem-flowers.json`](./gem-flowers.json).
 
-💻 A made a tool to automatically collect these gems from your GitHub repositories and any public repositories. Go try it out and start a collection of your own!
+💻 I made a tool to automatically collect these gems from your GitHub repositories and any public repositories. Go try it out and start a collection of your own!
 
 ---
 
