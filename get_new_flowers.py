@@ -925,10 +925,11 @@ def main():
                         if line.strip():
                             # If the line doesn't start with spaces, add indentation
                             if not line.startswith(" "):
-                                f.write(f"  {line}\n")
+                                # Add two spaces at the end of each line for GitHub-flavored Markdown line breaks
+                                f.write(f"  {line}  \n")
                             else:
-                                # If it already has spaces, preserve them
-                                f.write(f"  {line}\n")
+                                # If it already has spaces, preserve them and add two spaces at the end
+                                f.write(f"  {line}  \n")
                         else:
                             # For empty lines, just write a newline
                             f.write("\n")
