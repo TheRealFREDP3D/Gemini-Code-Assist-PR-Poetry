@@ -96,7 +96,21 @@ python get_new_flowers.py --max-prs=20
 
 # Search across multiple repositories
 python get_new_flowers.py --search --max-repos=10
+
+# Run in interactive wizard mode
+python get_new_flowers.py --wizard
+# or use the short form
+python get_new_flowers.py -w
 ```
+
+### Wizard Mode
+
+The script includes an interactive wizard mode that guides you through setting up the parameters:
+
+- Run with `--wizard` or `-w` flag
+- Displays default values in brackets [like this]
+- Press Enter to use the default value or type a new value
+- Provides a summary of your configuration before starting
 
 See [CHANGELOG.md](./CHANGELOG.md) for version history and updates.
 

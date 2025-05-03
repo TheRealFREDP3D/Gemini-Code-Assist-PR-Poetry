@@ -91,6 +91,44 @@ All notable changes to this project will be documented in this file.
 - Improved error messages to provide more context about failures
 - Enhanced logging to track which models were tried and which failed
 
+## [1.4.3] - 2025-05-07
+
+### Added
+
+- Interactive wizard mode with `--wizard` or `-w` flag to guide users through parameter setup
+- Improved documentation for the wizard mode in README and cheatsheet
+
+### Changed
+
+- Updated help text to include information about the wizard mode
+- Improved user experience for first-time users with guided parameter input
+
+## [1.4.4] - 2025-05-08
+
+### Changed
+
+- Refactored `get_poem_with_client` function to improve code quality and maintainability
+- Extracted helper functions for better separation of concerns:
+  - `_handle_client_error` for centralized error handling
+  - `_modify_client_code` for client-specific code modifications
+  - `_execute_temp_client` for executing temporary client scripts
+- Improved error handling with proper cleanup in finally blocks
+- Enhanced code readability with f-strings and simplified conditionals
+- Reduced function complexity score from F to B (from 51 to 6)
+
+## [1.4.5] - 2025-05-09
+
+### Added
+
+- Added statistics table to the top of gem-flowers.md showing collection metrics
+- Added similar statistics table to log files for consistency
+
+### Changed
+
+- Modified code to completely skip NO_POEM entries instead of just filtering them from markdown
+- Improved NO_POEM detection to catch variations in the response format
+- Updated both main script and development utilities to maintain consistent behavior
+
 ## [Future Plans]
 
 - Web interface for browsing the collection

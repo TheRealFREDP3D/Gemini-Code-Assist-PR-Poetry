@@ -1,37 +1,5 @@
 # Gemini Code Assist - PR Poetry
 
-## Collection Statistics
-
-| Metric | Value |
-|--------|-------|
-| Total Poems | 5 |
-| Repositories Scanned | 1 |
-| PRs Scanned | 4 |
-| Last Updated | 2025-05-03 10:37:16 |
-
----
-
-   **Extracted Poem Lines:**
-   ```
-   The models churn,
-   A poem sought in the code,
-   Errors now tamed.
-   ```
-
-  <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/13#pullrequestreview-2813236452>
-  
-  _From: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry_
-
----
-
-   **Extracted Poem Lines:**
-    * The addition of .gitignore entries is good practice.
-    * The gem-flowers.md file is an interesting way to document PR reviews.
-
-  <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/1#pullrequestreview-2811851484>
-  
-  _From: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry_
-
 ---
 
    **Extracted Poem Lines:**
@@ -53,6 +21,15 @@
    Code's poetry blooms.
 
   <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/2#pullrequestreview-2812381557>
+  
+  _From: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry_
+
+---
+
+   **NO_POEM**
+   The GitHub comment does not contain any poetic content or lines from a poem.
+
+  <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/2#pullrequestreview-2812382198>
   
   _From: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry_
 

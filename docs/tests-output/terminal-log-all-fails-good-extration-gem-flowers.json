@@ -3,31 +3,6 @@
     "poem": [
       " **Extracted Poem Lines:**",
       " ```",
-      " The models churn,",
-      " A poem sought in the code,",
-      " Errors now tamed.",
-      " ```"
-    ],
-    "link": "https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/13#pullrequestreview-2813236452",
-    "repository": "TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry",
-    "pr_number": 13,
-    "collected_at": "2025-05-03T09:59:27.684913"
-  },
-  {
-    "poem": [
-      " **Extracted Poem Lines:**",
-      "  * The addition of .gitignore entries is good practice.",
-      "  * The gem-flowers.md file is an interesting way to document PR reviews."
-    ],
-    "link": "https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/1#pullrequestreview-2811851484",
-    "repository": "TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry",
-    "pr_number": 1,
-    "collected_at": "2025-05-03T10:00:11.504885"
-  },
-  {
-    "poem": [
-      " **Extracted Poem Lines:**",
-      " ```",
       " From poetry's hold,",
       " A tool for PR tales unfolds,",
       " PullPal stands alone.",
@@ -49,6 +24,16 @@
     "repository": "TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry",
     "pr_number": 2,
     "collected_at": "2025-05-03T09:33:58.628619"
+  },
+  {
+    "poem": [
+      " **NO_POEM**",
+      " The GitHub comment does not contain any poetic content or lines from a poem."
+    ],
+    "link": "https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/2#pullrequestreview-2812382198",
+    "repository": "TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry",
+    "pr_number": 2,
+    "collected_at": "2025-05-03T09:33:59.667989"
   },
   {
     "poem": [

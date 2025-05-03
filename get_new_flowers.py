@@ -194,54 +194,77 @@ def load_client_module(client_filename):
 
     return module
 
+def _handle_client_error(error, client_filename, error_type=""):
+    """Handle errors in client execution and log them appropriately."""
+    error_prefix = error_type or "Error using client"
+    error_msg = f"{error_prefix} {client_filename}: {error}"
+    print(f"    {error_msg}")
+    run_stats["errors"].append(error_msg)
+    failed_clients.append(client_filename)
+    return None
+
+def _modify_client_code(client_code, clean_prompt):
+    """Modify client code to use our prompt based on the client type."""
+    if "azure.ai.inference" in client_code:
+        # Azure AI Inference client pattern
+        return client_code.replace(
+            'UserMessage("What is the capital of France?")',
+            f'UserMessage("{clean_prompt}")'
+        ).replace(
+            'UserMessage("Can you explain the basics of machine learning?")',
+            f'UserMessage("{clean_prompt}")'
+        )
+    elif "openai" in client_code:
+        # OpenAI client pattern
+        return client_code.replace(
+            '"content": "What is the capital of France?"',
+            f'"content": "{clean_prompt}"'
+        )
+    elif "mistralai" in client_code:
+        # Mistral client pattern
+        return client_code.replace(
+            'UserMessage("What is the capital of France?")',
+            f'UserMessage("{clean_prompt}")'
+        )
+    return client_code  # Return original if no patterns match
+
+def _execute_temp_client(temp_client_path):
+    """Execute the temporary client and return its output."""
+    return os.popen(f"python {temp_client_path}").read().strip()
+
 def get_poem_with_client(prompt, client_filename):
     """Use a specific client to get a poem from the prompt."""
     print(f"    Trying to extract poem using client: {client_filename}")
 
     try:
-        # Modify the client file to use our prompt
+        # Prepare file paths
         client_path = os.path.join("llm_client", client_filename)
-        with open(client_path, 'r') as f:
-            client_code = f.read()
-
-        # Create a temporary modified version of the client
         temp_client_path = os.path.join("llm_client", f"temp_{client_filename}")
 
-        # Clean up the prompt - replace newlines with spaces and escape quotes
-        clean_prompt = prompt.replace('\n', ' ').replace('"', '\\"')
+        # Read the client file
+        try:
+            with open(client_path, 'r') as f:
+                client_code = f.read()
+        except FileNotFoundError as e:
+            return _handle_client_error(e, client_filename, "Client file not found")
 
-        # Replace the example prompt with our poem extraction prompt
-        if "azure.ai.inference" in client_code:
-            # Azure AI Inference client pattern
-            client_code = client_code.replace(
-                'UserMessage("What is the capital of France?")',
-                'UserMessage("' + clean_prompt + '")'
-            ).replace(
-                'UserMessage("Can you explain the basics of machine learning?")',
-                'UserMessage("' + clean_prompt + '")'
-            )
-        elif "openai" in client_code:
-            # OpenAI client pattern
-            client_code = client_code.replace(
-                '"content": "What is the capital of France?"',
-                '"content": "' + clean_prompt + '"'
-            )
-        elif "mistralai" in client_code:
-            # Mistral client pattern
-            client_code = client_code.replace(
-                'UserMessage("What is the capital of France?")',
-                'UserMessage("' + clean_prompt + '")'
-            )
+        # Clean up the prompt and modify client code
+        clean_prompt = prompt.replace('\n', ' ').replace('"', '\\"')
+        modified_code = _modify_client_code(client_code, clean_prompt)
 
         # Write the modified client to a temporary file
         with open(temp_client_path, 'w') as f:
-            f.write(client_code)
+            f.write(modified_code)
 
-        # Execute the temporary client and capture its output
-        result = os.popen(f"python {temp_client_path}").read().strip()
-
-        # Clean up the temporary file
-        os.remove(temp_client_path)
+        # Execute the client and get result
+        try:
+            result = _execute_temp_client(temp_client_path)
+        except subprocess.CalledProcessError as e:
+            return _handle_client_error(e, client_filename, "Client execution failed")
+        finally:
+            # Clean up the temporary file
+            if os.path.exists(temp_client_path):
+                os.remove(temp_client_path)
 
         # Track model usage
         model_name = f"client:{client_filename}"
@@ -249,30 +272,11 @@ def get_poem_with_client(prompt, client_filename):
 
         print(f"    Client response: {result[:100]}...")
 
-        # Check if the result is a valid poem or NO_POEM
-        if result == "NO_POEM":
-            return None
-        else:
-            return result
+        # Return None for NO_POEM, otherwise return the result
+        return None if result == "NO_POEM" or "NO_POEM" in result else result
 
-    except FileNotFoundError as e:
-        error_msg = f"Client file not found: {e}"
-        print(f"    {error_msg}")
-        run_stats["errors"].append(error_msg)
-        failed_clients.append(client_filename)
-        return None
-    except subprocess.CalledProcessError as e:
-        error_msg = f"Client execution failed: {e}"
-        print(f"    {error_msg}")
-        run_stats["errors"].append(error_msg)
-        failed_clients.append(client_filename)
-        return None
     except Exception as e:
-        error_msg = f"Error using client {client_filename}: {e}"
-        print(f"    {error_msg}")
-        run_stats["errors"].append(error_msg)
-        failed_clients.append(client_filename)
-        return None
+        return _handle_client_error(e, client_filename)
 
 def extract_poem_from_comment(comment_body):
     """Extract poem and link from a comment using LiteLLM with fallback to alternative clients."""
@@ -340,7 +344,7 @@ def extract_poem_from_comment(comment_body):
             print(f"    LiteLLM response from {model_name}: {poem_text[:100]}...")
 
             # If we got a valid response, break the loop
-            if poem_text and poem_text != "NO_POEM":
+            if poem_text and poem_text != "NO_POEM" and "NO_POEM" not in poem_text:
                 break
 
         except Exception as e:
@@ -360,7 +364,7 @@ def extract_poem_from_comment(comment_body):
                     wait_time = int(wait_match.group(1))
 
     # If primary models failed or returned NO_POEM, try custom LiteLLM models
-    if not poem_text or poem_text == "NO_POEM":
+    if not poem_text or poem_text == "NO_POEM" or "NO_POEM" in poem_text:
         custom_models = load_custom_llm_models()
 
         # Try each custom model that hasn't failed yet
@@ -389,7 +393,7 @@ def extract_poem_from_comment(comment_body):
                 poem_text = response.choices[0].message.content.strip()
                 print(f"    Custom model response: {poem_text[:100]}...")
 
-                if poem_text and poem_text != "NO_POEM":
+                if poem_text and poem_text != "NO_POEM" and "NO_POEM" not in poem_text:
                     break
             except Exception as e:
                 error_msg = f"Error using custom model {model}: {e}"
@@ -400,7 +404,7 @@ def extract_poem_from_comment(comment_body):
                 failed_litellm_models.append(model)
 
         # If custom models failed or returned NO_POEM, try alternative clients
-        if not poem_text or poem_text == "NO_POEM":
+        if not poem_text or poem_text == "NO_POEM" or "NO_POEM" in poem_text:
             for client in LLM_CLIENTS:
                 if client in failed_clients:
                     print(f"    Skipping client {client} - previously failed")
@@ -420,14 +424,15 @@ def extract_poem_from_comment(comment_body):
                     failed_clients.append(client)
 
             # If all models and clients failed, exit with appropriate message
-            if not poem_text or poem_text == "NO_POEM":
+            if not poem_text or poem_text == "NO_POEM" or "NO_POEM" in poem_text:
                 if rate_limit_error:
                     print(f"    All LLM models and clients failed or rate limited. Need to wait {wait_time} seconds.")
                 else:
                     print("    All LLM models and clients failed.")
 
                 # If all models have failed, exit the program
-                if (len(failed_litellm_models) >= len(PRIMARY_LITELLM_MODELS) + len(load_custom_llm_models()) and
+                custom_llm_models = load_custom_llm_models()
+                if (len(failed_litellm_models) >= len(PRIMARY_LITELLM_MODELS) + len(custom_llm_models) and
                     len(failed_clients) >= len(LLM_CLIENTS)):
                     print("ERROR: All available LLM models have failed. Exiting program.")
                     sys.exit(1)
@@ -436,7 +441,7 @@ def extract_poem_from_comment(comment_body):
 
     # Process the response
     try:
-        if poem_text == "NO_POEM":
+        if poem_text == "NO_POEM" or "NO_POEM" in poem_text:
             print("    No poem found by LLM")
             return (None, None)
 
@@ -627,11 +632,16 @@ def write_log_summary():
         f.write(f"- Repository: {run_stats['repositories_checked']}\n")
         f.write(f"- PRs checked: {run_stats['prs_checked']}\n\n")
 
-        # Write statistics
-        f.write("## Statistics\n")
-        f.write(f"- New poems found: {run_stats['new_poems']}\n")
-        f.write(f"- Total poems in collection: {run_stats['total_poems']}\n")
-        f.write(f"- Duplicates found: {len(run_stats['duplicates'])}\n\n")
+        # Write statistics as a table
+        f.write("## Statistics\n\n")
+        f.write("| Metric | Value |\n")
+        f.write("|--------|-------|\n")
+        f.write(f"| Total Poems | {run_stats['total_poems']} |\n")
+        f.write(f"| Repositories Scanned | {len(run_stats['repositories_checked'])} |\n")
+        f.write(f"| PRs Scanned | {run_stats['prs_checked']} |\n")
+        f.write(f"| New Poems (This Run) | {run_stats['new_poems']} |\n")
+        f.write(f"| Duplicates Found | {len(run_stats['duplicates'])} |\n")
+        f.write(f"| Last Updated | {timestamp} |\n\n")
 
         # Write models used
         f.write("## LLM Models Used\n")
@@ -655,6 +665,61 @@ def write_log_summary():
 
         f.write("---\n\n")
 
+def run_wizard(args):
+    """Interactive wizard to prompt for parameter values."""
+    print("\n=== Gemini Code Assist Poetry Collection Wizard ===\n")
+    print("Press Enter to use default values or type a new value.\n")
+
+    # Owner
+    default_owner = args.owner
+    user_input = input(f"GitHub repository owner [{default_owner}]: ").strip()
+    args.owner = user_input if user_input else default_owner
+
+    # Repo
+    default_repo = args.repo
+    user_input = input(f"GitHub repository name [{default_repo}]: ").strip()
+    args.repo = user_input if user_input else default_repo
+
+    # Search mode
+    default_search = "yes" if args.search else "no"
+    user_input = input(f"Search for public repositories with Gemini poems? (yes/no) [{default_search}]: ").strip().lower()
+    args.search = user_input == "yes" if user_input else args.search
+
+    # Max repos (only if search is enabled)
+    if args.search:
+        default_max_repos = args.max_repos
+        user_input = input(f"Maximum number of repositories to search [{default_max_repos}]: ").strip()
+        if user_input:
+            try:
+                args.max_repos = int(user_input)
+            except ValueError:
+                print(f"Invalid input. Using default value: {default_max_repos}")
+
+    # Max PRs
+    default_max_prs = args.max_prs
+    user_input = input(f"Maximum number of PRs to check per repository [{default_max_prs}]: ").strip()
+    if user_input:
+        try:
+            args.max_prs = int(user_input)
+        except ValueError:
+            print(f"Invalid input. Using default value: {default_max_prs}")
+
+    # Output file
+    default_output = args.output
+    user_input = input(f"Output JSON file [{default_output}]: ").strip()
+    args.output = user_input if user_input else default_output
+
+    print("\n=== Configuration Summary ===")
+    print(f"Repository: {args.owner}/{args.repo}")
+    print(f"Search mode: {'Enabled' if args.search else 'Disabled'}")
+    if args.search:
+        print(f"Max repositories to search: {args.max_repos}")
+    print(f"Max PRs to check: {args.max_prs}")
+    print(f"Output file: {args.output}")
+    print("\nStarting collection...\n")
+
+    return args
+
 def main():
     print("Starting Gemini Code Assist poem collection script")
     parser = argparse.ArgumentParser(description="Collect Gemini Code Assist poems from GitHub repositories")
@@ -664,7 +729,12 @@ def main():
     parser.add_argument("--max-repos", help="Maximum number of repositories to search", type=int, default=5)
     parser.add_argument("--max-prs", help="Maximum number of PRs to check per repository", type=int, default=100)
     parser.add_argument("--output", help="Output JSON file", default=GEM_FLOWERS_FILE)
+    parser.add_argument("--wizard", "-w", help="Run in wizard mode to interactively set parameters", action="store_true")
     args = parser.parse_args()
+
+    # Run the wizard if requested
+    if args.wizard:
+        args = run_wizard(args)
 
     print(f"Configuration: owner={args.owner}, repo={args.repo}, search={args.search}, max_repos={args.max_repos}, max_prs={args.max_prs}")
     print(f"GitHub token available: {bool(GITHUB_TOKEN)}")
@@ -708,16 +778,33 @@ def main():
             # Add new poems to the front (LIFO)
             all_poems = unique_new_poems + existing_poems
 
+            # Filter out NO_POEM entries before saving to JSON
+            filtered_poems = [poem for poem in all_poems if not (len(poem.get("poem", [])) == 1 and (poem.get("poem", [""])[0] == "\"NO_POEM\"" or "NO_POEM" in poem.get("poem", [""])[0]))]
+
             # Save to JSON file
-            save_poems_to_json(all_poems, json_file)
+            save_poems_to_json(filtered_poems, json_file)
+
+            # Update statistics after filtering
+            run_stats["total_poems"] = len(filtered_poems)
 
             # Generate markdown file for human reading (optional)
             md_file = json_file.replace('.json', '.md')
             with open(md_file, 'w', encoding='utf-8') as f:
                 f.write("# Gemini Code Assist - PR Poetry\n\n")
 
-                # Filter out NO_POEM entries for the markdown file
-                filtered_poems = [poem for poem in all_poems if not (len(poem.get("poem", [])) == 1 and poem.get("poem", [""])[0] == "\"NO_POEM\"")]
+                # Add statistics table at the top
+                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                f.write("## Collection Statistics\n\n")
+                f.write("| Metric | Value |\n")
+                f.write("|--------|-------|\n")
+                f.write(f"| Total Poems | {run_stats['total_poems']} |\n")
+                f.write(f"| Repositories Scanned | {len(run_stats['repositories_checked'])} |\n")
+                f.write(f"| PRs Scanned | {run_stats['prs_checked']} |\n")
+                f.write(f"| New Poems (This Run) | {run_stats['new_poems']} |\n")
+                f.write(f"| Duplicates Found | {len(run_stats['duplicates'])} |\n")
+                f.write(f"| Last Updated | {timestamp} |\n\n")
+
+                # Use the already filtered poems for the markdown file
 
                 for poem in filtered_poems:
                     f.write("---\n\n")
