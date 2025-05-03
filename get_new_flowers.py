@@ -426,11 +426,10 @@ def extract_poem_from_comment(comment_body):
                 else:
                     print("    All LLM models and clients failed.")
 
-                # If all models have failed, exit the program
-                if (len(failed_litellm_models) >= len(PRIMARY_LITELLM_MODELS) + len(load_custom_llm_models()) and
-                    len(failed_clients) >= len(LLM_CLIENTS)):
-                    print("ERROR: All available LLM models have failed. Exiting program.")
-                    sys.exit(1)
+                if (
+                    len(failed_litellm_models) >= (len(PRIMARY_LITELLM_MODELS) + (len(load_custom_llm_models()) if load_custom_llm_models() else 0)) and
+                    len(failed_clients) >= (len(LLM_CLIENTS) if LLM_CLIENTS else 0)
+                ):
 
                 return (None, None)
 
