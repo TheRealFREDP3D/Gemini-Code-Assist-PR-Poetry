@@ -1,6 +1,6 @@
 # Gemini Code Assist PR Poetry
 
-[Listen to the Podcast Deep Dive i
+[Listen to the Podcast Deep Dive 
 having a conversation about this project](https://youtu.be/XEh26jsH-2g?si=yVaqn5TcBZhUaVzZ) 
 
 ## Why?
