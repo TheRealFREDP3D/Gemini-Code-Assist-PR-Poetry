@@ -1,5 +1,8 @@
 # Gemini Code Assist PR Poetry
 
+[Listen to the Podcast Deep Dive i
+having a conversation about this project](https://youtu.be/XEh26jsH-2g?si=yVaqn5TcBZhUaVzZ) 
+
 ## Why?
 
 When a Pull Request is created, the **Gemini Code Assist** app analyzes it and generates a detailed report.
