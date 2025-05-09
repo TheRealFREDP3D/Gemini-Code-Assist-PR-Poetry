@@ -33,7 +33,7 @@ try:
     if github_token:
         print(
             "Token starts with:",
-            f"{github_token[:4]}..." if len(github_token)  4 else "",
+            f"{github_token[:4]}..." if len(github_token) > 4 else "",
         )
 except Exception as e:
     print("Error loading environment variables:", e)
