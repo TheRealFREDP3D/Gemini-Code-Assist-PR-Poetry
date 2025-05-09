@@ -1,142 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
-      <mxfile host="codeviz.app" modified="2025-05-09T12:00:21.677Z" agent="CodeViz Exporter" version="14.6.5" type="device">
+      <mxfile host="codeviz.app" modified="2025-05-09T20:24:11.494Z" agent="CodeViz Exporter" version="14.6.5" type="device">
         <diagram id="codeviz-diagram" name="System Diagram">
           <mxGraphModel dx="1000" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
             <root>
               <mxCell id="0"/>
               <mxCell id="1" parent="0"/>
-              <mxCell id="2557" value="" style="html=1;whiteSpace=wrap;container=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;fillOpacity=20;strokeWidth=2;containerType=none;recursiveResize=0;movable=1;resizable=1;autosize=0;dropTarget=0" vertex="1" parent="2556">
-                <mxGeometry x="218.1578312295738" y="235" width="260" height="260" as="geometry"/>
+              <mxCell id="1009" value="" style="html=1;whiteSpace=wrap;container=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;fillOpacity=20;strokeWidth=2;containerType=none;recursiveResize=0;movable=1;resizable=1;autosize=0;dropTarget=0" vertex="1" parent="1008">
+                <mxGeometry x="40" y="195" width="260" height="260" as="geometry"/>
               </mxCell>
-              <mxCell id="2557_label" value="LLM Provider Services" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;labelBackgroundColor=white;spacing=5" vertex="1" parent="2556">
-                <mxGeometry x="226.1578312295738" y="243" width="184" height="24" as="geometry"/>
+              <mxCell id="1009_label" value="Poem Extraction Application&lt;br&gt;Python Application Container" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;labelBackgroundColor=white;spacing=5" vertex="1" parent="1008">
+                <mxGeometry x="48" y="203" width="184" height="24" as="geometry"/>
               </mxCell>
-<mxCell id="2559" value="" style="html=1;whiteSpace=wrap;container=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;fillOpacity=20;strokeWidth=2;containerType=none;recursiveResize=0;movable=1;resizable=1;autosize=0;dropTarget=0" vertex="1" parent="2558">
-                <mxGeometry x="478.39457807393444" y="370" width="260" height="260" as="geometry"/>
+<mxCell id="1007" value="" style="html=1;whiteSpace=wrap;container=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;fillOpacity=20;strokeWidth=2;containerType=none;recursiveResize=0;movable=1;resizable=1;autosize=0;dropTarget=0" vertex="1" parent="1">
+                <mxGeometry x="52" y="747" width="260" height="260" as="geometry"/>
               </mxCell>
-              <mxCell id="2559_label" value="Application Data (Local Storage)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;labelBackgroundColor=white;spacing=5" vertex="1" parent="2558">
-                <mxGeometry x="486.39457807393444" y="378" width="184" height="24" as="geometry"/>
+              <mxCell id="1007_label" value="External Systems" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;labelBackgroundColor=white;spacing=5" vertex="1" parent="1">
+                <mxGeometry x="60" y="755" width="184" height="24" as="geometry"/>
               </mxCell>
-<mxCell id="2560" value="" style="html=1;whiteSpace=wrap;container=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;fillOpacity=20;strokeWidth=2;containerType=none;recursiveResize=0;movable=1;resizable=1;autosize=0;dropTarget=0" vertex="1" parent="2558">
-                <mxGeometry x="511.39457807393444" y="300" width="260" height="260" as="geometry"/>
+<mxCell id="1008" value="" style="html=1;whiteSpace=wrap;container=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;fillOpacity=20;strokeWidth=2;containerType=none;recursiveResize=0;movable=1;resizable=1;autosize=0;dropTarget=0" vertex="1" parent="1">
+                <mxGeometry x="22" y="252" width="525.3419676640765" height="475" as="geometry"/>
               </mxCell>
-              <mxCell id="2560_label" value="Core Internal Modules" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;labelBackgroundColor=white;spacing=5" vertex="1" parent="2558">
-                <mxGeometry x="519.3945780739344" y="308" width="184" height="24" as="geometry"/>
+              <mxCell id="1008_label" value="Gemini-Code-Assist-PR-Poetry System" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;labelBackgroundColor=white;spacing=5" vertex="1" parent="1">
+                <mxGeometry x="30" y="260" width="449.34196766407655" height="24" as="geometry"/>
               </mxCell>
-<mxCell id="2556" value="" style="html=1;whiteSpace=wrap;container=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;fillOpacity=20;strokeWidth=2;containerType=none;recursiveResize=0;movable=1;resizable=1;autosize=0;dropTarget=0" vertex="1" parent="1">
-                <mxGeometry x="302.73674684436065" y="812" width="498.1578312295738" height="515" as="geometry"/>
-              </mxCell>
-              <mxCell id="2556_label" value="External Systems &amp; Libraries" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;labelBackgroundColor=white;spacing=5" vertex="1" parent="1">
-                <mxGeometry x="310.73674684436065" y="820" width="422.1578312295738" height="24" as="geometry"/>
-              </mxCell>
-<mxCell id="2558" value="" style="html=1;whiteSpace=wrap;container=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;fillOpacity=20;strokeWidth=2;containerType=none;recursiveResize=0;movable=1;resizable=1;autosize=0;dropTarget=0" vertex="1" parent="1">
-                <mxGeometry x="22" y="252" width="791.3945780739344" height="650" as="geometry"/>
-              </mxCell>
-              <mxCell id="2558_label" value="Gemini Code Assist Application System" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;labelBackgroundColor=white;spacing=5" vertex="1" parent="1">
-                <mxGeometry x="30" y="260" width="715.3945780739344" height="24" as="geometry"/>
-              </mxCell>
-              <mxCell id="2561" value="Developer/User&lt;br&gt;External Actor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5" vertex="1" parent="1">
-                    <mxGeometry x="244.65783122957376" y="12" width="168.1578312295738" height="84.0789156147869" as="geometry"/>
+              <mxCell id="1011" value="Developer/Operator&lt;br&gt;Human" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5" vertex="1" parent="1">
+                    <mxGeometry x="128.55261040985792" y="12" width="168.1578312295738" height="84.0789156147869" as="geometry"/>
                   </mxCell>
-<mxCell id="2562" value="Poem Collection Script&lt;br&gt;Python" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5" vertex="1" parent="2558">
-                    <mxGeometry x="333.23674684436065" y="185" width="168.1578312295738" height="84.0789156147869" as="geometry"/>
+<mxCell id="1019" value="Poem Data Store&lt;br&gt;JSON Files Container" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5" vertex="1" parent="1008">
+                    <mxGeometry x="249.1578312295738" y="305" width="168.1578312295738" height="84.0789156147869" as="geometry"/>
                   </mxCell>
-<mxCell id="2563" value="Poem Data Processor Utility&lt;br&gt;Python" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5" vertex="1" parent="2558">
-                    <mxGeometry x="40" y="255" width="168.1578312295738" height="84.0789156147869" as="geometry"/>
+<mxCell id="1020" value="Log Data Store&lt;br&gt;Log Files Container" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5" vertex="1" parent="1008">
+                    <mxGeometry x="51" y="315" width="168.1578312295738" height="84.0789156147869" as="geometry"/>
                   </mxCell>
-<mxCell id="2571" value="Test Suite&lt;br&gt;Python (unittest)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5" vertex="1" parent="2558">
-                    <mxGeometry x="135.07891561478687" y="120" width="168.1578312295738" height="84.0789156147869" as="geometry"/>
+<mxCell id="1021" value="Poem Data Management Utility&lt;br&gt;Python Script Container" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5" vertex="1" parent="1008">
+                    <mxGeometry x="277.18413643450276" y="120" width="168.1578312295738" height="84.0789156147869" as="geometry"/>
                   </mxCell>
-<mxCell id="2572" value="GitHub API&lt;br&gt;External Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5" vertex="1" parent="2556">
-                    <mxGeometry x="40" y="140" width="168.1578312295738" height="84.0789156147869" as="geometry"/>
-                  </mxCell>
-<mxCell id="2573" value="LiteLLM&lt;br&gt;Python Library" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5" vertex="1" parent="2556">
-                    <mxGeometry x="229.1578312295738" y="120" width="168.1578312295738" height="84.0789156147869" as="geometry"/>
-                  </mxCell>
-              <mxCell id="edge-8642" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;strokeWidth=2;jumpStyle=arc;jumpSize=10;spacing=15;labelBackgroundColor=white;labelBorderColor=none" edge="1" parent="1" source="2561" target="2562">
+              <mxCell id="edge-1181" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;strokeWidth=2;jumpStyle=arc;jumpSize=10;spacing=15;labelBackgroundColor=white;labelBorderColor=none" edge="1" parent="1" source="1021" target="1019">
                   <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="edge-8642_label" value="runs" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="edge-8642">
+                <mxCell id="edge-1181_label" value="manages poems in" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="edge-1181">
                   <mxGeometry x="-0.2" y="10" relative="1" as="geometry">
                     <mxPoint as="offset"/>
                   </mxGeometry>
                 </mxCell>
-<mxCell id="edge-8643" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;strokeWidth=2;jumpStyle=arc;jumpSize=10;spacing=15;labelBackgroundColor=white;labelBorderColor=none" edge="1" parent="1" source="2561" target="2563">
+<mxCell id="edge-1183" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;strokeWidth=2;jumpStyle=arc;jumpSize=10;spacing=15;labelBackgroundColor=white;labelBorderColor=none" edge="1" parent="1" source="1011" target="1009">
                   <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="edge-8643_label" value="runs" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="edge-8643">
+                <mxCell id="edge-1183_label" value="runs &amp; configures" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="edge-1183">
                   <mxGeometry x="-0.2" y="10" relative="1" as="geometry">
                     <mxPoint as="offset"/>
                   </mxGeometry>
                 </mxCell>
-<mxCell id="edge-8645" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;strokeWidth=2;jumpStyle=arc;jumpSize=10;spacing=15;labelBackgroundColor=white;labelBorderColor=none" edge="1" parent="1" source="2561" target="2571">
+<mxCell id="edge-1165" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;strokeWidth=2;jumpStyle=arc;jumpSize=10;spacing=15;labelBackgroundColor=white;labelBorderColor=none" edge="1" parent="1" source="1011" target="1021">
                   <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="edge-8645_label" value="runs" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="edge-8645">
+                <mxCell id="edge-1165_label" value="runs" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="edge-1165">
                   <mxGeometry x="-0.2" y="10" relative="1" as="geometry">
                     <mxPoint as="offset"/>
                   </mxGeometry>
                 </mxCell>
-<mxCell id="edge-8671" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;strokeWidth=2;jumpStyle=arc;jumpSize=10;spacing=15;labelBackgroundColor=white;labelBorderColor=none" edge="1" parent="1" source="2561" target="2560">
+<mxCell id="edge-1195" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;strokeWidth=2;jumpStyle=arc;jumpSize=10;spacing=15;labelBackgroundColor=white;labelBorderColor=none" edge="1" parent="1" source="1009" target="1007">
                   <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="edge-8671_label" value="may run PullPal.py utility via" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="edge-8671">
+                <mxCell id="edge-1195_label" value="fetches data from" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="edge-1195">
                   <mxGeometry x="-0.2" y="10" relative="1" as="geometry">
                     <mxPoint as="offset"/>
                   </mxGeometry>
                 </mxCell>
-<mxCell id="edge-8702" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;strokeWidth=2;jumpStyle=arc;jumpSize=10;spacing=15;labelBackgroundColor=white;labelBorderColor=none" edge="1" parent="1" source="2560" target="2557">
+<mxCell id="edge-1191" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;strokeWidth=2;jumpStyle=arc;jumpSize=10;spacing=15;labelBackgroundColor=white;labelBorderColor=none" edge="1" parent="1" source="1009" target="1019">
                   <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="edge-8702_label" value="may directly use for local LLMs" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="edge-8702">
+                <mxCell id="edge-1191_label" value="writes poems to" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="edge-1191">
                   <mxGeometry x="-0.2" y="10" relative="1" as="geometry">
                     <mxPoint as="offset"/>
                   </mxGeometry>
                 </mxCell>
-<mxCell id="edge-8738" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;strokeWidth=2;jumpStyle=arc;jumpSize=10;spacing=15;labelBackgroundColor=white;labelBorderColor=none" edge="1" parent="1" source="2560" target="2559">
+<mxCell id="edge-1250" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;strokeWidth=2;jumpStyle=arc;jumpSize=10;spacing=15;labelBackgroundColor=white;labelBorderColor=none" edge="1" parent="1" source="1009" target="1020">
                   <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="edge-8738_label" value="writes/reads poem data to/from" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="edge-8738">
-                  <mxGeometry x="-0.2" y="10" relative="1" as="geometry">
-                    <mxPoint as="offset"/>
-                  </mxGeometry>
-                </mxCell>
-<mxCell id="edge-8687" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;strokeWidth=2;jumpStyle=arc;jumpSize=10;spacing=15;labelBackgroundColor=white;labelBorderColor=none" edge="1" parent="1" source="2560" target="2572">
-                  <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="edge-8687_label" value="API calls to" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="edge-8687">
-                  <mxGeometry x="-0.2" y="10" relative="1" as="geometry">
-                    <mxPoint as="offset"/>
-                  </mxGeometry>
-                </mxCell>
-<mxCell id="edge-8694" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;strokeWidth=2;jumpStyle=arc;jumpSize=10;spacing=15;labelBackgroundColor=white;labelBorderColor=none" edge="1" parent="1" source="2560" target="2573">
-                  <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="edge-8694_label" value="delegates LLM calls via" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="edge-8694">
-                  <mxGeometry x="-0.2" y="10" relative="1" as="geometry">
-                    <mxPoint as="offset"/>
-                  </mxGeometry>
-                </mxCell>
-<mxCell id="edge-8744" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;strokeWidth=2;jumpStyle=arc;jumpSize=10;spacing=15;labelBackgroundColor=white;labelBorderColor=none" edge="1" parent="1" source="2573" target="2557">
-                  <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="edge-8744_label" value="routes requests to" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="edge-8744">
-                  <mxGeometry x="-0.2" y="10" relative="1" as="geometry">
-                    <mxPoint as="offset"/>
-                  </mxGeometry>
-                </mxCell>
-<mxCell id="edge-8684" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;strokeWidth=2;jumpStyle=arc;jumpSize=10;spacing=15;labelBackgroundColor=white;labelBorderColor=none" edge="1" parent="1" source="2563" target="2559">
-                  <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="edge-8684_label" value="reads/writes poem data to/from" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="edge-8684">
-                  <mxGeometry x="-0.2" y="10" relative="1" as="geometry">
-                    <mxPoint as="offset"/>
-                  </mxGeometry>
-                </mxCell>
-<mxCell id="edge-8676" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;strokeWidth=2;jumpStyle=arc;jumpSize=10;spacing=15;labelBackgroundColor=white;labelBorderColor=none" edge="1" parent="1" source="2562" target="2560">
-                  <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="edge-8676_label" value="uses" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="edge-8676">
+                <mxCell id="edge-1250_label" value="writes logs to" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="edge-1250">
                   <mxGeometry x="-0.2" y="10" relative="1" as="geometry">
                     <mxPoint as="offset"/>
                   </mxGeometry>

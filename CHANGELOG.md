@@ -151,7 +151,30 @@ All notable changes to this project will be documented in this file.
 - Enhanced logging with Python's built-in logging module
 - Standardized LLM client implementations
 
-## [1.6.0-FINAL] - 2025-05-09
+## [1.5.1] - 2025-05-11
+
+### Added
+
+- Added `--ollama` command-line argument to use only local Ollama models for LLM processing
+- Added Ollama-specific configuration in Config class
+- Added `_try_ollama_models()` function to specifically try Ollama models
+- Updated wizard mode to include Ollama option
+- Added examples to README.md and cheatsheet.md for the new option
+
+### Changed
+
+- Simplified LLM fallback workflow with clearer separation of concerns
+- Improved `is_ollama_running()` function to use the `requests` library instead of `curl`
+- Enhanced response handling with better error handling and null checks
+- Made response processing more robust across different LLM providers
+
+### Fixed
+
+- Fixed issues with attribute access in LLM response handling
+- Improved error handling for Ollama-only mode
+- Fixed potential issues with null responses
+
+## [1.6.0-FINAL] - 2025-05-12
 
 ### Added
 
