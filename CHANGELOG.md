@@ -151,6 +151,27 @@ All notable changes to this project will be documented in this file.
 - Enhanced logging with Python's built-in logging module
 - Standardized LLM client implementations
 
+## [1.6.0-FINAL] - 2025-05-09
+
+### Added
+
+- Finalized project structure and organization
+- Comprehensive documentation for all components
+- Complete test coverage for core functionality
+
+### Changed
+
+- Pinned dependency versions for better reproducibility
+- Improved error handling and recovery mechanisms
+- Enhanced logging with more detailed information
+- Standardized code formatting across all files
+
+### Fixed
+
+- Resolved all remaining issues with LLM client implementations
+- Fixed edge cases in poem extraction and formatting
+- Addressed potential security concerns with API handling
+
 ## [Future Plans]
 
 - Web interface for browsing the collection
