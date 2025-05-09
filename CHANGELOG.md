@@ -129,6 +129,25 @@ All notable changes to this project will be documented in this file.
 - Improved NO_POEM detection to catch variations in the response format
 - Updated both main script and development utilities to maintain consistent behavior
 
+## [1.5.0] - 2025-05-10
+
+### Added
+
+- New modular architecture with core modules in `src/` directory:
+  - `config.py` - Centralized configuration management
+  - `error_handler.py` - Improved error handling with better recovery
+  - `logger.py` - Enhanced logging with file rotation
+  - `llm_client_template.py` - Standardized template for LLM clients
+- Comprehensive documentation for the new architecture
+- Fixed syntax errors in utility scripts and test files
+
+### Changed
+
+- Improved error handling with centralized error management
+- Better configuration management with a dedicated class
+- Enhanced logging with Python's built-in logging module
+- Standardized LLM client implementations
+
 ## [Future Plans]
 
 - Web interface for browsing the collection
