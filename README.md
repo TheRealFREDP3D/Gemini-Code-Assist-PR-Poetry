@@ -126,9 +126,18 @@ See [CHANGELOG.md](./CHANGELOG.md) for version history and updates.
 - `logs/` - Log files with detailed information about collection runs
 - `tests/` - Test scripts and utilities
 - `utils/` - Utility scripts and tools
-  - `get-pr-conversations/` - Tool for fetching and saving complete PR conversations
+  - `PullPal` - Tool for fetching and saving complete PR conversations
 
 ---
 
  *It's like a gorgeous tiny flower growing on a big pile of snips*
  — `\x02\xM4\xNY\xC0\xFF\x55`
+
+---
+
+## Visual Overview - Fully Extended (Made with - CodeViz VSCode Extension)
+
+![Visual Overview](docs/overview-full.jpg)  
+
+---
+
