@@ -18,7 +18,7 @@ load_dotenv()
 
 # Configure LiteLLM
 litellm.api_key = os.getenv("GITHUB_TOKEN")
-litellm.set_verbose = True
+litellm.set_verbose = False
 
 # LLM Fallback Mechanism
 # -----------------------
