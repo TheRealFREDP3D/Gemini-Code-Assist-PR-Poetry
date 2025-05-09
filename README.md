@@ -149,9 +149,12 @@ See [CHANGELOG.md](./CHANGELOG.md) for version history and updates.
 
 ---
 
-## Visual Overview - Fully Extended (Made with - CodeViz VSCode Extension)
+## Visual Overview - (Made with - CodeViz VSCode Extension)
 
-![Visual Overview](docs/overview-full.jpg)
+![Visual Overview - Basic](docs/overview-basic.jpg)  
 
 ---
 
+![Visual Overview - Full](docs/overview-full.jpg)  
+
+---
