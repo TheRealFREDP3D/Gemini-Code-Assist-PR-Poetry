@@ -69,11 +69,10 @@ def load_custom_llm_models():
 def is_ollama_running():
     """Check if Ollama server is running."""
     try:
-        # Try to make a request to the Ollama API
-        result = subprocess.run(["curl", "-s", "http://localhost:11434/api/tags"],
-                               capture_output=True, text=True, timeout=5)
-        return result.returncode == 0 and "models" in result.stdout
-    except Exception:
+        # Try to make a request to the Ollama API using requests library
+        response = requests.get(f"{Config.OLLAMA_API_URL}/api/tags", timeout=5)
+        return response.status_code == 200 and "models" in response.text
+    except requests.RequestException:
         return False
 
 # Configuration is now handled by the Config class in src/config.py
@@ -223,7 +222,7 @@ def _modify_client_code(client_code, clean_prompt):
             'UserMessage("What is the capital of France?")',
             f'UserMessage("{clean_prompt}")'
         )
-    return client_code  # Return original if no patterns match
+    return client_code
 
 def _execute_temp_client(temp_client_path):
     """Execute the temporary client and return its output."""
@@ -335,19 +334,27 @@ def _try_primary_litellm_models(prompt):
             # Track model usage
             run_stats["models_used"].add(model_name)
 
-            # Handle different response formats from litellm
-            if hasattr(response, 'choices') and len(response.choices) > 0:
-                choice = response.choices[0]
-                if hasattr(choice, 'message') and hasattr(choice.message, 'content'):
-                    poem_text = choice.message.content.strip()
-                elif hasattr(choice, 'text'):
-                    poem_text = choice.text.strip()
-                else:
-                    poem_text = str(choice).strip()
-            else:
-                poem_text = str(response).strip()
+            # Extract text from the response in a safe way
+            try:
+                # Convert the response to a string and extract content
+                response_str = str(response)
+                poem_text = response_str.strip()
 
-            print(f"    LiteLLM response from {model_name}: {poem_text[:100]}...")
+                # Try to extract content from response object if possible
+                try:
+                    if hasattr(response, 'choices') and response.choices:
+                        content = response.choices[0].message.content
+                        if content:
+                            poem_text = content.strip()
+                except (AttributeError, IndexError, TypeError):
+                    pass  # Fall back to the string representation
+
+                # Safely print a preview of the response
+                preview = poem_text[:100] if poem_text else "None"
+                print(f"    LiteLLM response from {model_name}: {preview}...")
+            except Exception as e:
+                print(f"    Error extracting content from response: {e}")
+                poem_text = str(response)
 
             # If we got a valid response, break the loop
             if poem_text and poem_text != "NO_POEM" and "NO_POEM" not in poem_text:
@@ -358,6 +365,65 @@ def _try_primary_litellm_models(prompt):
             rate_limit_error, wait_time = error_handler.handle_litellm_error(e, model_name)
 
     return poem_text, rate_limit_error, wait_time
+
+def _try_ollama_models(prompt):
+    """Try to extract poem using only Ollama models."""
+    poem_text = None
+    max_retries = 3  # Maximum number of retries per model
+
+    # Check if Ollama is running
+    if not is_ollama_running():
+        print("    Ollama server is not running. Cannot use Ollama models.")
+        return None
+
+    # Try each Ollama model
+    for model in Config.OLLAMA_MODELS:
+        # Skip models that have failed too many times
+        if failed_litellm_models.count(model) >= max_retries:
+            print(f"    Skipping {model} - failed {max_retries} times")
+            continue
+
+        try:
+            print(f"    Trying Ollama model: {model}")
+            response = litellm.completion(
+                model=model,
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.1,
+                max_tokens=500
+            )
+
+            # Track model usage
+            run_stats["models_used"].add(model)
+
+            # Extract text from the response in a safe way
+            try:
+                # Convert the response to a string and extract content
+                response_str = str(response)
+                poem_text = response_str.strip()
+
+                # Try to extract content from response object if possible
+                try:
+                    if hasattr(response, 'choices') and response.choices:
+                        content = response.choices[0].message.content
+                        if content:
+                            poem_text = content.strip()
+                except (AttributeError, IndexError, TypeError):
+                    pass  # Fall back to the string representation
+
+                # Safely print a preview of the response
+                preview = poem_text[:100] if poem_text else "None"
+                print(f"    Ollama model response: {preview}...")
+            except Exception as e:
+                print(f"    Error extracting content from response: {e}")
+                poem_text = str(response)
+
+            if poem_text and poem_text != "NO_POEM" and "NO_POEM" not in poem_text:
+                break
+        except Exception as e:
+            # Use the centralized error handler
+            _, _ = error_handler.handle_litellm_error(e, model)  # We don't need to return these values here
+
+    return poem_text
 
 def _try_custom_litellm_models(prompt):
     """Try to extract poem using custom LiteLLM models."""
@@ -389,19 +455,27 @@ def _try_custom_litellm_models(prompt):
             # Track model usage
             run_stats["models_used"].add(model)
 
-            # Handle different response formats from litellm
-            if hasattr(response, 'choices') and len(response.choices) > 0:
-                choice = response.choices[0]
-                if hasattr(choice, 'message') and hasattr(choice.message, 'content'):
-                    poem_text = choice.message.content.strip()
-                elif hasattr(choice, 'text'):
-                    poem_text = choice.text.strip()
-                else:
-                    poem_text = str(choice).strip()
-            else:
-                poem_text = str(response).strip()
+            # Extract text from the response in a safe way
+            try:
+                # Convert the response to a string and extract content
+                response_str = str(response)
+                poem_text = response_str.strip()
 
-            print(f"    Custom model response: {poem_text[:100]}...")
+                # Try to extract content from response object if possible
+                try:
+                    if hasattr(response, 'choices') and response.choices:
+                        content = response.choices[0].message.content
+                        if content:
+                            poem_text = content.strip()
+                except (AttributeError, IndexError, TypeError):
+                    pass  # Fall back to the string representation
+
+                # Safely print a preview of the response
+                preview = poem_text[:100] if poem_text else "None"
+                print(f"    Custom model response: {preview}...")
+            except Exception as e:
+                print(f"    Error extracting content from response: {e}")
+                poem_text = str(response)
 
             if poem_text and poem_text != "NO_POEM" and "NO_POEM" not in poem_text:
                 break
@@ -482,8 +556,13 @@ def _check_all_models_failed():
         print("ERROR: All available LLM models have failed. Exiting program.")
         sys.exit(1)
 
-def extract_poem_from_comment(comment_body):
-    """Extract poem and link from a comment using LiteLLM with fallback to alternative clients."""
+def extract_poem_from_comment(comment_body, ollama_only=False):
+    """Extract poem and link from a comment using LiteLLM with fallback to alternative clients.
+
+    Args:
+        comment_body: The comment text to analyze
+        ollama_only: If True, only use Ollama models for LLM processing
+    """
     if not comment_body:
         return (None, None)
 
@@ -504,20 +583,35 @@ def extract_poem_from_comment(comment_body):
     Extract ONLY the poem lines (if any):
     """
 
-    # Try primary LiteLLM models
-    poem_text, rate_limit_error, wait_time = _try_primary_litellm_models(prompt)
+    # Check if Ollama is running when in Ollama-only mode
+    if ollama_only and not is_ollama_running():
+        print("    Ollama-only mode is enabled but Ollama server is not running.")
+        print("    Please start Ollama server or disable Ollama-only mode.")
+        return (None, None)
 
-    # Check if we need to try other models
+    poem_text = None
+    rate_limit_error = False
+    wait_time = 0
+
+    # Define helper function to check if a response indicates no poem
     def is_no_poem(text):
         return not text or text == "NO_POEM" or "NO_POEM" in text
 
-    # If primary models failed or returned NO_POEM, try custom LiteLLM models
-    if is_no_poem(poem_text):
-        poem_text = _try_custom_litellm_models(prompt)
+    # In Ollama-only mode, only try Ollama models
+    if ollama_only:
+        print("    Using Ollama-only mode for LLM processing")
+        poem_text = _try_ollama_models(prompt)
+    else:
+        # Try primary LiteLLM models first
+        poem_text, rate_limit_error, wait_time = _try_primary_litellm_models(prompt)
 
-    # If custom models failed or returned NO_POEM, try alternative clients
-    if is_no_poem(poem_text):
-        poem_text = _try_client_implementations(prompt)
+        # If primary models failed or returned NO_POEM, try custom LiteLLM models
+        if is_no_poem(poem_text):
+            poem_text = _try_custom_litellm_models(prompt)
+
+        # If custom models failed or returned NO_POEM, try alternative clients
+        if is_no_poem(poem_text):
+            poem_text = _try_client_implementations(prompt)
 
     # If all models and clients failed, exit with appropriate message
     if is_no_poem(poem_text):
@@ -526,8 +620,9 @@ def extract_poem_from_comment(comment_body):
         else:
             print("    All LLM models and clients failed.")
 
-        # If all models have failed, exit the program
-        _check_all_models_failed()
+        # Exit if all LLM models exhausted
+        if not ollama_only:  # Don't exit in Ollama-only mode
+            _check_all_models_failed()
         return (None, None)
 
     # Process the response
@@ -582,10 +677,19 @@ def save_poems_to_json(poems, json_file):
     with open(json_file, 'w', encoding='utf-8') as f:
         json.dump(poems, f, indent=2)
 
-def _process_gemini_comment(comment, owner, repo, pr_number, comment_type="comment"):
-    """Process a comment from Gemini Code Assist to extract poems."""
+def _process_gemini_comment(comment, owner, repo, pr_number, comment_type="comment", ollama_only=False):
+    """Process a comment from Gemini Code Assist to extract poems.
+
+    Args:
+        comment: The comment to process
+        owner: Repository owner
+        repo: Repository name
+        pr_number: Pull request number
+        comment_type: Type of comment ("comment" or "review")
+        ollama_only: If True, only use Ollama models for LLM processing
+    """
     print(f"    Found {comment_type} from Gemini Code Assist: {comment['user']['login']}")
-    poem_lines, link = extract_poem_from_comment(comment["body"])
+    poem_lines, link = extract_poem_from_comment(comment["body"], ollama_only=ollama_only)
 
     if not (poem_lines and link):
         print(f"    No poem found in {comment_type} from {comment['user']['login']}")
@@ -599,10 +703,19 @@ def _process_gemini_comment(comment, owner, repo, pr_number, comment_type="comme
     print(f"    Found poem in PR #{pr_number} from {comment_type}")
     return entry
 
-def collect_poems_from_repo(owner, repo, max_prs=100):
-    """Collect all poems from a specific repository."""
+def collect_poems_from_repo(owner, repo, max_prs=100, ollama_only=False):
+    """Collect all poems from a specific repository.
+
+    Args:
+        owner: Repository owner
+        repo: Repository name
+        max_prs: Maximum number of PRs to check
+        ollama_only: If True, only use Ollama models for LLM processing
+    """
     poems = []
     print(f"Collecting poems from {owner}/{repo}...")
+    if ollama_only:
+        print(f"Using Ollama-only mode for LLM processing")
 
     prs = get_pull_requests(owner, repo)[:max_prs]  # Limit to max_prs
     print(f"Found {len(prs)} PRs in {owner}/{repo}")
@@ -620,7 +733,7 @@ def collect_poems_from_repo(owner, repo, max_prs=100):
             print(f"    Comment from user: {comment['user']['login']}")
             # Check only for Gemini Code Assist comments
             if "gemini-code-assist" in comment["user"]["login"].lower():
-                if entry := _process_gemini_comment(comment, owner, repo, pr_number):
+                if entry := _process_gemini_comment(comment, owner, repo, pr_number, ollama_only=ollama_only):
                     poems.append(entry)
 
         # Check review comments
@@ -629,7 +742,7 @@ def collect_poems_from_repo(owner, repo, max_prs=100):
             print(f"    Review from user: {review['user']['login']}")
             # Check only for Gemini Code Assist reviews
             if "gemini-code-assist" in review["user"]["login"].lower():
-                if entry := _process_gemini_comment(review, owner, repo, pr_number, "review"):
+                if entry := _process_gemini_comment(review, owner, repo, pr_number, "review", ollama_only=ollama_only):
                     poems.append(entry)
 
         # Respect GitHub API rate limits
@@ -658,8 +771,7 @@ def get_next_log_file():
     # Use the logger's _get_log_file method
     return logger._get_log_file()
 
-# This function is now handled by the error_handler module
-
+# Error handling is centralized in ErrorHandler class
 def write_log_summary():
     """Write a summary of the run to the log file."""
     # Use the logger's write_run_summary method
@@ -709,6 +821,11 @@ def run_wizard(args):
     user_input = input(f"Output JSON file [{default_output}]: ").strip()
     args.output = user_input or default_output
 
+    # Ollama mode
+    default_ollama = "yes" if args.ollama else "no"
+    user_input = input(f"Use only local Ollama models? (yes/no) [{default_ollama}]: ").strip().lower()
+    args.ollama = user_input == "yes" if user_input else args.ollama
+
     print("\n=== Configuration Summary ===")
     print(f"Repository: {args.owner}/{args.repo}")
     print(f"Search mode: {'Enabled' if args.search else 'Disabled'}")
@@ -716,6 +833,7 @@ def run_wizard(args):
         print(f"Max repositories to search: {args.max_repos}")
     print(f"Max PRs to check: {args.max_prs}")
     print(f"Output file: {args.output}")
+    print(f"Ollama mode: {'Enabled' if args.ollama else 'Disabled'}")
     print("\nStarting collection...\n")
 
     return args
@@ -729,6 +847,7 @@ def main():
     parser.add_argument("--max-repos", help="Maximum number of repositories to search", type=int, default=5)
     parser.add_argument("--max-prs", help="Maximum number of PRs to check per repository", type=int, default=100)
     parser.add_argument("--output", help="Output JSON file", default=GEM_FLOWERS_FILE)
+    parser.add_argument("--ollama", help="Use only local Ollama models for LLM processing", action="store_true")
     parser.add_argument("--wizard", "-w", help="Run in wizard mode to interactively set parameters", action="store_true")
     args = parser.parse_args()
 
@@ -736,7 +855,7 @@ def main():
     if args.wizard:
         args = run_wizard(args)
 
-    print(f"Configuration: owner={args.owner}, repo={args.repo}, search={args.search}, max_repos={args.max_repos}, max_prs={args.max_prs}")
+    print(f"Configuration: owner={args.owner}, repo={args.repo}, search={args.search}, max_repos={args.max_repos}, max_prs={args.max_prs}, ollama={args.ollama}")
     print(f"GitHub token available: {bool(GITHUB_TOKEN)}")
 
     json_file = args.output
@@ -751,14 +870,14 @@ def main():
 
             for owner, repo in repos:
                 run_stats["repositories_checked"].add(f"{owner}/{repo}")
-                repo_poems = collect_poems_from_repo(owner, repo, args.max_prs)
+                repo_poems = collect_poems_from_repo(owner, repo, args.max_prs, ollama_only=args.ollama)
                 new_poems.extend(repo_poems)
                 print(f"Collected {len(repo_poems)} poems from {owner}/{repo}")
         else:
             # Use the specified repository
             print(f"Checking specified repository: {args.owner}/{args.repo}")
             run_stats["repositories_checked"].add(f"{args.owner}/{args.repo}")
-            repo_poems = collect_poems_from_repo(args.owner, args.repo, args.max_prs)
+            repo_poems = collect_poems_from_repo(args.owner, args.repo, args.max_prs, ollama_only=args.ollama)
             new_poems.extend(repo_poems)
             print(f"Collected {len(repo_poems)} poems from {args.owner}/{args.repo}")
 
@@ -809,11 +928,10 @@ def main():
                 f.write(f"| Duplicates Found | {len(run_stats['duplicates'])} |\n")
                 f.write(f"| Last Updated | {timestamp} |\n\n")
 
-                # Use the already filtered poems for the markdown file
-
+                # Write poem content with markdown formatting
                 for poem in filtered_poems:
                     f.write("---\n\n")
-                    # Ensure each line is written separately with proper formatting
+                    # Preserve original line formatting with markdown line breaks
                     for line in poem.get("poem", []):
                         # Preserve the original formatting but ensure consistent indentation
                         # Add two spaces at the beginning for consistent indentation

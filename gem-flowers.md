@@ -4,10 +4,40 @@
 
 | Metric | Value |
 |--------|-------|
-| Total Poems | 11 |
-| Repositories Scanned | 2 |
-| PRs Scanned | 10 |
-| Last Updated | 2025-05-09 13:57:22 |
+| Total Poems | 13 |
+| Repositories Scanned | 5 |
+| PRs Scanned | 15 |
+| New Poems (This Run) | 2 |
+| Duplicates Found | 8 |
+| Last Updated | 2025-05-09 16:18:59 |
+
+---
+
+   **Extracted Poem Lines:**  
+   ```  
+   The final release is here,  
+   Dependencies pinned, have no fear,  
+   Stable and sound,  
+   All around,  
+   The project's end is near!  
+   ```  
+
+  <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/19#pullrequestreview-2829320253>
+  
+  _From: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry_
+
+---
+
+   **Extracted Poem Lines:**  
+   ```  
+   A beta blooms,  
+   Azure's inference takes hold,  
+   New insights unfold.  
+   ```  
+
+  <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/18#pullrequestreview-2829297779>
+  
+  _From: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry_
 
 ---
 

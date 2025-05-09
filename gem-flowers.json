@@ -1,6 +1,36 @@
 [
   {
     "poem": [
+      " **Extracted Poem Lines:**",
+      " ```",
+      " The final release is here,",
+      " Dependencies pinned, have no fear,",
+      " Stable and sound,",
+      " All around,",
+      " The project's end is near!",
+      " ```"
+    ],
+    "link": "https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/19#pullrequestreview-2829320253",
+    "repository": "TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry",
+    "pr_number": 19,
+    "collected_at": "2025-05-09T16:16:01.414128"
+  },
+  {
+    "poem": [
+      " **Extracted Poem Lines:**",
+      " ```",
+      " A beta blooms,",
+      " Azure's inference takes hold,",
+      " New insights unfold.",
+      " ```"
+    ],
+    "link": "https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/18#pullrequestreview-2829297779",
+    "repository": "TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry",
+    "pr_number": 18,
+    "collected_at": "2025-05-09T16:16:17.858110"
+  },
+  {
+    "poem": [
       " A module's born, code takes new flight,",
       " Errors now tremble, in logging's light."
     ],

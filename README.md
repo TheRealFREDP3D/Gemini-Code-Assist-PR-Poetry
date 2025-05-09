@@ -106,6 +106,9 @@ python get_new_flowers.py --max-prs=20
 # Search across multiple repositories
 python get_new_flowers.py --search --max-repos=10
 
+# Use only local Ollama models for LLM processing
+python get_new_flowers.py --ollama
+
 # Run in interactive wizard mode
 python get_new_flowers.py --wizard
 # or use the short form
@@ -151,10 +154,10 @@ See [CHANGELOG.md](./CHANGELOG.md) for version history and updates.
 
 ## Visual Overview - (Made with - CodeViz VSCode Extension)
 
-![Visual Overview - Basic](docs/overview-basic.jpg)  
+![Visual Overview - Basic](docs/overview-basic.jpg)
 
 ---
 
-![Visual Overview - Full](docs/overview-full.jpg)  
+![Visual Overview - Full](docs/overview-full.jpg)
 
 ---

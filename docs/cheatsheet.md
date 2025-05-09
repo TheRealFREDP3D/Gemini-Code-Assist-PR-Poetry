@@ -17,3 +17,9 @@ python get_new_flowers.py --wizard
 
 ## Use the short form for wizard mode
 python get_new_flowers.py -w
+
+## Use only local Ollama models for LLM processing
+python get_new_flowers.py --ollama
+
+## Combine options
+python get_new_flowers.py --search --max-repos=5 --ollama
