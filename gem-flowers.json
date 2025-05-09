@@ -1,6 +1,43 @@
 [
   {
     "poem": [
+      " A system's context,",
+      " Diagrams draw the clear path,",
+      " Code's intent shown."
+    ],
+    "link": "https://github.com/TheRealFREDP3D/Making-BanditGUI/pull/10#pullrequestreview-2809083426",
+    "repository": "TheRealFREDP3D/making-BanditGUI",
+    "pr_number": 10,
+    "collected_at": "2025-05-03T12:34:10.651000"
+  },
+  {
+    "poem": [
+      " A terminal's tale,",
+      " With SSH, no fail,",
+      " Bandit's secrets unfold,",
+      " In code, brave and bold,",
+      " A GUI to prevail."
+    ],
+    "link": "https://github.com/TheRealFREDP3D/Making-BanditGUI/pull/7#pullrequestreview-2796453558",
+    "repository": "TheRealFREDP3D/making-BanditGUI",
+    "pr_number": 7,
+    "collected_at": "2025-05-03T12:40:27.705628"
+  },
+  {
+    "poem": [
+      " A manager's plight,",
+      " Names clashing in the night,",
+      " Rename, refactor,",
+      " Code satisfaction factor,",
+      " Now clarity shines bright."
+    ],
+    "link": "https://github.com/TheRealFREDP3D/Making-BanditGUI/pull/1#pullrequestreview-2792740907",
+    "repository": "TheRealFREDP3D/making-BanditGUI",
+    "pr_number": 1,
+    "collected_at": "2025-05-03T12:46:50.079462"
+  },
+  {
+    "poem": [
       " The models speak in verse,",
       " A poem from the codeiverse,",
       " If one should fail,",

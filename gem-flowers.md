@@ -4,10 +4,46 @@
 
 | Metric | Value |
 |--------|-------|
-| Total Poems | 6 |
+| Total Poems | 9 |
 | Repositories Scanned | 1 |
-| PRs Scanned | 5 |
-| Last Updated | 2025-05-03 12:30:02 |
+| PRs Scanned | 6 |
+| New Poems (This Run) | 3 |
+| Duplicates Found | 0 |
+| Last Updated | 2025-05-03 12:52:47 |
+
+---
+
+   A system's context,  
+   Diagrams draw the clear path,  
+   Code's intent shown.  
+
+  <https://github.com/TheRealFREDP3D/Making-BanditGUI/pull/10#pullrequestreview-2809083426>
+  
+  _From: TheRealFREDP3D/making-BanditGUI_
+
+---
+
+   A terminal's tale,  
+   With SSH, no fail,  
+   Bandit's secrets unfold,  
+   In code, brave and bold,  
+   A GUI to prevail.  
+
+  <https://github.com/TheRealFREDP3D/Making-BanditGUI/pull/7#pullrequestreview-2796453558>
+  
+  _From: TheRealFREDP3D/making-BanditGUI_
+
+---
+
+   A manager's plight,  
+   Names clashing in the night,  
+   Rename, refactor,  
+   Code satisfaction factor,  
+   Now clarity shines bright.  
+
+  <https://github.com/TheRealFREDP3D/Making-BanditGUI/pull/1#pullrequestreview-2792740907>
+  
+  _From: TheRealFREDP3D/making-BanditGUI_
 
 ---
 
