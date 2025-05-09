@@ -95,15 +95,4 @@
 
   <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/1#pullrequestreview-2811851372>
   
-  _From: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry_
-
----
-
-   **Extracted Poem Lines:**  
-   - The addition of .gitignore entries is good practice.  
-   - The gem-flowers.md file is an interesting way to document PR reviews.  
-
-  <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/1#pullrequestreview-2811851484>
-  
-  _From: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry_
-
+  _From: TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry_  
