@@ -1,7 +1,7 @@
 # Gemini Code Assist PR Poetry
 
-[Listen to the Podcast Deep Dive 
-having a conversation about this project](https://youtu.be/XEh26jsH-2g?si=yVaqn5TcBZhUaVzZ) 
+[Listen to the Podcast Deep Dive
+having a conversation about this project](https://youtu.be/XEh26jsH-2g?si=yVaqn5TcBZhUaVzZ)
 
 ## Why?
 
@@ -122,6 +122,11 @@ See [CHANGELOG.md](./CHANGELOG.md) for version history and updates.
 - `get_new_flowers.py` - Main script for collecting poems
 - `gem-flowers.md` - Human-readable collection of poems
 - `gem-flowers.json` - Machine-readable collection of poems
+- `src/` - Core modules for the project
+  - `config.py` - Configuration management
+  - `error_handler.py` - Centralized error handling
+  - `logger.py` - Logging system with file rotation
+  - `llm_client_template.py` - Template for LLM clients
 - `llm_client/` - LLM client implementations and configuration
 - `logs/` - Log files with detailed information about collection runs
 - `tests/` - Test scripts and utilities
@@ -137,7 +142,7 @@ See [CHANGELOG.md](./CHANGELOG.md) for version history and updates.
 
 ## Visual Overview - Fully Extended (Made with - CodeViz VSCode Extension)
 
-![Visual Overview](docs/overview-full.jpg)  
+![Visual Overview](docs/overview-full.jpg)
 
 ---
 
