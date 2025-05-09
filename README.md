@@ -35,17 +35,23 @@ I bet some gems will surface soon enough. ✨
 
 ### Automated Collection
 
-You can use the `get_new_flowers.py` script to automatically collect poems from GitHub repositories:
+You can use the provided scripts to automatically collect poems from GitHub repositories:
 
 ```bash
 # Install dependencies
-pip install requests gitpython tqdm litellm
+pip install requests gitpython tqdm litellm python-dotenv
 
 # Set your GitHub token (will work without it but recommended to avoid rate limits)
 # It's free to get one from https://github.com/marketplace/a
 export GITHUB_TOKEN=your_github_token
 
-# Basic usage - collect from this repository
+# On Linux/macOS - use the run.sh script
+./run.sh
+
+# On Windows - use the run.bat script
+run.bat
+
+# Or run the Python script directly
 python get_new_flowers.py
 
 # Search for poems across multiple public repositories
@@ -120,6 +126,9 @@ See [CHANGELOG.md](./CHANGELOG.md) for version history and updates.
 ## Project Structure
 
 - `get_new_flowers.py` - Main script for collecting poems
+- `cleanup_poems.py` - Script for cleaning up the poem collection
+- `run.sh` - Shell script to run collection and cleanup (Linux/macOS)
+- `run.bat` - Batch script to run collection and cleanup (Windows)
 - `gem-flowers.md` - Human-readable collection of poems
 - `gem-flowers.json` - Machine-readable collection of poems
 - `src/` - Core modules for the project

@@ -138,6 +138,9 @@ All notable changes to this project will be documented in this file.
   - `error_handler.py` - Improved error handling with better recovery
   - `logger.py` - Enhanced logging with file rotation
   - `llm_client_template.py` - Standardized template for LLM clients
+- Added run scripts for easier execution:
+  - `run.sh` - Shell script for Linux/macOS
+  - `run.bat` - Batch script for Windows
 - Comprehensive documentation for the new architecture
 - Fixed syntax errors in utility scripts and test files
 
