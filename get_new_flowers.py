@@ -8,6 +8,7 @@ import time
 from datetime import datetime
 import litellm
 import subprocess
+from urllib.parse import urlparse
 
 # Import our custom modules
 from src.config import Config
@@ -505,6 +506,33 @@ def _try_client_implementations(prompt):
 
     return poem_text
 
+def is_valid_github_url(url):
+    """Validate that a URL is a legitimate GitHub URL."""
+    try:
+        parsed = urlparse(url)
+        # Check scheme
+        if parsed.scheme not in ('http', 'https'):
+            return False
+            
+        # Check hostname is github.com
+        if not parsed.hostname:
+            return False
+        if not parsed.hostname.endswith('github.com'):
+            return False
+            
+        # Validate path exists and has expected format
+        if not parsed.path or not parsed.path.strip('/'):
+            return False
+            
+        # Path should have format: /{owner}/{repo} or /{owner}/{repo}/...
+        parts = [p for p in parsed.path.split('/') if p]
+        if len(parts) < 2:
+            return False
+            
+        return True
+    except Exception:
+        return False
+
 def _find_or_create_link(comment_body, lines):
     """Find an existing GitHub link or create a default one."""
     # Look for a GitHub link in the comment
@@ -512,19 +540,25 @@ def _find_or_create_link(comment_body, lines):
     for line in lines:
         stripped = line.strip()
         if "github.com" in stripped:
-            link_line = stripped
-            if not (link_line.startswith("<") and link_line.endswith(">")):
-                link_line = f"<{link_line}>"
-            break
+            # Extract URL
+            url_match = re.search(r'<?(https?://[^\s>]+)>?', stripped)
+            if url_match:
+                url = url_match.group(1)
+                if is_valid_github_url(url):
+                    link_line = f"<{url}>"
+                    break
 
-    # If no GitHub link found, use a default link to the repository
+    # If no valid GitHub link found, use a default link
     if not link_line:
         # Extract repository info from the comment if possible
         if repo_match := re.search(r"github\.com/([^/]+/[^/\s]+)", comment_body):
             repo_path = repo_match[1]
-            link_line = f"<https://github.com/{repo_path}>"
-        else:
-            # Default link
+            default_url = f"https://github.com/{repo_path}"
+            if is_valid_github_url(default_url):
+                link_line = f"<{default_url}>"
+        
+        # Fallback to known safe default
+        if not link_line:
             link_line = "<https://github.com/TheRealFREDP3D/Making-BanditGUI>"
 
     return link_line
