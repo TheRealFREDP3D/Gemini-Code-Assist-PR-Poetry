@@ -517,7 +517,7 @@ def is_valid_github_url(url):
         # Check hostname is github.com
         if not parsed.hostname:
             return False
-        if not parsed.hostname.endswith('github.com'):
+        if not (parsed.hostname == 'github.com' or parsed.hostname.endswith('.github.com')):
             return False
             
         # Validate path exists and has expected format
