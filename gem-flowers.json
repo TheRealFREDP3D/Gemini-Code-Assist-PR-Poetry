@@ -3,6 +3,35 @@
     "poem": [
       " **Extracted Poem Lines:**",
       " ```",
+      " Code grows complex,",
+      " Refactor brings it back,",
+      " Tests ensure it's right.",
+      " ```"
+    ],
+    "link": "https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/24#pullrequestreview-2869079328",
+    "repository": "TheRealFredP3D/Gemini-Code-Assist-PR-Poetry",
+    "pr_number": 24,
+    "collected_at": "2025-05-26T15:53:34.126565"
+  },
+  {
+    "poem": [
+      " **Extracted Poem Lines:**",
+      " 1. A dot before, a check so keen,",
+      " 2. GitHub's domain, a trusted scene.",
+      " 3. No rogue allowed,",
+      " 4. In the cloud,",
+      " 5. Security's wall, forever green.",
+      " These are the poem lines extracted from the given comment."
+    ],
+    "link": "https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/23#pullrequestreview-2831250356",
+    "repository": "TheRealFredP3D/Gemini-Code-Assist-PR-Poetry",
+    "pr_number": 23,
+    "collected_at": "2025-05-26T15:53:52.695453"
+  },
+  {
+    "poem": [
+      " **Extracted Poem Lines:**",
+      " ```",
       " Code flows, structure grows,",
       " YAML defines the tools it knows.",
       " Refactor's art,",

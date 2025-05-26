@@ -4,10 +4,37 @@
 
 | Metric | Value |
 |--------|-------|
-| Total Poems | 16 |
-| Repositories Scanned | 3 |
-| PRs Scanned | 15 |
-| Last Updated | 2025-05-26 15:29:51 |
+| Total Poems | 18 |
+| Repositories Scanned | 4 |
+| PRs Scanned | 17 |
+| Last Updated | 2025-05-26 16:00:48 |
+
+---
+
+   **Extracted Poem Lines:**  
+   ```  
+   Code grows complex,  
+   Refactor brings it back,  
+   Tests ensure it's right.  
+   ```  
+
+  <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/24#pullrequestreview-2869079328>
+  
+  _From: TheRealFredP3D/Gemini-Code-Assist-PR-Poetry_
+
+---
+
+   **Extracted Poem Lines:**  
+   1. A dot before, a check so keen,  
+   2. GitHub's domain, a trusted scene.  
+   3. No rogue allowed,  
+   4. In the cloud,  
+   5. Security's wall, forever green.  
+   These are the poem lines extracted from the given comment.  
+
+  <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/23#pullrequestreview-2831250356>
+  
+  _From: TheRealFredP3D/Gemini-Code-Assist-PR-Poetry_
 
 ---
 
