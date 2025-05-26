@@ -63,6 +63,12 @@ class TestLLMClientTemplate(unittest.TestCase):
         client = get_client_for_model(model_name)
         self.assertIsNone(client)
 
+    def test_get_client_for_model_empty_string(self):
+        """Test get_client_for_model with an empty string model name."""
+        model_name = ""
+        client = get_client_for_model(model_name)
+        self.assertIsNone(client)
+
     def test_list_available_clients_returns_list(self):
         """Test that list_available_clients returns a list."""
         clients = list_available_clients()
