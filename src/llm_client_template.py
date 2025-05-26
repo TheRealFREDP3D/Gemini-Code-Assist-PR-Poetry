@@ -246,10 +246,14 @@ def get_client_for_model(model_name: str) -> Optional[BaseLLMClient]:
     for prefix, client_class in CLIENT_MAPPINGS["startswith"].items():
         if model_name.startswith(prefix):
             return client_class(model_name)
-    for name, client_class in CLIENT_MAPPINGS["exact"].items():
-        if model_name == name:
-            return client_class(model_name)
-    return None
+    return next(
+        (
+            client_class(model_name)
+            for name, client_class in CLIENT_MAPPINGS["exact"].items()
+            if model_name == name
+        ),
+        None,
+    )
 
 
 SUPPORTED_MODEL_NAMES = [
