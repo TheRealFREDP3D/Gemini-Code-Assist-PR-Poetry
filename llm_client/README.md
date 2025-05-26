@@ -1,22 +1,22 @@
 # LLM Client Directory
 
-This directory contains various LLM client implementations that can be used by the poem extraction script when the primary models encounter rate limits or other errors.
+This directory contains information about how the poem extraction script interacts with various Large Language Models (LLMs).
 
-## Available Clients
+## Client Logic
 
-The following client implementations are available:
+The core logic for interacting with different LLM providers is centralized in `src/llm_client_template.py`. This file includes:
+- Base class `BaseLLMClient` for all client implementations.
+- Specific client implementations such as `AzureLLMClient`, `OpenAILLMClient`, and `MistralLLMClient`.
+- The `CLIENT_MAPPINGS` dictionary, which maps model name patterns to the appropriate client class.
+- The `SUPPORTED_MODEL_NAMES` list, which defines all models the system can try to use via these clients.
+- The factory function `get_client_for_model(model_name)` that returns a client instance for a given model name based on `CLIENT_MAPPINGS`.
+- The `list_available_clients()` function, which lists all clients that can be instantiated based on `SUPPORTED_MODEL_NAMES`.
 
-1. **gpt-4.1-github-client.py** - Uses Azure AI Inference to access the GitHub-hosted GPT-4.1 model
-2. **gpt-4o-client.py** - Uses OpenAI API to access the GPT-4o model
-3. **deepseek-v3-client.py** - Uses Azure AI Inference to access the DeepSeek v3 model
-4. **llama-3.1-8b-inst-client.py** - Uses Azure AI Inference to access the Llama 3.1 8B Instruct model
-5. **llama4-maverik-client.py** - Uses Azure AI Inference to access the Llama 4 Maverik model
-6. **mistral-large-client.py** - Uses Mistral AI API to access the Mistral Large model
-7. **phi4-client.py** - Uses Azure AI Inference to access the Phi-4 model
+This centralized approach allows for consistent handling of different LLMs and simplifies adding support for new models that use existing client types or entirely new LLM providers.
 
 ## Custom LLM Models
 
-In addition to the client implementations, you can also define custom LiteLLM models in the `custom_llm_model.json` file. These models will be tried before falling back to the client implementations.
+In addition to the clients defined in `src/llm_client_template.py`, you can also define custom LiteLLM models in the `custom_llm_model.json` file. These models will be tried before falling back to the clients managed by `get_client_for_model`.
 
 ### Format
 
@@ -47,15 +47,28 @@ The following models are currently defined:
 
 The poem extraction script will try models in the following order:
 
-1. **Primary Model**: github/gpt-4.1
-2. **Fallback Model**: github/gpt-4o
-3. **Custom LiteLLM Models**: Models defined in `custom_llm_model.json`
-4. **Client Implementations**: Python client implementations in this directory
+1. **Primary Model**: `github/gpt-4.1` (This is an example, the actual primary model might be configured elsewhere in the script)
+2. **Fallback Model**: `github/gpt-4o` (This is an example, the actual fallback model might be configured elsewhere in the script)
+3. **Custom LiteLLM Models**: Models defined in `custom_llm_model.json`.
+4. **Supported Clients**: Models listed in `SUPPORTED_MODEL_NAMES` in `src/llm_client_template.py`, accessed via the `get_client_for_model` function.
 
 For Ollama models, the script will check if the Ollama server is running before attempting to use them. If the server is not running, these models will be skipped.
 
 ## Adding New Models
 
-To add a new custom LiteLLM model, simply add it to the `litellm_models` array in the `custom_llm_model.json` file.
+There are two main ways to add support for new models:
 
-To add a new client implementation, create a new Python file in this directory that follows the same pattern as the existing clients. The script will automatically detect and use it when needed.
+1.  **Using Custom LiteLLM Models:**
+    To add a new model that is supported by LiteLLM (and not already covered by the existing client logic), simply add its identifier to the `litellm_models` array in the `custom_llm_model.json` file. This is the simplest way to add support for many models.
+
+2.  **Modifying Centralized Client Logic (`src/llm_client_template.py`):**
+    *   **For models compatible with existing client types (Azure, OpenAI, Mistral):**
+        If you want to add a new model name that can be served by one of the existing client classes (`AzureLLMClient`, `OpenAILLMClient`, `MistralLLMClient`), you should:
+        1.  Add the model name string to the `SUPPORTED_MODEL_NAMES` list.
+        2.  Ensure the `CLIENT_MAPPINGS` dictionary correctly maps this model name (either via its prefix or exact name) to the appropriate client class.
+    *   **For models requiring a new client type (e.g., a new API provider):**
+        1.  Create a new client class in `src/llm_client_template.py` that inherits from `BaseLLMClient` and implements the necessary methods (e.g., `extract_poem`).
+        2.  Add the new model name(s) to the `SUPPORTED_MODEL_NAMES` list.
+        3.  Update the `CLIENT_MAPPINGS` dictionary to include a pattern (startswith or exact) and the new client class for your new model(s).
+
+This structured approach ensures that model support is managed consistently and the poem extraction script can leverage a wide range of LLMs.
