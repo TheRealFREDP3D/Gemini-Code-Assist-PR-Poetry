@@ -3,6 +3,36 @@
     "poem": [
       " **Extracted Poem Lines:**",
       " ```",
+      " Code flows, structure grows,",
+      " YAML defines the tools it knows.",
+      " Refactor's art,",
+      " a fresh new start,",
+      " Where every function clearly shows.",
+      " ```"
+    ],
+    "link": "https://github.com/TheRealFREDP3D/CTF-TUI/pull/3#pullrequestreview-2869037411",
+    "repository": "TheRealFredP3D/ctf-tui",
+    "pr_number": 3,
+    "collected_at": "2025-05-26T15:28:53.915229"
+  },
+  {
+    "poem": [
+      " **Extracted Poem Lines:**",
+      " ```plaintext",
+      " Notes saved to disk,",
+      " AI remembers chat's flow,",
+      " Plugins mock refresh.",
+      " ```"
+    ],
+    "link": "https://github.com/TheRealFREDP3D/CTF-TUI/pull/2#pullrequestreview-2867045248",
+    "repository": "TheRealFredP3D/ctf-tui",
+    "pr_number": 2,
+    "collected_at": "2025-05-26T15:29:14.893295"
+  },
+  {
+    "poem": [
+      " **Extracted Poem Lines:**",
+      " ```",
       " From mock to real, the code takes flight,",
       " With LiteLLM, shining bright.",
       " Env vars guide the way,",

@@ -4,10 +4,38 @@
 
 | Metric | Value |
 |--------|-------|
-| Total Poems | 14 |
+| Total Poems | 16 |
 | Repositories Scanned | 3 |
-| PRs Scanned | 13 |
-| Last Updated | 2025-05-25 20:27:23 |
+| PRs Scanned | 15 |
+| Last Updated | 2025-05-26 15:29:51 |
+
+---
+
+   **Extracted Poem Lines:**  
+   ```  
+   Code flows, structure grows,  
+   YAML defines the tools it knows.  
+   Refactor's art,  
+   a fresh new start,  
+   Where every function clearly shows.  
+   ```  
+
+  <https://github.com/TheRealFREDP3D/CTF-TUI/pull/3#pullrequestreview-2869037411>
+  
+  _From: TheRealFredP3D/ctf-tui_
+
+---
+
+   **Extracted Poem Lines:**  
+   ```plaintext  
+   Notes saved to disk,  
+   AI remembers chat's flow,  
+   Plugins mock refresh.  
+   ```  
+
+  <https://github.com/TheRealFREDP3D/CTF-TUI/pull/2#pullrequestreview-2867045248>
+  
+  _From: TheRealFredP3D/ctf-tui_
 
 ---
 
