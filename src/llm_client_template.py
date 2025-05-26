@@ -221,6 +221,19 @@ class MistralLLMClient(BaseLLMClient):
             return "NO_POEM"
 
 
+CLIENT_MAPPINGS = {
+    "startswith": {
+        "openai/": AzureLLMClient,
+        "meta/": AzureLLMClient,
+        "deepseek/": AzureLLMClient,
+        "microsoft/": AzureLLMClient,
+        "Mistral-": MistralLLMClient,
+    },
+    "exact": {
+        "gpt-4o": OpenAILLMClient,
+    }
+}
+
 def get_client_for_model(model_name: str) -> Optional[BaseLLMClient]:
     """Get the appropriate client for a given model.
     
@@ -230,20 +243,28 @@ def get_client_for_model(model_name: str) -> Optional[BaseLLMClient]:
     Returns:
         A client instance for the model, or None if no client is available.
     """
-    # Azure models
-    if model_name.startswith(("openai/", "meta/", "deepseek/", "microsoft/")):
-        return AzureLLMClient(model_name)
-    
-    # OpenAI models
-    if model_name in ["gpt-4o"]:
-        return OpenAILLMClient(model_name)
-    
-    # Mistral models
-    if model_name.startswith("Mistral-"):
-        return MistralLLMClient(model_name)
-    
-    return None
+    for prefix, client_class in CLIENT_MAPPINGS["startswith"].items():
+        if model_name.startswith(prefix):
+            return client_class(model_name)
+    return next(
+        (
+            client_class(model_name)
+            for name, client_class in CLIENT_MAPPINGS["exact"].items()
+            if model_name == name
+        ),
+        None,
+    )
 
+
+SUPPORTED_MODEL_NAMES = [
+    "openai/gpt-4.1",
+    "gpt-4o",
+    "deepseek/DeepSeek-V3-0324",
+    "meta/Meta-Llama-3.1-8B-Instruct",
+    "meta/Llama-4-Maverick-17B-128E-Instruct-FP8",
+    "Mistral-large-2407",
+    "microsoft/Phi-4"
+]
 
 def list_available_clients() -> List[Dict[str, Any]]:
     """List all available LLM clients.
@@ -251,14 +272,9 @@ def list_available_clients() -> List[Dict[str, Any]]:
     Returns:
         A list of dictionaries with client information.
     """
-    clients = [
-        AzureLLMClient("openai/gpt-4.1"),
-        OpenAILLMClient("gpt-4o"),
-        AzureLLMClient("deepseek/DeepSeek-V3-0324"),
-        AzureLLMClient("meta/Meta-Llama-3.1-8B-Instruct"),
-        AzureLLMClient("meta/Llama-4-Maverick-17B-128E-Instruct-FP8"),
-        MistralLLMClient("Mistral-large-2407"),
-        AzureLLMClient("microsoft/Phi-4")
-    ]
-    
-    return [client.to_dict() for client in clients]
+    available_clients_dicts = []
+    for model_name in SUPPORTED_MODEL_NAMES:
+        client = get_client_for_model(model_name)
+        if client:
+            available_clients_dicts.append(client.to_dict())
+    return available_clients_dicts
