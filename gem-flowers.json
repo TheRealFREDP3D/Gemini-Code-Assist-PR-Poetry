@@ -3,6 +3,22 @@
     "poem": [
       " **Extracted Poem Lines:**",
       " ```",
+      " From mock to real, the code takes flight,",
+      " With LiteLLM, shining bright.",
+      " Env vars guide the way,",
+      " For models day by day,",
+      " An AI helper, now with true might.",
+      " ```"
+    ],
+    "link": "https://github.com/TheRealFREDP3D/CTF-TUI/pull/1#pullrequestreview-2866982300",
+    "repository": "TheRealFredP3D/ctf-tui",
+    "pr_number": 1,
+    "collected_at": "2025-05-25T20:14:57.586865"
+  },
+  {
+    "poem": [
+      " **Extracted Poem Lines:**",
+      " ```",
       " The final release is here,",
       " Dependencies pinned, have no fear,",
       " Stable and sound,",

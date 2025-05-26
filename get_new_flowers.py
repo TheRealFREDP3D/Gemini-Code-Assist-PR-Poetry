@@ -10,6 +10,8 @@ import litellm
 import subprocess
 from urllib.parse import urlparse
 
+print("Initial imports successful.")
+
 # Import our custom modules
 from src.config import Config
 from src.error_handler import ErrorHandler
@@ -873,6 +875,7 @@ def run_wizard(args):
     return args
 
 def main():
+    print("Script execution started.")
     print("Starting Gemini Code Assist poem collection script")
     parser = argparse.ArgumentParser(description="Collect Gemini Code Assist poems from GitHub repositories")
     parser.add_argument("--owner", help="GitHub repository owner", default=DEFAULT_REPO_OWNER)

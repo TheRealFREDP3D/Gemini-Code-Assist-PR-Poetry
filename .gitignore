@@ -16,3 +16,8 @@ appmap.log
 .sourcetrail/Gemini-PR-Review-Poetry.srctrldb_tmp
 /logs/log.md
 /temp
+/node_modules
+package.json
+.gitignore
+.gitignore
+.gitignore
