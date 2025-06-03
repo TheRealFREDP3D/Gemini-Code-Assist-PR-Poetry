@@ -7,6 +7,7 @@ import os
 import abc
 import json
 from typing import Dict, Any, Optional, List
+import litellm
 
 class BaseLLMClient(abc.ABC):
     """Base class for LLM clients."""
@@ -69,212 +70,54 @@ class BaseLLMClient(abc.ABC):
         Returns:
             A new client instance.
         """
-        return cls(data["model_name"])
+        # This method might need adjustment depending on how LiteLLMClient is structured
+        # For now, assume it can be initialized with model_name like other clients
+        if data.get("client_type") == "LiteLLMClient":
+            return LiteLLMClient(data["model_name"])
+        # Fallback or error handling if other client types were expected
+        raise ValueError(f"Unknown client type: {data.get('client_type')}")
 
 
-class AzureLLMClient(BaseLLMClient):
-    """Client for Azure AI Inference models."""
-    
-    def __init__(self, model_name: str, endpoint: str = "https://models.github.ai/inference"):
-        """Initialize the Azure LLM client.
-        
+class LiteLLMClient(BaseLLMClient):
+    """Client for LiteLLM supported models."""
+
+    def __init__(self, model_name: str):
+        """Initialize the LiteLLM client.
+
         Args:
-            model_name: The name of the model to use.
-            endpoint: The Azure endpoint to use.
+            model_name: The name of the model to use (e.g., "gemini/gemini-1.5-flash").
         """
         super().__init__(model_name)
-        self.endpoint = endpoint
-    
+
     def extract_poem(self, prompt: str) -> str:
-        """Extract a poem using Azure AI Inference.
-        
+        """Extract a poem using LiteLLM.
+
         Args:
             prompt: The prompt to send to the LLM.
-            
+
         Returns:
             The extracted poem text or "NO_POEM" if no poem is found.
         """
         try:
-            from azure.ai.inference import ChatCompletionsClient
-            from azure.ai.inference.models import SystemMessage, UserMessage
-            from azure.core.credentials import AzureKeyCredential
-            
-            client = ChatCompletionsClient(
-                endpoint=self.endpoint,
-                credential=AzureKeyCredential(self.github_token),
-            )
-            
-            response = client.complete(
+            response = litellm.completion(
+                model=self.model_name,
                 messages=[
-                    SystemMessage(""),
-                    UserMessage(prompt),
+                    {"role": "system", "content": ""},
+                    {"role": "user", "content": prompt}
                 ],
                 temperature=0.8,
                 top_p=0.1,
                 max_tokens=2048,
-                model=self.model_name
             )
-            
-            return self.clean_response(response.choices[0].message.content)
-        except Exception as e:
-            print(f"Error using Azure LLM client with {self.model_name}: {e}")
+            # Accessing the content correctly based on LiteLLM's response structure
+            # LiteLLM typically returns a ModelResponse object, then access message via .choices[0].message.content
+            if response.choices and response.choices[0].message and response.choices[0].message.content:
+                return self.clean_response(response.choices[0].message.content)
             return "NO_POEM"
-
-
-class OpenAILLMClient(BaseLLMClient):
-    """Client for OpenAI models."""
-    
-    def __init__(self, model_name: str, base_url: str = "https://models.github.ai/inference"):
-        """Initialize the OpenAI LLM client.
-        
-        Args:
-            model_name: The name of the model to use.
-            base_url: The base URL for the OpenAI API.
-        """
-        super().__init__(model_name)
-        self.base_url = base_url
-    
-    def extract_poem(self, prompt: str) -> str:
-        """Extract a poem using OpenAI.
-        
-        Args:
-            prompt: The prompt to send to the LLM.
-            
-        Returns:
-            The extracted poem text or "NO_POEM" if no poem is found.
-        """
-        try:
-            from openai import OpenAI
-            
-            client = OpenAI(
-                base_url=self.base_url,
-                api_key=self.github_token,
-            )
-            
-            response = client.chat.completions.create(
-                messages=[
-                    {
-                        "role": "system",
-                        "content": "",
-                    },
-                    {
-                        "role": "user",
-                        "content": prompt,
-                    }
-                ],
-                model=self.model_name,
-                temperature=0.8,
-                max_tokens=2048,
-                top_p=0.1
-            )
-            
-            return self.clean_response(response.choices[0].message.content)
         except Exception as e:
-            print(f"Error using OpenAI LLM client with {self.model_name}: {e}")
+            # It's good practice to log the exception or handle it more gracefully
+            print(f"Error using LiteLLM client with {self.model_name}: {e}")
+            # Check if the exception is due to missing API keys for the specific model
+            if "api_key" in str(e).lower():
+                print(f"Please ensure the API key for {self.model_name} is set in your environment variables.")
             return "NO_POEM"
-
-
-class MistralLLMClient(BaseLLMClient):
-    """Client for Mistral models."""
-    
-    def __init__(self, model_name: str, server_url: str = "https://models.github.ai/inference"):
-        """Initialize the Mistral LLM client.
-        
-        Args:
-            model_name: The name of the model to use.
-            server_url: The server URL for the Mistral API.
-        """
-        super().__init__(model_name)
-        self.server_url = server_url
-    
-    def extract_poem(self, prompt: str) -> str:
-        """Extract a poem using Mistral.
-        
-        Args:
-            prompt: The prompt to send to the LLM.
-            
-        Returns:
-            The extracted poem text or "NO_POEM" if no poem is found.
-        """
-        try:
-            from mistralai import Mistral, UserMessage, SystemMessage
-            
-            client = Mistral(
-                api_key=self.github_token,
-                server_url=self.server_url
-            )
-            
-            response = client.chat(
-                model=self.model_name,
-                messages=[
-                    SystemMessage(""),
-                    UserMessage(prompt),
-                ],
-                temperature=0.8,
-                max_tokens=2048,
-                top_p=0.1
-            )
-            
-            return self.clean_response(response.choices[0].message.content)
-        except Exception as e:
-            print(f"Error using Mistral LLM client with {self.model_name}: {e}")
-            return "NO_POEM"
-
-
-CLIENT_MAPPINGS = {
-    "startswith": {
-        "openai/": AzureLLMClient,
-        "meta/": AzureLLMClient,
-        "deepseek/": AzureLLMClient,
-        "microsoft/": AzureLLMClient,
-        "Mistral-": MistralLLMClient,
-    },
-    "exact": {
-        "gpt-4o": OpenAILLMClient,
-    }
-}
-
-def get_client_for_model(model_name: str) -> Optional[BaseLLMClient]:
-    """Get the appropriate client for a given model.
-    
-    Args:
-        model_name: The name of the model to use.
-        
-    Returns:
-        A client instance for the model, or None if no client is available.
-    """
-    for prefix, client_class in CLIENT_MAPPINGS["startswith"].items():
-        if model_name.startswith(prefix):
-            return client_class(model_name)
-    return next(
-        (
-            client_class(model_name)
-            for name, client_class in CLIENT_MAPPINGS["exact"].items()
-            if model_name == name
-        ),
-        None,
-    )
-
-
-SUPPORTED_MODEL_NAMES = [
-    "openai/gpt-4.1",
-    "gpt-4o",
-    "deepseek/DeepSeek-V3-0324",
-    "meta/Meta-Llama-3.1-8B-Instruct",
-    "meta/Llama-4-Maverick-17B-128E-Instruct-FP8",
-    "Mistral-large-2407",
-    "microsoft/Phi-4"
-]
-
-def list_available_clients() -> List[Dict[str, Any]]:
-    """List all available LLM clients.
-    
-    Returns:
-        A list of dictionaries with client information.
-    """
-    available_clients_dicts = []
-    for model_name in SUPPORTED_MODEL_NAMES:
-        client = get_client_for_model(model_name)
-        if client:
-            available_clients_dicts.append(client.to_dict())
-    return available_clients_dicts

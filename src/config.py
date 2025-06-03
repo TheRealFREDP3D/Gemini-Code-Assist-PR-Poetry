@@ -34,27 +34,12 @@ class Config:
     BOT_NAME = "gemini-code-assist[bot]"
 
     # LLM configuration
-    PRIMARY_LITELLM_MODELS = ["github/gpt-4.1", "github/gpt-4o"]
+    DEFAULT_MODEL = "gemini/gemini-1.5-flash"
     LLM_CLIENTS_DIR = "llm_client"
-    LLM_CLIENTS = [
-        "gpt-4.1-github-client.py",  # GitHub-hosted GPT-4.1 model
-        "gpt-4o-client.py",         # GitHub-hosted GPT-4o model
-        "deepseek-v3-client.py",    # DeepSeek V3 model
-        "llama-3.1-8b-inst-client.py", # Llama 3.1 8B Instruct model
-        "llama4-maverik-client.py", # Llama 4 Maverik model
-        "mistral-large-client.py",  # Mistral Large model
-        "phi4-client.py"            # Phi-4 model
-    ]
     CUSTOM_LLM_MODEL_FILE = os.path.join(LLM_CLIENTS_DIR, "custom_llm_model.json")
 
     # Ollama configuration
     OLLAMA_API_URL = "http://localhost:11434"
-    OLLAMA_MODELS = [
-        "ollama/qwen2.5:1.5b",
-        "ollama/3.2:1b-instruct",
-        "ollama/llama3:8b",
-        "ollama/mistral:7b"
-    ]
 
     # LLM prompt configuration
     POEM_EXTRACTION_PROMPT = """
