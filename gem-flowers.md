@@ -4,10 +4,10 @@
 
 | Metric | Value |
 |--------|-------|
-| Total Poems | 23 |
-| Repositories Scanned | 6 |
-| PRs Scanned | 22 |
-| Last Updated | 2025-06-04 02:28:37 |
+| Total Poems | 25 |
+| Repositories Scanned | 7 |
+| PRs Scanned | 23 |
+| Last Updated | 2025-06-04 02:50:42 |
 
 ---
 
@@ -92,13 +92,12 @@
 ---
 
    **Extracted Poem Lines:**  
-   1. A dot before, a check so keen,  
-   2. GitHub's domain, a trusted scene.  
-   3. No rogue allowed,  
-   4. In the cloud,  
-   5. Security's wall, forever green.  
-   These are the poem lines extracted from the given comment.  
-
+   A dot before, a check so keen,  
+   GitHub's domain, a trusted scene.  
+   No rogue allowed,  
+   In the cloud,  
+   Security's wall, forever green.  
+   
   <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/23#pullrequestreview-2831250356>
   
   _From: TheRealFredP3D/Gemini-Code-Assist-PR-Poetry_

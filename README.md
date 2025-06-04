@@ -41,10 +41,6 @@ You can use the provided scripts to automatically collect poems from GitHub repo
 # Install dependencies
 pip install requests gitpython tqdm litellm python-dotenv
 
-# Set your GitHub token (will work without it but recommended to avoid rate limits)
-# It's free to get one from https://github.com/marketplace/a
-export GITHUB_TOKEN=your_github_token
-
 # On Linux/macOS - use the run.sh script
 ./run.sh
 
@@ -52,7 +48,7 @@ export GITHUB_TOKEN=your_github_token
 run.bat
 
 # Or run the Python script directly
-python get_new_flowers.py
+python get_new_flowers.py --model="gemini/gemini-1.5-flash"
 
 # Search for poems across multiple public repositories
 python get_new_flowers.py --search --max-repos=10
@@ -69,6 +65,10 @@ The script can be configured using environment variables in a `.env` file:
 # Default LLM
 GITHUB_TOKEN=your_github_token
 
+# Specify the LLM model to use (e.g., 'gemini/gemini-1.5-flash', 'ollama/llama2')
+# If not specified, the default model will be used.
+# MODEL=gemini/gemini-1.5-flash
+
 # Fallback LLM
 GEMINI_API_KEY=your_gemini_api_key
 
@@ -84,6 +84,7 @@ GEMINI_API_KEY=your_gemini_api_key
 - Avoids duplicates
 - Includes metadata about the source repository and PR
 - Uses LLM models to identify poems in comments
+- Specifies the LLM model to use (e.g., 'gemini/gemini-1.5-flash', 'ollama/llama2')
 - Automatically falls back to alternative models when rate limits are encountered
 - Intelligently tracks failed models to avoid retrying them
 - Logs detailed information about the collection process
@@ -108,6 +109,9 @@ python get_new_flowers.py --search --max-repos=10
 
 # Use only local Ollama models for LLM processing
 python get_new_flowers.py --ollama
+
+# Specify the LLM model to use
+python get_new_flowers.py --model="gemini/gemini-1.5-flash"
 
 # Run in interactive wizard mode
 python get_new_flowers.py --wizard

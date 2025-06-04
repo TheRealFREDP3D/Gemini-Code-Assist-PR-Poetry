@@ -1,6 +1,32 @@
 [
   {
     "poem": [
+      " The GitHub comment does not contain a poem. The prompt is:",
+      " ```python",
+      " \"Generate visually compelling representations (infographics or artwork) based on the comparative analyses from the Researcher and Writer Agents, visually communicating connections between '1984' themes and modern occurrences.\"",
+      " ```",
+      " There are no poetic lines in this comment."
+    ],
+    "link": "https://github.com/TheRealFREDP3D/George_Was_Right/pull/13#discussion_r2100833204",
+    "repository": "therealfredp3d/george_was_right",
+    "pr_number": 13,
+    "collected_at": "2025-06-04T02:40:37.908100"
+  },
+  {
+    "poem": [
+      " The GitHub comment does not contain a poem. The prompt is:",
+      " ```python",
+      " \"Generate visually compelling representations (infographics or artwork) based on the comparative analyses from the Researcher and Writer Agents, visually communicating connections between '1984' themes and modern occurrences.\"",
+      " ```",
+      " There are no poetic lines in this comment."
+    ],
+    "link": "https://github.com/TheRealFREDP3D/George_Was_Right/pull/13#discussion_r2100833204",
+    "repository": "therealfredp3d/george_was_right",
+    "pr_number": 13,
+    "collected_at": "2025-06-04T02:40:48.465162"
+  },
+  {
+    "poem": [
       " **Extracted Poem Lines:**",
       " ```",
       " VS Code file blooms,",
