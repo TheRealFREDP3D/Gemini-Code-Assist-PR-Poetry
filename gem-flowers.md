@@ -5,11 +5,9 @@
 | Metric | Value |
 |--------|-------|
 | Total Poems | 23 |
-| Repositories Scanned | 1 |
-| PRs Scanned | 16 |
-| New Poems (This Run) | 1 |
-| Duplicates Found | 12 |
-| Last Updated | 2025-06-04 00:23:56 |
+| Repositories Scanned | 6 |
+| PRs Scanned | 22 |
+| Last Updated | 2025-06-04 02:28:37 |
 
 ---
 
