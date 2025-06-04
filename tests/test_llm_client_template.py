@@ -12,13 +12,6 @@ from src.config import Config # Needed for DEFAULT_MODEL if used by LiteLLMClien
 # Mock litellm.completion response structure
 class MockLiteLLMResponse:
     def __init__(self, content=None, error=None):
-        if error:
-            # Simulate an error scenario if needed by raising it or returning a specific structure
-            # For simplicity here, we assume 'completion' itself might raise or return a response
-            # that indicates an error through its structure, which LiteLLMClient handles.
-            # This mock focuses on the `choices[0].message.content` path.
-            pass
-
         self.choices = []
         if content is not None:
             message_mock = MagicMock()
