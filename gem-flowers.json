@@ -3,6 +3,78 @@
     "poem": [
       " **Extracted Poem Lines:**",
       " ```",
+      " VS Code file blooms,",
+      " Auto-generated noise,",
+      " Git ignores its growth.",
+      " ```"
+    ],
+    "link": "https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/25#pullrequestreview-2894400215",
+    "repository": "therealfredp3d/gemini-code-assist-pr-poetry",
+    "pr_number": 25,
+    "collected_at": "2025-06-04T00:22:57.178145"
+  },
+  {
+    "poem": [
+      " **Extracted Poem Lines:**",
+      " ```",
+      " AI agents assemble,",
+      " With notes, they won't tremble.",
+      " A plan they will make,",
+      " For CTF's sake,",
+      " Through challenges, they'll ramble.",
+      " ```"
+    ],
+    "link": "https://github.com/TheRealFREDP3D/CTF-TUI/pull/8#pullrequestreview-2877270181",
+    "repository": "therealfredp3d/ctf-tui",
+    "pr_number": 8,
+    "collected_at": "2025-06-04T00:21:13.029013"
+  },
+  {
+    "poem": [
+      " **Extracted Poem Lines:**",
+      " ```",
+      " Old features fade,",
+      " Like leaves in autumn's breeze,",
+      " Code base grows lean.",
+      " ```"
+    ],
+    "link": "https://github.com/TheRealFREDP3D/CTF-TUI/pull/7#pullrequestreview-2869317742",
+    "repository": "therealfredp3d/ctf-tui",
+    "pr_number": 7,
+    "collected_at": "2025-06-04T00:21:18.361397"
+  },
+  {
+    "poem": [
+      " **Extracted Poem Lines:**",
+      " ```",
+      " Styles for the screen,",
+      " AI and notes now gleam,",
+      " Code refactored.",
+      " ```"
+    ],
+    "link": "https://github.com/TheRealFREDP3D/CTF-TUI/pull/6#pullrequestreview-2869260050",
+    "repository": "therealfredp3d/ctf-tui",
+    "pr_number": 6,
+    "collected_at": "2025-06-04T00:21:23.426282"
+  },
+  {
+    "poem": [
+      " **Extracted Poem Lines:**",
+      " ```",
+      " Docs get pictures bright,",
+      " Terminal looks clean and neat,",
+      " Plans for future grow.",
+      " ```"
+    ],
+    "link": "https://github.com/TheRealFREDP3D/CTF-TUI/pull/4#pullrequestreview-2869166220",
+    "repository": "therealfredp3d/ctf-tui",
+    "pr_number": 4,
+    "collected_at": "2025-06-04T00:21:30.335668"
+  },
+  {
+    "poem": [
+      " **Extracted Poem Lines:**",
+      " ```",
       " Code grows complex,",
       " Refactor brings it back,",
       " Tests ensure it's right.",

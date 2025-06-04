@@ -8,11 +8,7 @@ from .error_handler import ErrorHandler
 from .logger import PoemLogger
 from .llm_client_template import (
     BaseLLMClient,
-    AzureLLMClient,
-    OpenAILLMClient,
-    MistralLLMClient,
-    get_client_for_model,
-    list_available_clients
+    LiteLLMClient,
 )
 
 __all__ = [
@@ -20,9 +16,5 @@ __all__ = [
     'ErrorHandler',
     'PoemLogger',
     'BaseLLMClient',
-    'AzureLLMClient',
-    'OpenAILLMClient',
-    'MistralLLMClient',
-    'get_client_for_model',
-    'list_available_clients'
+    'LiteLLMClient',
 ]

@@ -4,10 +4,79 @@
 
 | Metric | Value |
 |--------|-------|
-| Total Poems | 18 |
-| Repositories Scanned | 4 |
-| PRs Scanned | 17 |
-| Last Updated | 2025-05-26 16:00:48 |
+| Total Poems | 23 |
+| Repositories Scanned | 1 |
+| PRs Scanned | 16 |
+| New Poems (This Run) | 1 |
+| Duplicates Found | 12 |
+| Last Updated | 2025-06-04 00:23:56 |
+
+---
+
+   **Extracted Poem Lines:**  
+   ```  
+   VS Code file blooms,  
+   Auto-generated noise,  
+   Git ignores its growth.  
+   ```  
+
+  <https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry/pull/25#pullrequestreview-2894400215>
+  
+  _From: therealfredp3d/gemini-code-assist-pr-poetry_
+
+---
+
+   **Extracted Poem Lines:**  
+   ```  
+   AI agents assemble,  
+   With notes, they won't tremble.  
+   A plan they will make,  
+   For CTF's sake,  
+   Through challenges, they'll ramble.  
+   ```  
+
+  <https://github.com/TheRealFREDP3D/CTF-TUI/pull/8#pullrequestreview-2877270181>
+  
+  _From: therealfredp3d/ctf-tui_
+
+---
+
+   **Extracted Poem Lines:**  
+   ```  
+   Old features fade,  
+   Like leaves in autumn's breeze,  
+   Code base grows lean.  
+   ```  
+
+  <https://github.com/TheRealFREDP3D/CTF-TUI/pull/7#pullrequestreview-2869317742>
+  
+  _From: therealfredp3d/ctf-tui_
+
+---
+
+   **Extracted Poem Lines:**  
+   ```  
+   Styles for the screen,  
+   AI and notes now gleam,  
+   Code refactored.  
+   ```  
+
+  <https://github.com/TheRealFREDP3D/CTF-TUI/pull/6#pullrequestreview-2869260050>
+  
+  _From: therealfredp3d/ctf-tui_
+
+---
+
+   **Extracted Poem Lines:**  
+   ```  
+   Docs get pictures bright,  
+   Terminal looks clean and neat,  
+   Plans for future grow.  
+   ```  
+
+  <https://github.com/TheRealFREDP3D/CTF-TUI/pull/4#pullrequestreview-2869166220>
+  
+  _From: therealfredp3d/ctf-tui_
 
 ---
 
