@@ -279,19 +279,6 @@ def _check_all_models_failed():
     # This function might need adjustment if custom_llm_models logic is also removed or changed.
     # For now, assuming load_custom_llm_models is still relevant for some fallback or direct use.
     custom_llm_models = load_custom_llm_models() # TODO: Review if load_custom_llm_models is still needed
-    # PRIMARY_LITELLM_MODELS is removed, so the condition needs update.
-    # We are now relying on a single model passed via args or default.
-    # This check might become simpler: if the primary model failed too many times.
-    # For now, let's count failures against Config.DEFAULT_MODEL or the passed model.
-    # This function's logic is significantly impacted by the removal of model lists.
-    # It should probably check if the *current* model being used has failed too many times.
-    # However, the current structure tries only one model. If it fails, it fails.
-    # This function might not be directly applicable in the new single-model approach per run.
-    # For now, commenting out the complex check. A simpler failure check is in extract_poem_from_comment.
-    # if (len(failed_litellm_models) >= 1 ): # Simplified: if the one model tried has failed.
-    #     print("ERROR: The specified LLM model has failed. Exiting program.")
-    #     sys.exit(1)
-    pass # Placeholder, actual logic for "all models failed" needs rethink for single model context
 
 
 def extract_poem_from_comment(comment_body, model_name_to_use, ollama_only=False): # Added model_name_to_use
