@@ -576,7 +576,7 @@ def main():
         args = run_wizard(args) # Wizard should also be updated for --model if it's to be comprehensive
 
     # Determine the model to use
-    model_name_to_use = args.model if args.model else Config.DEFAULT_MODEL
+    model_name_to_use = args.model or Config.DEFAULT_MODEL
 
     # Adjust ollama_only based on the selected model if necessary.
     # If a specific model is given, the ollama_only flag for collect_poems_from_repo should align.
