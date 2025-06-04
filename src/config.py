@@ -34,6 +34,9 @@ class Config:
     BOT_NAME = "gemini-code-assist[bot]"
 
     # LLM configuration
+    # The default LLM model to use if no model is specified at runtime.
+    # This value is used as a fallback when the `--model` command-line argument is not provided.
+    # To override the default, use the `--model` flag when running the application.
     DEFAULT_MODEL = "gemini/gemini-1.5-flash"
     LLM_CLIENTS_DIR = "llm_client"
     CUSTOM_LLM_MODEL_FILE = os.path.join(LLM_CLIENTS_DIR, "custom_llm_model.json")
