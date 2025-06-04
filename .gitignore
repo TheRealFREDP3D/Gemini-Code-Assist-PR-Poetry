@@ -22,3 +22,4 @@ package.json
 .gitignore
 .gitignore
 gem-flowers.json
+docs/CHANGELOG.md
