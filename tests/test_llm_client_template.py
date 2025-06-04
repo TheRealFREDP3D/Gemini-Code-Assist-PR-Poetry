@@ -1,109 +1,118 @@
 import unittest
 import os
 import sys
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 # Adjust sys.path to include the src directory
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from llm_client_template import (
-    AzureLLMClient,
-    OpenAILLMClient,
-    MistralLLMClient,
-    get_client_for_model,
-    list_available_clients,
-    SUPPORTED_MODEL_NAMES,
-    CLIENT_MAPPINGS 
-    # BaseLLMClient might be needed if we were to test its methods directly,
-    # but for now, we are testing functions that return instances of its children.
-)
+from src.llm_client_template import LiteLLMClient
+from src.config import Config # Needed for DEFAULT_MODEL if used by LiteLLMClient directly
 
-class TestLLMClientTemplate(unittest.TestCase):
+# Mock litellm.completion response structure
+class MockLiteLLMResponse:
+    def __init__(self, content=None, error=None):
+        self.choices = []
+        if content is not None:
+            message_mock = MagicMock()
+            message_mock.message = MagicMock()
+            message_mock.message.content = content
+            self.choices.append(message_mock)
+
+class TestLiteLLMClient(unittest.TestCase):
 
     def setUp(self):
-        """Set up the test environment by mocking GITHUB_TOKEN."""
-        self.env_patcher = patch.dict(os.environ, {"GITHUB_TOKEN": "test_token"})
+        """Set up the test environment."""
+        # Mock GITHUB_TOKEN environment variable
+        self.env_patcher = patch.dict(os.environ, {"GITHUB_TOKEN": "fake_github_token"})
         self.env_patcher.start()
+
+        # Patch litellm.completion
+        self.mock_litellm_completion = patch('litellm.completion').start()
+
+        # Instantiate the client
+        self.client = LiteLLMClient(model_name="test_model/test_variant")
 
     def tearDown(self):
         """Clean up the test environment."""
         self.env_patcher.stop()
+        patch.stopall() # Stops all patches started with patch.start()
 
-    def test_get_client_for_model_azure(self):
-        """Test get_client_for_model for Azure-compatible models."""
-        azure_models = [
-            "openai/gpt-4.1", 
-            "meta/Meta-Llama-3.1-8B-Instruct", 
-            "deepseek/DeepSeek-V3-0324", 
-            "microsoft/Phi-4"
-        ]
-        for model_name in azure_models:
-            with self.subTest(model_name=model_name):
-                client = get_client_for_model(model_name)
-                self.assertIsInstance(client, AzureLLMClient)
-                self.assertEqual(client.model_name, model_name)
+    def test_extract_poem_success(self):
+        """Test successful poem extraction."""
+        expected_poem = "This is a test poem.\nWith multiple lines."
+        # Configure the mock to return a successful response object
+        self.mock_litellm_completion.return_value = MockLiteLLMResponse(content=expected_poem)
 
-    def test_get_client_for_model_openai(self):
-        """Test get_client_for_model for OpenAI-compatible models."""
-        model_name = "gpt-4o"
-        client = get_client_for_model(model_name)
-        self.assertIsInstance(client, OpenAILLMClient)
-        self.assertEqual(client.model_name, model_name)
+        prompt = "Extract a poem from this text."
+        actual_poem = self.client.extract_poem(prompt)
 
-    def test_get_client_for_model_mistral(self):
-        """Test get_client_for_model for Mistral-compatible models."""
-        model_name = "Mistral-large-2407"
-        client = get_client_for_model(model_name)
-        self.assertIsInstance(client, MistralLLMClient)
-        self.assertEqual(client.model_name, model_name)
+        self.assertEqual(actual_poem, expected_poem.strip())
+        self.mock_litellm_completion.assert_called_once_with(
+            model="test_model/test_variant",
+            messages=[
+                {"role": "system", "content": ""},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.8, # Assuming these are the defaults in LiteLLMClient
+            top_p=0.1,
+            max_tokens=2048,
+        )
 
-    def test_get_client_for_model_unknown(self):
-        """Test get_client_for_model for an unknown model."""
-        model_name = "unknown-model/some-variant"
-        client = get_client_for_model(model_name)
-        self.assertIsNone(client)
+    def test_extract_poem_no_poem(self):
+        """Test when the LLM returns 'NO_POEM'."""
+        # Configure the mock to return "NO_POEM"
+        self.mock_litellm_completion.return_value = MockLiteLLMResponse(content="NO_POEM")
 
-    def test_get_client_for_model_empty_string(self):
-        """Test get_client_for_model with an empty string model name."""
-        model_name = ""
-        client = get_client_for_model(model_name)
-        self.assertIsNone(client)
+        prompt = "Extract a poem from this text that has no poem."
+        actual_response = self.client.extract_poem(prompt)
 
-    def test_list_available_clients_returns_list(self):
-        """Test that list_available_clients returns a list."""
-        clients = list_available_clients()
-        self.assertIsInstance(clients, list)
+        self.assertEqual(actual_response, "NO_POEM")
+        self.mock_litellm_completion.assert_called_once()
 
-    def test_list_available_clients_content(self):
-        """Test the content of the list returned by list_available_clients."""
-        clients_list = list_available_clients()
+    def test_extract_poem_api_error(self):
+        """Test when litellm.completion raises an API error."""
+        # Configure the mock to raise an exception
+        self.mock_litellm_completion.side_effect = Exception("Simulated API Error")
         
-        # Expected number of clients is the number of models in SUPPORTED_MODEL_NAMES
-        # that have a valid mapping in CLIENT_MAPPINGS.
-        expected_count = 0
-        for model_name in SUPPORTED_MODEL_NAMES:
-            if get_client_for_model(model_name) is not None:
-                expected_count += 1
+        prompt = "Extract a poem, but an error occurs."
+        actual_response = self.client.extract_poem(prompt)
         
-        self.assertEqual(len(clients_list), expected_count)
+        self.assertEqual(actual_response, "NO_POEM")
+        self.mock_litellm_completion.assert_called_once()
+        # Optionally, check if the error was logged if LiteLLMClient has logging
 
-        for client_dict in clients_list:
-            self.assertIsInstance(client_dict, dict)
-            self.assertIn("model_name", client_dict)
-            self.assertIn("client_type", client_dict)
+    def test_extract_poem_empty_response_content(self):
+        """Test when the LLM returns a response with empty content."""
+        self.mock_litellm_completion.return_value = MockLiteLLMResponse(content="")
+        prompt = "Test prompt"
+        actual_response = self.client.extract_poem(prompt)
+        self.assertEqual(actual_response, "NO_POEM") # Based on clean_response logic
 
-            # Verify the client_type is correct based on get_client_for_model
-            model_name = client_dict["model_name"]
-            expected_client_instance = get_client_for_model(model_name)
-            self.assertIsNotNone(expected_client_instance, f"No client found for {model_name} listed in list_available_clients")
-            self.assertEqual(client_dict["client_type"], expected_client_instance.__class__.__name__)
-            self.assertIn(model_name, SUPPORTED_MODEL_NAMES)
+    def test_extract_poem_none_response_content(self):
+        """Test when the LLM returns a response with None content."""
+        # Mocking a response where choices[0].message.content might be None
+        mock_response = MagicMock()
+        mock_choice = MagicMock()
+        mock_message = MagicMock()
+        mock_message.content = None
+        mock_choice.message = mock_message
+        mock_response.choices = [mock_choice]
+        self.mock_litellm_completion.return_value = mock_response
 
-    def test_list_available_clients_model_names_are_supported(self):
-        """Test that all model names in list_available_clients are in SUPPORTED_MODEL_NAMES."""
-        clients_list = list_available_clients()
-        for client_dict in clients_list:
-            self.assertIn(client_dict["model_name"], SUPPORTED_MODEL_NAMES)
+        prompt = "Test prompt for None content"
+        actual_response = self.client.extract_poem(prompt)
+        self.assertEqual(actual_response, "NO_POEM")
+
+    def test_extract_poem_no_choices_in_response(self):
+        """Test when the LLM returns a response with no choices."""
+        mock_response = MagicMock()
+        mock_response.choices = [] # No choices
+        self.mock_litellm_completion.return_value = mock_response
+
+        prompt = "Test prompt for no choices"
+        actual_response = self.client.extract_poem(prompt)
+        self.assertEqual(actual_response, "NO_POEM")
 
 if __name__ == '__main__':
     unittest.main()
