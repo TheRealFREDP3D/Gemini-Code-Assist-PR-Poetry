@@ -22,8 +22,12 @@ package.json
 .gitignore
 .gitignore
 gem-flowers.json
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 docs/CHANGELOG.md
 =======
 .vscode/PythonImportHelper-v2-Completion.json
 >>>>>>> a4dc23cfc6e56c912c5658534e6da3b3cfd17d56
+=======
+.vscode/PythonImportHelper-v2-Completion.json
+>>>>>>> Stashed changes
