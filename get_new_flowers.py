@@ -7,10 +7,11 @@ import argparse
 import time
 from datetime import datetime
 import litellm
-import subprocess
+# import subprocess # subprocess is no longer used
 from urllib.parse import urlparse
 
-print("Initial imports successful.")
+import re # Added for parse_repo_url
+from urllib.parse import urlparse # Ensure urlparse is imported
 
 # Import our custom modules
 from src.config import Config
@@ -30,51 +31,13 @@ logger = PoemLogger(logs_dir=Config.LOGS_DIR, max_log_size_bytes=Config.MAX_LOG_
 run_stats = Config.get_initial_stats()
 
 # Initialize error handler
-error_handler = ErrorHandler(run_stats) # No need to pass failed_litellm_models or failed_clients here, ErrorHandler manages them
-
-def load_custom_llm_models():
-    """Load custom LLM models from the JSON file."""
-    try:
-        model_file = os.path.join("llm_client", "custom_llm_model.json")
-        with open(model_file, 'r') as f:
-            data = json.load(f)
-
-        # Clean up the model names (remove trailing commas)
-        try:
-            return [model.rstrip(',') for model in data.get("litellm_models", [])]
-        except Exception as e:
-            print(f"Error processing model names: {e}")
-            return []
-    except Exception as e:
-        print(f"Error loading custom LLM models: {e}")
-        return []
-
-def is_ollama_running():
-    """Check if Ollama server is running."""
-    try:
-        # Try to make a request to the Ollama API using requests library
-        response = requests.get(f"{Config.OLLAMA_API_URL}/api/tags", timeout=5)
-        return response.status_code == 200 and "models" in response.text
-    except requests.RequestException:
-        return False
+error_handler = ErrorHandler(run_stats)
 
 # GitHub API URLs and Headers are now directly accessed from Config
-SEARCH_REPOS_URL = Config.SEARCH_REPOS_URL
 PR_LIST_URL = Config.PR_LIST_URL
 PR_COMMENTS_URL = Config.PR_COMMENTS_URL
-PR_REVIEW_COMMENTS_URL = Config.PR_REVIEW_COMMENTS_URL # Corrected URL for review comments
+PR_REVIEW_COMMENTS_URL = Config.PR_REVIEW_COMMENTS_URL
 HEADERS = Config.get_headers()
-
-def search_public_repos(query="gemini-code-assist", max_repos=10):
-    """Search for public repositories that might contain Gemini Code Assist comments."""
-    search_url = f"{SEARCH_REPOS_URL}?q={query}&sort=updated&order=desc&per_page={max_repos}"
-    response = requests.get(search_url, headers=HEADERS)
-
-    if response.status_code != 200:
-        print(f"Error searching repositories: {response.status_code}")
-        return []
-
-    return [(repo["owner"]["login"], repo["name"]) for repo in response.json().get("items", [])]
 
 def get_pull_requests(owner, repo):
     """Fetch all pull requests from a repository."""
@@ -83,7 +46,7 @@ def get_pull_requests(owner, repo):
 
     while True:
         url = PR_LIST_URL.format(owner=owner, repo=repo)
-        print(f"Fetching PRs from {url}?page={page}&state=all&per_page=100")
+        # print(f"Fetching PRs from {url}?page={page}&state=all&per_page=100") # Verbose
         response = requests.get(f"{url}?page={page}&state=all&per_page=100", headers=HEADERS)
 
         if response.status_code != 200:
@@ -91,7 +54,7 @@ def get_pull_requests(owner, repo):
             break
 
         results = response.json()
-        print(f"Got {len(results)} results for page {page}")
+        # print(f"Got {len(results)} results for page {page}") # Verbose
         if not results:
             break
 
@@ -107,7 +70,7 @@ def get_pull_requests(owner, repo):
 def get_comments_for_pr(owner, repo, pr_number):
     """Fetch all comments for a given PR."""
     url = PR_COMMENTS_URL.format(owner=owner, repo=repo, pr_number=pr_number)
-    print(f"Fetching comments from {url}")
+    # print(f"Fetching comments from {url}") # Verbose
     response = requests.get(url, headers=HEADERS)
 
     if response.status_code != 200:
@@ -115,13 +78,13 @@ def get_comments_for_pr(owner, repo, pr_number):
         return []
 
     comments = response.json()
-    print(f"Found {len(comments)} comments for PR #{pr_number}")
+    # print(f"Found {len(comments)} comments for PR #{pr_number}") # Verbose
     return comments
 
 def get_reviews_for_pr(owner, repo, pr_number):
     """Fetch all reviews for a given PR."""
     url = Config.PR_REVIEWS_URL.format(owner=owner, repo=repo, pr_number=pr_number)
-    print(f"Fetching reviews from {url}")
+    # print(f"Fetching reviews from {url}") # Verbose
     response = requests.get(url, headers=HEADERS)
 
     if response.status_code != 200:
@@ -129,13 +92,13 @@ def get_reviews_for_pr(owner, repo, pr_number):
         return []
 
     reviews = response.json()
-    print(f"Found {len(reviews)} reviews for PR #{pr_number}")
+    # print(f"Found {len(reviews)} reviews for PR #{pr_number}") # Verbose
     return reviews
 
 def get_comments_from_review(owner, repo, pr_number, review_id):
     """Fetch comments for a specific review."""
     url = Config.PR_REVIEW_COMMENTS_URL.format(owner=owner, repo=repo, pr_number=pr_number, review_id=review_id)
-    print(f"Fetching comments for review {review_id} from {url}")
+    # print(f"Fetching comments for review {review_id} from {url}") # Verbose
     response = requests.get(url, headers=HEADERS)
 
     if response.status_code != 200:
@@ -143,43 +106,8 @@ def get_comments_from_review(owner, repo, pr_number, review_id):
         return []
 
     comments = response.json()
-    print(f"Found {len(comments)} comments for review {review_id}")
+    # print(f"Found {len(comments)} comments for review {review_id}") # Verbose
     return comments
-
-# Removed load_client_module, _handle_client_error (direct usages),
-# _modify_client_code, _execute_temp_client, get_poem_with_client as they are no longer needed.
-
-def _try_traditional_extraction(comment_body):
-    """Try to extract poem using traditional pattern matching method."""
-    lines = comment_body.strip().splitlines()
-    poem_lines = []
-    link_line = None
-
-    in_poem = False
-    for line in lines:
-        stripped = line.strip()
-        if stripped.startswith(" ") or (in_poem and stripped == ''):
-            # Preserve the original line with its formatting
-            poem_lines.append(line)
-            in_poem = True
-        elif re.match(r"<https://github\.com/.+?>", stripped):
-            link_line = stripped
-            break
-        else:
-            in_poem = False
-
-    # If we found a poem with the traditional method, return it
-    if poem_lines and link_line:
-        print("    Found poem using traditional method")
-        return (poem_lines, link_line)
-
-    return (None, None)
-
-# This function is now handled by the error_handler module
-
-# Removed _try_primary_litellm_models, _try_ollama_models,
-# _try_custom_litellm_models, and _try_client_implementations
-# as they are replaced by the new LiteLLMClient logic in extract_poem_from_comment.
 
 def is_valid_github_url(url):
     """Validate that a URL is a legitimate GitHub URL."""
@@ -257,31 +185,18 @@ def _process_llm_response(poem_text, comment_body, lines):
 
     return (None, None)
 
-def extract_poem_from_comment(comment_body, model_name_to_use, ollama_only=False):
+def extract_poem_from_comment(comment_body, model_name_to_use):
     """Extract poem and link from a comment using the specified LiteLLM client.
 
     Args:
         comment_body: The comment text to analyze
         model_name_to_use: The specific model name to use (e.g., "gemini/gemini-1.5-flash")
-        ollama_only: If True, only use Ollama models for LLM processing (Note: this flag might be redundant if model_name_to_use already specifies an ollama model)
     """
     if not comment_body:
         return (None, None)
 
     lines = comment_body.strip().splitlines()
-    poem_lines, link_line = _try_traditional_extraction(comment_body)
-    if poem_lines and link_line:
-        return (poem_lines, link_line)
-
     prompt = Config.POEM_EXTRACTION_PROMPT.format(comment_body=comment_body)
-
-    if ollama_only and not model_name_to_use.startswith("ollama/"):
-        print(f"    Ollama-only mode is enabled, but the specified model '{model_name_to_use}' is not an Ollama model. Skipping.")
-        return (None, None)
-
-    if ollama_only and not is_ollama_running():
-        print("    Ollama-only mode is enabled but Ollama server is not running.")
-        return (None, None)
 
     print(f"    Trying to extract poem using LiteLLM with {model_name_to_use}...")
 
@@ -290,23 +205,17 @@ def extract_poem_from_comment(comment_body, model_name_to_use, ollama_only=False
 
     try:
         poem_text = llm_client.extract_poem(prompt)
-        run_stats["models_used"].add(model_name_to_use) # Track model usage
 
         if not poem_text or poem_text == "NO_POEM" or "NO_POEM" in poem_text:
-            print(f"    LiteLLM ({model_name_to_use}) found no poem or indicated NO_POEM.")
+            # print(f"    LiteLLM ({model_name_to_use}) found no poem or indicated NO_POEM.") # Less verbose
             return (None, None)
 
-        print(f"    LiteLLM response from {model_name_to_use}: {poem_text[:100]}...")
+        # print(f"    LiteLLM response from {model_name_to_use}: {poem_text[:100]}...") # Less verbose
         return _process_llm_response(poem_text, comment_body, lines)
 
     except Exception as e:
         print(f"    Error using LiteLLM client with {model_name_to_use}: {e}")
         error_handler.handle_litellm_error(e, model_name_to_use)
-        error_handler.check_all_models_failed(
-            primary_models=[Config.DEFAULT_MODEL], # Assuming DEFAULT_MODEL is the only primary
-            custom_models=load_custom_llm_models(), # Still need to load custom models to check if all failed
-            llm_clients=[] # No separate client implementations anymore
-        )
         return (None, None)
 
 
@@ -355,7 +264,7 @@ def save_poems_to_json(poems, json_file):
     with open(json_file, 'w', encoding='utf-8') as f:
         json.dump(poems, f, indent=2)
 
-def _process_gemini_comment(comment, owner, repo, pr_number, model_name_to_use, comment_type="comment", ollama_only=False):
+def _process_gemini_comment(comment, owner, repo, pr_number, model_name_to_use, comment_type="comment"):
     """Process a comment from Gemini Code Assist to extract poems.
 
     Args:
@@ -365,7 +274,6 @@ def _process_gemini_comment(comment, owner, repo, pr_number, model_name_to_use, 
         pr_number: Pull request number
         model_name_to_use: The specific model name to use for LLM processing.
         comment_type: Type of comment ("comment" or "review")
-        ollama_only: If True, only use Ollama models for LLM processing
     """
     no_poem_phrases = [
         "The GitHub comment does not contain a poem",
@@ -377,7 +285,8 @@ def _process_gemini_comment(comment, owner, repo, pr_number, model_name_to_use, 
         return None
 
     print(f"    Found {comment_type} from Gemini Code Assist: {comment['user']['login']}")
-    poem_lines, link = extract_poem_from_comment(comment["body"], model_name_to_use=model_name_to_use, ollama_only=ollama_only)
+    # ollama_only parameter removed from the call below
+    poem_lines, link = extract_poem_from_comment(comment["body"], model_name_to_use=model_name_to_use)
 
     if not (poem_lines and link):
         print(f"    No poem found in {comment_type} from {comment['user']['login']} using model {model_name_to_use}")
@@ -390,7 +299,7 @@ def _process_gemini_comment(comment, owner, repo, pr_number, model_name_to_use, 
     print(f"    Found poem in PR #{pr_number} from {comment_type}")
     return entry
 
-def collect_poems_from_repo(owner, repo, model_name_to_use, max_prs=100, ollama_only=False):
+def collect_poems_from_repo(owner, repo, model_name_to_use, max_prs=100):
     """Collect all poems from a specific repository.
 
     Args:
@@ -398,17 +307,12 @@ def collect_poems_from_repo(owner, repo, model_name_to_use, max_prs=100, ollama_
         repo: Repository name
         model_name_to_use: The specific model name to use for LLM processing.
         max_prs: Maximum number of PRs to check
-        ollama_only: If True, only use Ollama models for LLM processing
     """
     poems = []
     print(f"Collecting poems from {owner}/{repo} using model {model_name_to_use}...")
-    if ollama_only:
-        print(f"Using Ollama-only mode (effective if '{model_name_to_use}' is an Ollama model and server is running)")
 
     prs = get_pull_requests(owner, repo)[:max_prs]
-    print(f"Found {len(prs)} PRs in {owner}/{repo}")
-
-    run_stats["prs_checked"] += len(prs)
+    print(f"Found {len(prs)} PRs in {owner}/{repo}. Processing...")
 
     for pr in prs:
         pr_number = pr["number"]
@@ -416,21 +320,20 @@ def collect_poems_from_repo(owner, repo, model_name_to_use, max_prs=100, ollama_
 
         comments = get_comments_for_pr(owner, repo, pr_number)
         for comment in comments:
-            print(f"    Comment from user: {comment['user']['login']}")
+            # print(f"    Comment from user: {comment['user']['login']}") # Verbose
             if "gemini-code-assist" in comment["user"]["login"].lower():
-                if entry := _process_gemini_comment(comment, owner, repo, pr_number, model_name_to_use=model_name_to_use, ollama_only=ollama_only):
+                if entry := _process_gemini_comment(comment, owner, repo, pr_number, model_name_to_use=model_name_to_use):
                     poems.append(entry)
 
-        reviews = get_reviews_for_pr(owner, repo, pr_number) # Use the new get_reviews_for_pr
+        reviews = get_reviews_for_pr(owner, repo, pr_number)
         for review in reviews:
-            print(f"    Review from user: {review['user']['login']}")
+            # print(f"    Review from user: {review['user']['login']}") # Verbose
             if "gemini-code-assist" in review["user"]["login"].lower():
-                # Now fetch comments for this specific review
                 review_comments = get_comments_from_review(owner, repo, pr_number, review["id"])
                 for review_comment in review_comments:
-                    print(f"      Review comment from user: {review_comment['user']['login']}")
+                    # print(f"      Review comment from user: {review_comment['user']['login']}") # Verbose
                     if "gemini-code-assist" in review_comment["user"]["login"].lower():
-                        if entry := _process_gemini_comment(review_comment, owner, repo, pr_number, model_name_to_use=model_name_to_use, comment_type="review_comment", ollama_only=ollama_only):
+                        if entry := _process_gemini_comment(review_comment, owner, repo, pr_number, model_name_to_use=model_name_to_use, comment_type="review_comment"):
                             poems.append(entry)
 
         time.sleep(0.5)
@@ -456,147 +359,171 @@ def get_next_log_file():
     """Get the next available log file name."""
     return logger._get_log_file()
 
-def write_log_summary():
+def write_log_summary(repository_url, model_name):
     """Write a summary of the run to the log file."""
-    logger.write_run_summary(run_stats)
-
-def run_wizard(args):
-    """Interactive wizard to prompt for parameter values."""
-    print("\n=== Gemini Code Assist Poetry Collection Wizard ===\n")
-    print("Press Enter to use default values or type a new value.\n")
-
-    default_owner = args.owner
-    user_input = input(f"GitHub repository owner [{default_owner}]: ").strip()
-    args.owner = user_input or default_owner
-
-    default_repo = args.repo
-    user_input = input(f"GitHub repository name [{default_repo}]: ").strip()
-    args.repo = user_input or default_repo
-
-    default_search = "yes" if args.search else "no"
-    user_input = input(f"Search for public repositories with Gemini poems? (yes/no) [{default_search}]: ").strip().lower()
-    args.search = user_input == "yes" if user_input else args.search
-
-    if args.search:
-        default_max_repos = args.max_repos
-        user_input = input(f"Maximum number of repositories to search [{default_max_repos}]: ").strip()
-        if user_input:
-            try:
-                args.max_repos = int(user_input)
-            except ValueError:
-                print(f"Invalid input. Using default value: {default_max_repos}")
-
-    default_max_prs = args.max_prs
-    user_input = input(f"Maximum number of PRs to check per repository [{default_max_prs}]: ").strip()
-    if user_input:
-        try:
-            args.max_prs = int(user_input)
-        except ValueError:
-            print(f"Invalid input. Using default value: {default_max_prs}")
-
-    default_output = args.output
-    user_input = input(f"Output JSON file [{default_output}]: ").strip()
-    args.output = user_input or default_output
-
-    default_ollama = "yes" if args.ollama else "no"
-    user_input = input(f"Use only local Ollama models? (yes/no) [{default_ollama}]: ").strip().lower()
-    args.ollama = user_input == "yes" if user_input else args.ollama
-
-    print("\n=== Configuration Summary ===")
-    print(f"Repository: {args.owner}/{args.repo}")
-    print(f"Search mode: {'Enabled' if args.search else 'Disabled'}")
-    if args.search:
-        print(f"Max repositories to search: {args.max_repos}")
-    print(f"Max PRs to check: {args.max_prs}")
-    print(f"Output file: {args.output}")
-    print(f"Ollama mode: {'Enabled' if args.ollama else 'Disabled'}")
-    print("\nStarting collection...\n")
-
-    return args
+    logger.write_run_summary(run_stats, repository_url, model_name)
 
 def main():
-    print("Script execution started.")
     print("Starting Gemini Code Assist poem collection script")
     parser = argparse.ArgumentParser(description="Collect Gemini Code Assist poems from GitHub repositories")
-    parser.add_argument("--owner", help="GitHub repository owner", default=Config.DEFAULT_REPO_OWNER)
-    parser.add_argument("--repo", help="GitHub repository name", default=Config.DEFAULT_REPO_NAME)
-    parser.add_argument("--search", help="Search for public repositories with Gemini poems", action="store_true")
-    parser.add_argument("--max-repos", help="Maximum number of repositories to search", type=int, default=5)
+    parser.add_argument("repository_url", help="Full GitHub repository URL (e.g., https://github.com/owner/repo)")
     parser.add_argument("--max-prs", help="Maximum number of PRs to check per repository", type=int, default=100)
     parser.add_argument("--output", help="Output JSON file", default=Config.GEM_FLOWERS_FILE)
-    parser.add_argument("--ollama", help="Use only local Ollama models for LLM processing (Note: --model takes precedence)", action="store_true")
-    parser.add_argument("--wizard", "-w", help="Run in wizard mode to interactively set parameters", action="store_true")
-    parser.add_argument("--model", help="Specify the LLM model to use (e.g., 'gemini/gemini-1.5-flash', 'ollama/llama2'). Overrides default and Ollama-only mode for model selection.", default=None)
+    parser.add_argument("--model", help="Specify the LLM model to use (e.g., 'gemini/gemini-1.5-flash', 'ollama/llama2').", default=Config.DEFAULT_MODEL)
     args = parser.parse_args()
 
-    if args.wizard:
-        args = run_wizard(args)
+    model_name_to_use = args.model
 
-    model_name_to_use = args.model or Config.DEFAULT_MODEL
+    owner, repo = parse_repo_url(args.repository_url)
+    if owner is None or repo is None:
+        print(f"Error: Invalid repository URL format: {args.repository_url}")
+        print("Expected format: https://github.com/owner/repo or git@github.com:owner/repo.git")
+        sys.exit(1)
 
-    effective_ollama_only = args.ollama
-    if args.model:
-        effective_ollama_only = model_name_to_use.startswith("ollama/")
-    elif args.ollama and not model_name_to_use.startswith("ollama/"):
-        print(f"Warning: --ollama flag is set, but the effective default model '{model_name_to_use}' is not an Ollama model. Poems will be extracted using '{model_name_to_use}'. Consider using --model to specify an Ollama model if that's the intent.")
-
-    print(f"Configuration: owner={args.owner}, repo={args.repo}, search={args.search}, max_repos={args.max_repos}, max_prs={args.max_prs}, ollama_flag={args.ollama}, model_to_use='{model_name_to_use}'")
-    print(f"GitHub token available: {bool(Config.GITHUB_TOKEN)}")
+    print(f"Processing repository: {args.repository_url}")
+    # print(f"GitHub token available: {bool(Config.GITHUB_TOKEN)}") # Less verbose
 
     json_file = args.output
     new_poems = []
 
     try:
-        if args.search:
-            print("Searching for public repositories with Gemini Code Assist comments...")
-            repos = search_public_repos(max_repos=args.max_repos)
-            print(f"Found {len(repos)} repositories to check")
-
-            for owner, repo in repos:
-                run_stats["repositories_checked"].add(f"{owner}/{repo}")
-                repo_poems = collect_poems_from_repo(owner, repo, model_name_to_use, args.max_prs, ollama_only=effective_ollama_only)
-                new_poems.extend(repo_poems)
-                print(f"Collected {len(repo_poems)} poems from {owner}/{repo}")
-        else:
-            print(f"Checking specified repository: {args.owner}/{args.repo}")
-            run_stats["repositories_checked"].add(f"{args.owner}/{args.repo}")
-            repo_poems = collect_poems_from_repo(args.owner, args.repo, model_name_to_use, args.max_prs, ollama_only=effective_ollama_only)
-            new_poems.extend(repo_poems)
-            print(f"Collected {len(repo_poems)} poems from {args.owner}/{args.repo}")
+        # print(f"Checking specified repository: {owner}/{repo}") # Redundant with above
+        repo_poems = collect_poems_from_repo(owner, repo, model_name_to_use, args.max_prs)
+        new_poems.extend(repo_poems)
+        print(f"Collected {len(repo_poems)} initial poems from {owner}/{repo}")
 
         existing_poems = load_existing_poems(json_file)
         unique_new_poems = [poem for poem in new_poems if not is_duplicate(poem, existing_poems)]
 
         run_stats["new_poems"] = len(unique_new_poems)
-        run_stats["total_poems"] = len(existing_poems) + len(unique_new_poems)
+        run_stats["total_poems"] = len(existing_poems) + len(unique_new_poems) # This is a pre-filter count
 
-        if not unique_new_poems:
-            print("No new poems found.")
+        if not unique_new_poems and not existing_poems: # If no new poems and no existing ones, nothing to do.
+            print("No new poems found and no existing poems loaded. Output files will not be generated.")
         else:
             all_poems = unique_new_poems + existing_poems
 
-            def is_no_poem_entry(poem):
-                poem_lines = poem.get("poem", [])
-                return (len(poem_lines) == 1 and
-                        (poem_lines[0] == "\"NO_POEM\"" or "NO_POEM" in poem_lines[0]))
+            # Filter out NO_POEM entries using the new function
+            final_poems_to_save = filter_no_poem_entries(all_poems)
 
-            filtered_poems = [poem for poem in all_poems if not is_no_poem_entry(poem)]
-            save_poems_to_json(filtered_poems, json_file)
-            run_stats["total_poems"] = len(filtered_poems)
+            # Save the truly final list of poems to JSON
+            save_poems_to_json(final_poems_to_save, json_file)
+            print(f"Saved {len(final_poems_to_save)} poems to {json_file} after filtering.")
 
-            # Call cleanup_poems.main() to generate the markdown file
-            import cleanup_poems
-            cleanup_poems.main()
+            # Update total_poems stat with the count of poems actually saved
+            run_stats["total_poems"] = len(final_poems_to_save)
+
+            if not final_poems_to_save:
+                print("No valid poems to generate Markdown file.")
+            else:
+                # Generate markdown file from the final filtered list
+                md_file_path = json_file.replace(".json", ".md")
+                if not md_file_path.endswith(".md"):
+                    md_file_path = json_file + ".md"
+                generate_markdown(final_poems_to_save, md_file_path, args.repository_url)
+                print(f"Generated markdown file: {md_file_path}")
 
     except Exception as e:
         error_msg = f"Error during execution: {str(e)}"
         print(error_msg)
         run_stats["errors"].append(error_msg)
 
-    write_log_summary()
+    write_log_summary(args.repository_url, model_name_to_use)
+
+# Functions moved from cleanup_poems.py
+def filter_no_poem_entries(poems_list):
+    """Filters out poems that are considered 'NO_POEM' entries."""
+    # Original filter: exact match or "NO_POEM" in the single line
+    filtered = [
+        poem for poem in poems_list if not (
+            len(poem.get("poem", [])) == 1 and (
+                poem.get("poem", [""])[0] == "\"NO_POEM\"" or
+                "NO_POEM" in poem.get("poem", [""])[0] # Check substring for single line poems
+            )
+        )
+    ]
+    # Second filter: "NO_POEM" substring in any line of multi-line poems
+    # This also implicitly handles the single line case again, but it's fine.
+    further_filtered = [
+        poem for poem in filtered if not any(
+            "NO_POEM" in line for line in poem.get("poem", [])
+        )
+    ]
+    return further_filtered
+
+def generate_markdown(poems, md_file, repository_url):
+    """Generate markdown file from poems."""
+    with open(md_file, 'w', encoding='utf-8') as f:
+        f.write("# Gemini Code Assist - PR Poetry\n\n")
+
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        f.write("## Collection Statistics\n\n")
+        f.write("| Metric | Value |\n")
+        f.write("|--------|-------|\n")
+        f.write(f"| Total Poems in Collection | {len(poems)} |\n")
+        f.write(f"| Repository Processed | {repository_url} |\n")
+        pr_count = len(set((poem.get("repository", ""), poem.get("pr_number", "")) for poem in poems))
+        f.write(f"| Unique PRs with Poems (in this update) | {pr_count} |\n")
+        f.write(f"| Last Updated | {timestamp} |\n\n")
+
+        sorted_poems = sorted(poems, key=lambda p: (p.get("repository", "").lower(), p.get("pr_number", 0), p.get("link", "")))
+
+        for poem in sorted_poems:
+            f.write("---\n\n")
+            for line in poem.get("poem", []):
+                if line.strip():
+                    if not line.startswith(" "):
+                        f.write(f"  {line}  \n")
+                    else:
+                        f.write(f"  {line}  \n")
+                else:
+                    f.write("\n")
+            f.write("\n")
+            f.write(f"  <{poem.get('link')}>\n")
+            f.write(f"  \n  _From: {poem.get('repository')} PR #{poem.get('pr_number', 'N/A')}_\n\n")
+
+def parse_repo_url(url: str) -> tuple[str | None, str | None]:
+    """
+    Parses a GitHub repository URL to extract owner and repository name.
+    Supports HTTPS and SSH formats.
+    e.g., https://github.com/owner/repo or git@github.com:owner/repo.git
+    Returns (owner, repo) or (None, None) if parsing fails.
+    """
+    # Try parsing as HTTPS URL
+    parsed_url = urlparse(url)
+    if parsed_url.scheme == 'https' and parsed_url.hostname == 'github.com':
+        path_parts = parsed_url.path.strip('/').split('/')
+        if len(path_parts) >= 2:
+            owner = path_parts[0]
+            repo = path_parts[1].replace('.git', '')
+            return owner, repo
+
+    # Try parsing as SSH URL
+    ssh_match = re.match(r"git@github\.com:([^/]+)/([^.]+)\.git$", url)
+    if ssh_match:
+        owner = ssh_match.group(1)
+        repo = ssh_match.group(2)
+        return owner, repo
+
+    # Try parsing as SSH URL without .git suffix
+    ssh_match_no_suffix = re.match(r"git@github\.com:([^/]+)/([^.]+)$", url)
+    if ssh_match_no_suffix:
+        owner = ssh_match_no_suffix.group(1)
+        repo = ssh_match_no_suffix.group(2)
+        return owner, repo
+
+    # Fallback for URLs like https://github.com/owner/repo/ (with trailing slash)
+    if parsed_url.scheme == 'https' and parsed_url.hostname == 'github.com':
+        path_parts = parsed_url.path.strip('/').split('/')
+        if len(path_parts) >= 2 : # Allow for extra parts like /pulls, /issues etc.
+            owner = path_parts[0]
+            repo = path_parts[1].replace('.git', '')
+            return owner, repo
+
+    return None, None
 
 if __name__ == "__main__":
-    print("Starting script...")
-    print(f"GitHub token available: {bool(Config.GITHUB_TOKEN)}")
+    # print("Starting script...") # Moved to main
+    # print(f"GitHub token available: {bool(Config.GITHUB_TOKEN)}") # Less verbose, can be logged if needed
     main()
     print("Script completed.")

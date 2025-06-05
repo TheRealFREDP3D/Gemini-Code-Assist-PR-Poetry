@@ -5,7 +5,6 @@ This provides a centralized logging system with file rotation.
 
 import os
 import logging
-import glob
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
 
@@ -32,71 +31,50 @@ class PoemLogger:
         self.logger.addHandler(console_handler)
         
         # Add file handler with rotation
-        log_file = self._get_log_file()
+        self.log_file_path = os.path.join(self.logs_dir, "collection_activity.log")
         file_handler = RotatingFileHandler(
-            log_file,
+            self.log_file_path,
             maxBytes=self.max_log_size_bytes,
-            backupCount=10
+            backupCount=10 # Keeps up to 10 backup files
         )
         file_handler.setLevel(logging.INFO)
         file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
         file_handler.setFormatter(file_formatter)
         self.logger.addHandler(file_handler)
-    
-    def _get_log_file(self):
-        """Get the next available log file name."""
-        # Check for existing log files
-        existing_logs = glob.glob(os.path.join(self.logs_dir, "log*.md"))
-        
-        if not existing_logs:
-            return os.path.join(self.logs_dir, "log.md")
-        
-        # Check if the latest log file is under the size limit
-        latest_log = max(existing_logs, key=os.path.getctime)
-        
-        if os.path.getsize(latest_log) < self.max_log_size_bytes:
-            return latest_log
-        
-        # Create a new log file with incremented number
-        if latest_log == os.path.join(self.logs_dir, "log.md"):
-            return os.path.join(self.logs_dir, "log1.md")
-        
-        # Extract number from log file name
-        base_name = os.path.basename(latest_log)
-        num = int(base_name[3:-3]) + 1
-        return os.path.join(self.logs_dir, f"log{num}.md")
-    
-    def write_run_summary(self, run_stats):
-        """Write a summary of the run to the log file."""
-        log_file = self._get_log_file()
+
+    def write_run_summary(self, run_stats, repository_url, model_name_to_use):
+        """Write a simplified summary of the run to the log file."""
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
-        with open(log_file, 'a', encoding='utf-8') as f:
-            f.write(f"# Run Summary - {timestamp}\n\n")
-            
-            # Write statistics
-            f.write("## Statistics\n")
-            f.write(f"- New poems: {run_stats['new_poems']}\n")
-            f.write(f"- Total poems: {run_stats['total_poems']}\n")
-            f.write(f"- Repositories checked: {len(run_stats['repositories_checked'])}\n")
-            f.write(f"- PRs checked: {run_stats['prs_checked']}\n")
-            f.write(f"- Models used: {', '.join(run_stats['models_used'])}\n\n")
-            
-            # Write duplicates
-            if run_stats["duplicates"]:
-                f.write("## Duplicates\n")
-                for dup in run_stats["duplicates"]:
-                    f.write(f"- {dup['repository']} PR #{dup['pr_number']} - {dup['link']}\n")
-                f.write("\n")
-            
-            # Write errors
-            if run_stats["errors"]:
-                f.write("## Errors\n")
-                for error in run_stats["errors"]:
-                    f.write(f"- {error}\n")
-                f.write("\n")
-            
-            f.write("---\n\n")
+        summary_lines = []
+        summary_lines.append(f"# Run Summary - {timestamp}")
+        summary_lines.append(f"- Repository Processed: {repository_url}")
+        summary_lines.append(f"- Model Used: {model_name_to_use}")
+        summary_lines.append(f"- New poems found: {run_stats.get('new_poems', 0)}")
+        summary_lines.append(f"- Total poems in collection (after run): {run_stats.get('total_poems', 0)}")
         
-        self.logger.info(f"Run summary written to {log_file}")
-        return log_file
+        duplicates = run_stats.get("duplicates", [])
+        if duplicates:
+            summary_lines.append("\n## Duplicates Found During This Run")
+            for dup in duplicates:
+                summary_lines.append(f"- Link: {dup.get('link', 'N/A')}")
+                if 'repository' in dup and 'pr_number' in dup:
+                    summary_lines.append(f"  (From: {dup['repository']} PR #{dup['pr_number']})")
+        
+        errors = run_stats.get("errors", [])
+        if errors:
+            summary_lines.append("\n## Errors")
+            for error in errors:
+                summary_lines.append(f"- {error}")
+        
+        summary_lines.append("\n---\n")
+        
+        # Log each line of the summary
+        # To maintain the multi-line format in the log, we can log it as a single block
+        # or iterate and log. Iterating might be cleaner with standard logger format.
+        # However, for a distinct block, logging a pre-formatted string is common.
+        summary_message = "\n" + "\n".join(summary_lines) # Add a leading newline for separation
+        self.logger.info(summary_message)
+        
+        self.logger.info(f"Run summary appended to {self.log_file_path}")
+        return self.log_file_path
