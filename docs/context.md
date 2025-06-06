@@ -1,19 +1,14 @@
 # System Context
 
-## I am working on a software system with the following directory structure, architecture, and analyzed files:
+## Current Directory Structure (Simplified)
 
-## Directory Structure
 ```
 Gemini-Code-Assist-PR-Poetry
 ├── docs
 │   ├── drawio-diagrams
-│   │   ├── overview-full.drawio
-│   │   ├── overview-min.drawio
-│   │   └── v0.4.0-LLM-overview-full.drawio
+│   │   └── overview-min.drawio
 │   ├── mermaid-diagrams
 │   │   ├── diagram-rate-limiting.md
-│   │   ├── diagram-sequences.md
-│   │   ├── overview-full.md
 │   │   └── overview-min.md
 │   ├── podcast
 │   │   └── DeepDive-Podcast-Gemini-Code-Assist-PR-Poetry-Collection.mp4
@@ -31,73 +26,47 @@ Gemini-Code-Assist-PR-Poetry
 │   ├── header.jpg
 │   ├── output.jpg
 │   ├── overview-basic.jpg
-│   ├── overview-full.jpg
 │   └── stats.jpg
-├── llm_client
-│   ├── custom_llm_model.json
-│   └── README.md
+├── logs
+│   └── collection_activity.log (example, actual name may vary if backups are created)
 ├── src
 │   ├── __init__.py
 │   ├── config.py
 │   ├── error_handler.py
 │   ├── llm_client_template.py
-│   ├── logger.py
-│   └── README.md
+│   └── logger.py
 ├── tests
 │   ├── test_llm_client_template.py
 │   ├── test_poem_extraction.py
 │   └── test_script.py
-├── utils
-│   ├── PullPal-env-sample
-│   ├── PullPal-gitignore
-│   ├── PullPal-init.py
-│   ├── PullPal-LICENSE
-│   ├── PullPal-README.md
-│   ├── PullPal-review.md
-│   ├── PullPal-setup.py
-│   └── PullPal.py
+├── .env.example
+├── .gitignore
 ├── CHANGELOG.md
-├── cleanup_poems.py
 ├── gem-flowers.md
+├── gem-flowers.json
 ├── get_new_flowers.py
 ├── LICENSE
-├── package-lock.json
 ├── README.md
 ├── requirements.txt
-├── run.bat
-├── run.sh
 └── SECURITY.md
-
 ```
 
-## Mermaid Diagram
+## Simplified System Diagram
+
 ```mermaid
 graph TD
-
-    1116["Poem Cleanup Script<br>Python"]
-    1117["PR Fetcher Script<br>Python CLI"]
-    1118["User<br>External Actor"]
-    subgraph 1111["External Systems"]
-        1119["GitHub API<br>GitHub"]
-        1120["LLM APIs<br>LiteLLM, OpenAI, Azure, etc."]
-    end
-    subgraph 1112["Poem Processing System<br>Python"]
-        1113["Poem Collector Script<br>Python"]
-        1114["Core Logic Modules<br>Python"]
-        1115["LLM Client Config<br>JSON"]
-        %% Edges at this level (grouped by source)
-        1113["Poem Collector Script<br>Python"] -->|uses| 1114["Core Logic Modules<br>Python"]
-        1113["Poem Collector Script<br>Python"] -->|loads| 1115["LLM Client Config<br>JSON"]
-    end
-    %% Edges at this level (grouped by source)
-    1118["User<br>External Actor"] -->|runs| 1113["Poem Collector Script<br>Python"]
-    1118["User<br>External Actor"] -->|runs| 1116["Poem Cleanup Script<br>Python"]
-    1118["User<br>External Actor"] -->|runs| 1117["PR Fetcher Script<br>Python CLI"]
-    1113["Poem Collector Script<br>Python"] -->|fetches PR data from| 1119["GitHub API<br>GitHub"]
-    1117["PR Fetcher Script<br>Python CLI"] -->|fetches PR data from| 1119["GitHub API<br>GitHub"]
-    1114["Core Logic Modules<br>Python"] -->|calls| 1120["LLM APIs<br>LiteLLM, OpenAI, Azure, etc."]
-
+    A["User"] -->|runs| B["get_new_flowers.py (Poem Collector Script)"];
+    B -->|uses| C["src/ (Core Logic Modules)"];
+    B -->|fetches PR data from| D["GitHub API"];
+    C -->|calls LLM via LiteLLMClient| E["LLM APIs (e.g., Gemini, OpenAI, Anthropic)"];
+    B -->|writes| F["gem-flowers.json (Data)"];
+    B -->|writes| G["gem-flowers.md (Markdown)"];
+    B -->|writes| H["logs/ (Log files)"];
 ```
 
-## Analyzed Files
+## Overview
 
+The system now centers around the `get_new_flowers.py` script. This script takes a GitHub repository URL and an LLM model name as input. It fetches pull request data from the specified repository, extracts comments, and uses the designated LLM (via LiteLLM, as implemented in `src/llm_client_template.py`) to identify and extract poems from these comments.
+
+The collected poems are saved in `gem-flowers.json` and a human-readable Markdown version is generated in `gem-flowers.md`. Configuration primarily involves setting a `GITHUB_TOKEN` and any necessary API keys for the chosen LLM provider as environment variables (typically in a `.env` file). The `src/` directory contains modules for configuration (`config.py`), error handling (`error_handler.py`), logging (`logger.py`), and the LiteLLM client logic (`llm_client_template.py`).
+The previous complex model fallback, search functionalities, and separate cleanup script have been removed to simplify the application.

@@ -1,25 +1,27 @@
 # Gemini Code Assist PR Poetry Cheatsheet
 
-## Basic usage with your repository
-python get_new_flowers.py
+## Basic usage (replace placeholders)
+```bash
+python get_new_flowers.py <URL_TO_GITHUB_REPO> --model <MODEL_PROVIDER/MODEL_NAME>
+```
 
-## Search public repositories and preview results without saving
-python get_new_flowers.py --search --max-repos=10 --dry-run
+## Example with specific repository and model
+```bash
+python get_new_flowers.py https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry --model gemini/gemini-1.5-flash
+```
 
-## Clear cache and check a specific repository
-python get_new_flowers.py --owner="some-user" --repo="some-repo" --clear-cache
+## Specify maximum Pull Requests to check
+```bash
+python get_new_flowers.py <URL_TO_GITHUB_REPO> --model <MODEL_PROVIDER/MODEL_NAME> --max-prs 50
+```
 
-## Process many PRs without caching
-python get_new_flowers.py --search --max-prs=500 --no-cache
+## Specify a different output JSON file
+```bash
+python get_new_flowers.py <URL_TO_GITHUB_REPO> --model <MODEL_PROVIDER/MODEL_NAME> --output my_poems.json
+```
+*(Note: The Markdown file will be named based on the JSON output file, e.g., `my_poems.md`)*
 
-## Run in interactive wizard mode
-python get_new_flowers.py --wizard
-
-## Use the short form for wizard mode
-python get_new_flowers.py -w
-
-## Use only local Ollama models for LLM processing
-python get_new_flowers.py --ollama
-
-## Combine options
-python get_new_flowers.py --search --max-repos=5 --ollama
+## Get help on command-line options
+```bash
+python get_new_flowers.py --help
+```

@@ -21,7 +21,7 @@ Maybe it's beautiful.
 
 📖 A growing collection of these poetry nuggets lives in [`gem-flowers.md`](./gem-flowers.md) and [`gem-flowers.json`](./gem-flowers.json).
 
-💻 I made a tool to automatically collect these gems from your GitHub repositories and any public repositories. Go try it out and start a collection of your own!
+💻 I made a tool to automatically collect these gems from a specified GitHub repository. Go try it out and start a collection of your own!
 
 ---
 
@@ -35,119 +35,82 @@ I bet some gems will surface soon enough. ✨
 
 ### Automated Collection
 
-You can use the provided scripts to automatically collect poems from GitHub repositories:
+You can use the provided script to automatically collect poems from a GitHub repository:
 
 ```bash
 # Install dependencies
-pip install requests gitpython tqdm litellm python-dotenv
+pip install requests litellm python-dotenv tqdm
 
-# On Linux/macOS - use the run.sh script
-./run.sh
+# Run the Python script directly:
+# Replace <URL_TO_GITHUB_REPO> with the actual repository URL.
+# Replace <MODEL_PROVIDER/MODEL_NAME> with the LiteLLM model string (optional, defaults to gemini/gemini-1.5-flash).
+python get_new_flowers.py <URL_TO_GITHUB_REPO> --model <MODEL_PROVIDER/MODEL_NAME>
 
-# On Windows - use the run.bat script
-run.bat
+# Example with a specific model and repository:
+python get_new_flowers.py https://github.com/TheRealFREDP3D/Gemini-Code-Assist-PR-Poetry --model gemini/gemini-1.5-flash
 
-# Or run the Python script directly
-python get_new_flowers.py --model="gemini/gemini-1.5-flash"
+# Other options:
+# --max-prs : Maximum number of PRs to check (default: 100)
+# --output : Output JSON file (default: gem-flowers.json)
+# --model : Specify the LLM model to use (e.g., 'ollama/llama2', 'claude-3-haiku-20240307')
 
-# Search for poems across multiple public repositories
-python get_new_flowers.py --search --max-repos=10
-
-# See all options
+# See all options:
 python get_new_flowers.py --help
 ```
 
 ### Configuration
 
-The script can be configured using environment variables in a `.env` file:
+The script requires a GitHub token and potentially API keys for your chosen LLM provider. These should be set as environment variables. You can place them in a `.env` file in the project root, and they will be loaded automatically.
 
+**.env.example:**
 ```env
-# Default LLM
-GITHUB_TOKEN=your_github_token
+# Required: GitHub token for accessing repository data
+GITHUB_TOKEN=your_github_token_here
 
-# Specify the LLM model to use (e.g., 'gemini/gemini-1.5-flash', 'ollama/llama2')
-# If not specified, the default model will be used.
-# MODEL=gemini/gemini-1.5-flash
-
-# Fallback LLM
-GEMINI_API_KEY=your_gemini_api_key
+# Optional: LLM Provider API Keys (handled by LiteLLM)
+# LiteLLM will automatically look for standard environment variables for different providers.
+# For example:
+# GOOGLE_API_KEY=your_google_api_key_here (for Gemini models)
+# OPENAI_API_KEY=your_openai_api_key_here
+# ANTHROPIC_API_KEY=your_anthropic_api_key_here
+# COHERE_API_KEY=your_cohere_api_key_here
+# Add other keys as needed for your chosen provider.
 
 # Optional LiteLLM Logging (uncomment to enable)
 # LITELLM_LOGGING=True
 # LITELLM_LOG=DEBUG
 ```
+Refer to the [LiteLLM documentation](https://docs.litellm.ai/docs/providers) for details on environment variables for specific LLM providers.
 
 ### Key Features
 
-- Collects poems from any public GitHub repository
-- Adds new poems to the top of the file (LIFO order)
-- Avoids duplicates
-- Includes metadata about the source repository and PR
-- Uses LLM models to identify poems in comments
-- Specifies the LLM model to use (e.g., 'gemini/gemini-1.5-flash', 'ollama/llama2')
-- Automatically falls back to alternative models when rate limits are encountered
-- Intelligently tracks failed models to avoid retrying them
-- Logs detailed information about the collection process
-- Supports multiple LLM providers (OpenAI, Azure, Gemini, Ollama, etc.)
+- Collects poems from a user-specified GitHub repository via its URL.
+- Adds new poems to the collection, avoiding duplicates based on comment links.
+- Includes metadata about the source repository and PR.
+- Uses a user-specified LLM model (via LiteLLM) to identify poems in comments.
+- Logs detailed information about the collection process.
+- Generates both Markdown and JSON output of the collected poems.
 
 ### Output Formats
 
-- **Markdown**: Human-readable format in `gem-flowers.md`
-- **JSON**: Machine-readable format in `gem-flowers.json`
-
-### Advanced Usage
-
-```bash
-# Specify a repository to check
-python get_new_flowers.py --owner="username" --repo="repository"
-
-# Limit the number of PRs to check
-python get_new_flowers.py --max-prs=20
-
-# Search across multiple repositories
-python get_new_flowers.py --search --max-repos=10
-
-# Use only local Ollama models for LLM processing
-python get_new_flowers.py --ollama
-
-# Specify the LLM model to use
-python get_new_flowers.py --model="gemini/gemini-1.5-flash"
-
-# Run in interactive wizard mode
-python get_new_flowers.py --wizard
-# or use the short form
-python get_new_flowers.py -w
-```
-
-### Wizard Mode
-
-The script includes an interactive wizard mode that guides you through setting up the parameters:
-
-- Run with `--wizard` or `-w` flag
-- Displays default values in brackets [like this]
-- Press Enter to use the default value or type a new value
-- Provides a summary of your configuration before starting
+- **Markdown**: Human-readable format in `gem-flowers.md` (automatically generated from the JSON).
+- **JSON**: Machine-readable format in `gem-flowers.json`.
 
 See [CHANGELOG.md](./CHANGELOG.md) for version history and updates.
 
 ## Project Structure
 
-- `get_new_flowers.py` - Main script for collecting poems
-- `cleanup_poems.py` - Script for cleaning up the poem collection
-- `run.sh` - Shell script to run collection and cleanup (Linux/macOS)
-- `run.bat` - Batch script to run collection and cleanup (Windows)
-- `gem-flowers.md` - Human-readable collection of poems
-- `gem-flowers.json` - Machine-readable collection of poems
+- `get_new_flowers.py` - Main script for collecting and processing poems.
+- `gem-flowers.md` - Human-readable collection of poems.
+- `gem-flowers.json` - Machine-readable collection of poems.
 - `src/` - Core modules for the project
   - `config.py` - Configuration management
   - `error_handler.py` - Centralized error handling
-  - `logger.py` - Logging system with file rotation
-  - `llm_client_template.py` - Template for LLM clients
-- `llm_client/` - LLM client implementations and configuration
-- `logs/` - Log files with detailed information about collection runs
-- `tests/` - Test scripts and utilities
-- `utils/` - Utility scripts and tools
-  - `PullPal` - Tool for fetching and saving complete PR conversations
+  - `logger.py` - Logging system using `collection_activity.log` with rotation.
+  - `llm_client_template.py` - Defines `LiteLLMClient` for LLM interaction.
+- `logs/` - Contains `collection_activity.log` with detailed information about collection runs.
+- `tests/` - Test scripts and utilities.
+- `docs/` - Project documentation, diagrams, and related assets.
 
 ---
 
@@ -156,12 +119,8 @@ See [CHANGELOG.md](./CHANGELOG.md) for version history and updates.
 
 ---
 
-## Visual Overview - (Made with - CodeViz VSCode Extension)
+## Visual Overview
 
 ![Visual Overview - Basic](docs/overview-basic.jpg)
-
----
-
-![Visual Overview - Full](docs/overview-full.jpg)
 
 ---
