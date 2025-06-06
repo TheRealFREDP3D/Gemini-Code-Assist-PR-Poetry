@@ -10,9 +10,6 @@ import litellm
 # import subprocess # subprocess is no longer used
 from urllib.parse import urlparse
 
-import re # Added for parse_repo_url
-from urllib.parse import urlparse # Ensure urlparse is imported
-
 # Import our custom modules
 from src.config import Config
 from src.error_handler import ErrorHandler
@@ -46,7 +43,6 @@ def get_pull_requests(owner, repo):
 
     while True:
         url = PR_LIST_URL.format(owner=owner, repo=repo)
-        # print(f"Fetching PRs from {url}?page={page}&state=all&per_page=100") # Verbose
         response = requests.get(f"{url}?page={page}&state=all&per_page=100", headers=HEADERS)
 
         if response.status_code != 200:
@@ -54,7 +50,6 @@ def get_pull_requests(owner, repo):
             break
 
         results = response.json()
-        # print(f"Got {len(results)} results for page {page}") # Verbose
         if not results:
             break
 
@@ -70,7 +65,6 @@ def get_pull_requests(owner, repo):
 def get_comments_for_pr(owner, repo, pr_number):
     """Fetch all comments for a given PR."""
     url = PR_COMMENTS_URL.format(owner=owner, repo=repo, pr_number=pr_number)
-    # print(f"Fetching comments from {url}") # Verbose
     response = requests.get(url, headers=HEADERS)
 
     if response.status_code != 200:
@@ -78,13 +72,11 @@ def get_comments_for_pr(owner, repo, pr_number):
         return []
 
     comments = response.json()
-    # print(f"Found {len(comments)} comments for PR #{pr_number}") # Verbose
     return comments
 
 def get_reviews_for_pr(owner, repo, pr_number):
     """Fetch all reviews for a given PR."""
     url = Config.PR_REVIEWS_URL.format(owner=owner, repo=repo, pr_number=pr_number)
-    # print(f"Fetching reviews from {url}") # Verbose
     response = requests.get(url, headers=HEADERS)
 
     if response.status_code != 200:
@@ -92,13 +84,11 @@ def get_reviews_for_pr(owner, repo, pr_number):
         return []
 
     reviews = response.json()
-    # print(f"Found {len(reviews)} reviews for PR #{pr_number}") # Verbose
     return reviews
 
 def get_comments_from_review(owner, repo, pr_number, review_id):
     """Fetch comments for a specific review."""
     url = Config.PR_REVIEW_COMMENTS_URL.format(owner=owner, repo=repo, pr_number=pr_number, review_id=review_id)
-    # print(f"Fetching comments for review {review_id} from {url}") # Verbose
     response = requests.get(url, headers=HEADERS)
 
     if response.status_code != 200:
@@ -106,7 +96,6 @@ def get_comments_from_review(owner, repo, pr_number, review_id):
         return []
 
     comments = response.json()
-    # print(f"Found {len(comments)} comments for review {review_id}") # Verbose
     return comments
 
 def is_valid_github_url(url):
@@ -207,10 +196,8 @@ def extract_poem_from_comment(comment_body, model_name_to_use):
         poem_text = llm_client.extract_poem(prompt)
 
         if not poem_text or poem_text == "NO_POEM" or "NO_POEM" in poem_text:
-            # print(f"    LiteLLM ({model_name_to_use}) found no poem or indicated NO_POEM.") # Less verbose
             return (None, None)
 
-        # print(f"    LiteLLM response from {model_name_to_use}: {poem_text[:100]}...") # Less verbose
         return _process_llm_response(poem_text, comment_body, lines)
 
     except Exception as e:
@@ -320,21 +307,28 @@ def collect_poems_from_repo(owner, repo, model_name_to_use, max_prs=100):
 
         comments = get_comments_for_pr(owner, repo, pr_number)
         for comment in comments:
-            # print(f"    Comment from user: {comment['user']['login']}") # Verbose
-            if "gemini-code-assist" in comment["user"]["login"].lower():
-                if entry := _process_gemini_comment(comment, owner, repo, pr_number, model_name_to_use=model_name_to_use):
-                    poems.append(entry)
+            try:
+                if "gemini-code-assist" in comment["user"]["login"].lower():
+                    if entry := _process_gemini_comment(comment, owner, repo, pr_number, model_name_to_use=model_name_to_use):
+                        poems.append(entry)
+            except Exception as e:
+                print(f"    Error processing comment from {comment['user']['login']} in PR #{pr_number}: {e}")
+                error_handler.handle_litellm_error(e, model_name_to_use)
+                continue # Continue to next comment even if one fails
 
         reviews = get_reviews_for_pr(owner, repo, pr_number)
         for review in reviews:
-            # print(f"    Review from user: {review['user']['login']}") # Verbose
             if "gemini-code-assist" in review["user"]["login"].lower():
                 review_comments = get_comments_from_review(owner, repo, pr_number, review["id"])
                 for review_comment in review_comments:
-                    # print(f"      Review comment from user: {review_comment['user']['login']}") # Verbose
-                    if "gemini-code-assist" in review_comment["user"]["login"].lower():
-                        if entry := _process_gemini_comment(review_comment, owner, repo, pr_number, model_name_to_use=model_name_to_use, comment_type="review_comment"):
-                            poems.append(entry)
+                    try:
+                        if "gemini-code-assist" in review_comment["user"]["login"].lower():
+                            if entry := _process_gemini_comment(review_comment, owner, repo, pr_number, model_name_to_use=model_name_to_use, comment_type="review_comment"):
+                                poems.append(entry)
+                    except Exception as e:
+                        print(f"      Error processing review comment from {review_comment['user']['login']} in PR #{pr_number}, review {review['id']}: {e}")
+                        error_handler.handle_litellm_error(e, model_name_to_use)
+                        continue # Continue to next review comment even if one fails
 
         time.sleep(0.5)
 
@@ -381,13 +375,11 @@ def main():
         sys.exit(1)
 
     print(f"Processing repository: {args.repository_url}")
-    # print(f"GitHub token available: {bool(Config.GITHUB_TOKEN)}") # Less verbose
 
     json_file = args.output
     new_poems = []
 
     try:
-        # print(f"Checking specified repository: {owner}/{repo}") # Redundant with above
         repo_poems = collect_poems_from_repo(owner, repo, model_name_to_use, args.max_prs)
         new_poems.extend(repo_poems)
         print(f"Collected {len(repo_poems)} initial poems from {owner}/{repo}")
@@ -523,7 +515,5 @@ def parse_repo_url(url: str) -> tuple[str | None, str | None]:
     return None, None
 
 if __name__ == "__main__":
-    # print("Starting script...") # Moved to main
-    # print(f"GitHub token available: {bool(Config.GITHUB_TOKEN)}") # Less verbose, can be logged if needed
     main()
     print("Script completed.")
