@@ -1,7 +1,5 @@
 ![Poem Collector](https://img.shields.io/badge/PR%20Poetry-LLM%20Generated-blueviolet)
-![Auto-updated](https://img.shields.io/badge/auto--update-enabled-brightgreen)
-![Gemini Model](https://img.shields.io/badge/model-gemini%201.5%20flash-orange)
-
+![Auto-updated](https://img.shields.io/badge/auto--update-enabled-brightgreen)  
 
 # 🌸 Gemini Code Assist PR Poetry
 
