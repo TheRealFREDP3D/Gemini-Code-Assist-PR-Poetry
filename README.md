@@ -1,3 +1,5 @@
+![Auto-updated daily](https://img.shields.io/badge/poems-updated%20daily-ff69b4)
+
 # 🌸 Gemini Code Assist PR Poetry
 
 > _“It’s like a tiny flower growing on a big pile of snips.”_  
