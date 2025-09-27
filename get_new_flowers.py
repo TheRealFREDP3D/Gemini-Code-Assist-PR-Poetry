@@ -214,14 +214,14 @@ def _find_or_create_link(comment_body, lines):
     link_line = None
     for line in lines:
         stripped = line.strip()
-        if "github.com" in stripped:
-            # Extract URL
-            url_match = re.search(r'<?(https?://[^\s>]+)>?', stripped)
-            if url_match:
-                url = url_match.group(1)
-                if is_valid_github_url(url):
-                    link_line = f"<{url}>"
-                    break
+        # Extract all URLs from the line and validate each
+        urls = re.findall(r'<?(https?://[^\s>]+)>?', stripped)
+        for url in urls:
+            if is_valid_github_url(url):
+                link_line = f"<{url}>"
+                break
+        if link_line:
+            break
 
     # If no valid GitHub link found, use a default link
     if not link_line:
