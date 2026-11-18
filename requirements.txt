@@ -1,7 +1,10 @@
-requests==2.32.2
-litellm==1.61.15
-python-dotenv==1.0.0
-mistralai==0.1.0
-openai==1.3.0
-azure-ai-inference==1.0.0b9
-azure-core==1.29.4
+requests>=2.31.0
+python-dotenv>=1.0.0
+tqdm>=4.66.0
+
+# Optional - only needed for `--llm-adjudicate` (LLM second opinion):
+# litellm>=1.83.10
+
+# Optional - only needed for `--crew` (CrewAI agent workflow):
+# crewai[tools]>=0.148.0
+# Requires SERPER_API_KEY for the Searcher agent's web search.
