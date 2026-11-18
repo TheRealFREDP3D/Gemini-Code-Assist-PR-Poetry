@@ -1,9 +1,0 @@
-{"litellm_models": [
-    "gemini/gemini-1.5-pro",
-    "gemini/gemini-1.5-flash",
-    "gemini/gemini-1.0-pro",
-    "gemini/gemini-1.5-flash-8b",
-    "ollama/qwen2.5:1.5b",
-    "ollama/3.2:1b-instruct"
-]
-}

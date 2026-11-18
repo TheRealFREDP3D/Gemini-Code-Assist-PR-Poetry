@@ -1,33 +1,14 @@
-/.history
-/.snapshots
-/.env
-/.dev-notes
-/.venv
-/.dev_notes
-/logs
-/__pycache__
+
+
+#Ignore vscode AI rules
+.github\instructions\codacy.instructions.md
+
+# Local secrets / generated data / tooling
+.env
+.venv/
+__pycache__/
 *.pyc
-*.pyo
-.sourcetrail/Gemini-PR-Review-Poetry.srctrlbm
-.sourcetrail/Gemini-PR-Review-Poetry.srctrldb
-.sourcetrail/Gemini-PR-Review-Poetry.srctrlprj
-docs/header.jfif
-appmap.log
-.sourcetrail/Gemini-PR-Review-Poetry.srctrldb_tmp
-/logs/log.md
-/temp
-/node_modules
-package.json
-.gitignore
-.gitignore
-.gitignore
-gem-flowers.json
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-docs/CHANGELOG.md
-=======
-.vscode/PythonImportHelper-v2-Completion.json
->>>>>>> a4dc23cfc6e56c912c5658534e6da3b3cfd17d56
-=======
-.vscode/PythonImportHelper-v2-Completion.json
->>>>>>> Stashed changes
+cache/
+logs/
+output/
+/.DEV_NOTES

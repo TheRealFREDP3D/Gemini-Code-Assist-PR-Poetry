@@ -1,26 +1,27 @@
 @echo off
-REM Run script for Gemini Code Assist PR Poetry Collection
-REM This script runs the main collection program and then cleans up the poems
+REM Launch the Gemini Poetry scanner using uv + .venv.
+REM Usage: run.bat [--top 5] [--repos owner/repo,...] [--user username] [...]
 
-echo === Gemini Code Assist PR Poetry Collection ===
-echo Starting collection process...
+setlocal
+cd /d "%~dp0"
 
-REM Run the main collection script
-python get_new_flowers.py %*
-if %ERRORLEVEL% neq 0 (
-    echo Error: Collection process failed with exit code %ERRORLEVEL%
-    exit /b %ERRORLEVEL%
+:: Ensure uv is available
+where uv >nul 2>&1
+if errorlevel 1 (
+    echo uv is required but not installed. Install: https://docs.astral.sh/uv/getting-started/installation/
+    exit /b 1
 )
 
-echo Collection process completed successfully.
-echo Running cleanup process...
-
-REM Run the cleanup script
-python cleanup_poems.py
-if %ERRORLEVEL% neq 0 (
-    echo Error: Cleanup process failed with exit code %ERRORLEVEL%
-    exit /b %ERRORLEVEL%
+:: Create the .venv with uv if missing
+if not exist ".venv\pyvenv.cfg" (
+    echo Creating .venv with uv...
+    uv venv .venv
 )
 
-echo Cleanup process completed successfully.
-echo === All processes completed ===
+:: Sync dependencies with uv
+uv pip install --python .venv -r requirements.txt --quiet
+
+:: Activate venv and run
+call ".venv\Scripts\activate.bat"
+python scan_poems.py %*
+endlocal

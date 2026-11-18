@@ -1,31 +1,25 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Launch the Gemini Poetry scanner using uv + .venv.
+# Usage: ./run.sh [--top 5] [--repos owner/repo,...] [--user username] [...]
 
-# Run script for Gemini Code Assist PR Poetry Collection
-# This script runs the main collection program and then cleans up the poems
+set -euo pipefail
+cd "$(dirname "$0")"
 
-echo "=== Gemini Code Assist PR Poetry Collection ==="
-echo "Starting collection process..."
-
-# Run the main collection script
-python get_new_flowers.py "$@"
-MAIN_RESULT=$?
-
-if [ $MAIN_RESULT -ne 0 ]; then
-    echo "Error: Collection process failed with exit code $MAIN_RESULT"
-    exit $MAIN_RESULT
+# Ensure uv is available
+if ! command -v uv >/dev/null 2>&1; then
+    echo "uv is required but not installed. Install: https://docs.astral.sh/uv/getting-started/installation/"
+    exit 1
 fi
 
-echo "Collection process completed successfully."
-echo "Running cleanup process..."
-
-# Run the cleanup script
-python cleanup_poems.py
-CLEANUP_RESULT=$?
-
-if [ $CLEANUP_RESULT -ne 0 ]; then
-    echo "Error: Cleanup process failed with exit code $CLEANUP_RESULT"
-    exit $CLEANUP_RESULT
+# Create the .venv with uv if missing
+if [ ! -d ".venv" ]; then
+    echo "Creating .venv with uv..."
+    uv venv .venv
 fi
 
-echo "Cleanup process completed successfully."
-echo "=== All processes completed ==="
+# Sync dependencies with uv
+uv pip install --python .venv -r requirements.txt --quiet
+
+# Activate venv and run
+source .venv/bin/activate
+python scan_poems.py "$@"

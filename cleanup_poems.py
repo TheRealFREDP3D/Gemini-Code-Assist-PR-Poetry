@@ -1,98 +1,108 @@
+#!/usr/bin/env python3
+"""Cleanup helper - deduplicate and re-sort a poems.json archive.
+
+Reads `output/poems.json`, removes near-duplicate poems (same text after
+whitespace normalization OR same repo+PR+first-200-chars), sorts by
+(repo, pr_number, created_at), and writes back.
+
+Usage:
+    python cleanup_poems.py [--input PATH] [--output PATH]
+"""
+
+from __future__ import annotations
+
+import argparse
 import json
-import os
-from datetime import datetime
+import logging
+import re
+import sys
+from pathlib import Path
+from typing import List
 
-def load_poems(json_file):
-    """Load poems from JSON file."""
-    if not os.path.exists(json_file):
-        print(f"Error: {json_file} not found.")
-        return []
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-    try:
-        with open(json_file, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except json.JSONDecodeError:
-        print(f"Error: {json_file} contains invalid JSON.")
-        return []
+from src.config import DEFAULT_OUTPUT_DIR  # noqa: E402
 
-def save_poems(poems, json_file):
-    """Save poems to JSON file."""
-    with open(json_file, 'w', encoding='utf-8') as f:
-        json.dump(poems, f, indent=2)
+log = logging.getLogger("cleanup")
 
-def generate_markdown(poems, md_file):
-    """Generate markdown file from poems."""
-    with open(md_file, 'w', encoding='utf-8') as f:
-        f.write("# Gemini Code Assist - PR Poetry\n\n")
 
-        # Add statistics table at the top
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        f.write("## Collection Statistics\n\n")
-        f.write("| Metric | Value |\n")
-        f.write("|--------|-------|\n")
-        f.write(f"| Total Poems | {len(poems)} |\n")
+def normalize(text: str) -> str:
+    """Lowercase, collapse whitespace, strip punctuation - for fuzzy match."""
+    text = (text or "").lower()
+    text = re.sub(r"[^\w\s]", "", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
 
-        # Count unique repositories
-        repositories = set(poem.get("repository", "") for poem in poems)
-        f.write(f"| Repositories Scanned | {len(repositories)} |\n")
 
-        # Count unique PRs
-        pr_count = len(set((poem.get("repository", ""), poem.get("pr_number", "")) for poem in poems))
-        f.write(f"| PRs Scanned | {pr_count} |\n")
-        f.write(f"| Last Updated | {timestamp} |\n\n")
+def dedupe(records: List[dict]) -> List[dict]:
+    seen_text: set[str] = set()
+    seen_key: set[str] = set()
+    out: List[dict] = []
+    dropped = 0
+    for r in records:
+        poem = r.get("poem", "")
+        norm = normalize(poem)
+        # Key 1: exact normalized poem text (catches cross-repo reposts)
+        if norm and norm in seen_text:
+            dropped += 1
+            continue
+        # Key 2: same repo + PR + first 200 normalized chars
+        key2 = f"{r.get('repo')}|{r.get('pr_number')}|{norm[:200]}"
+        if key2 in seen_key:
+            dropped += 1
+            continue
+        seen_text.add(norm)
+        seen_key.add(key2)
+        out.append(r)
+    log.info("Dedupe: %d -> %d (dropped %d)", len(records), len(out), dropped)
+    return out
 
-        for poem in poems:
-            f.write("---\n\n")
-            # Ensure each line is written separately with proper formatting
-            for line in poem.get("poem", []):
-                # Preserve the original formatting but ensure consistent indentation
-                # Add two spaces at the beginning for consistent indentation
-                if line.strip():
-                    # If the line doesn't start with spaces, add indentation
-                    if not line.startswith(" "):
-                        # Add two spaces at the end of each line for GitHub-flavored Markdown line breaks
-                        f.write(f"  {line}  \n")
-                    else:
-                        # If it already has spaces, preserve them and add two spaces at the end
-                        f.write(f"  {line}  \n")
-                else:
-                    # For empty lines, just write a newline
-                    f.write("\n")
-            f.write("\n")
-            f.write(f"  <{poem.get('link')}>\n")
-            f.write(f"  \n  _From: {poem.get('repository')}_\n\n")
 
-def main():
-    json_file = "gem-flowers.json"
-    md_file = "gem-flowers.md"
-
-    # Load existing poems
-    all_poems = load_poems(json_file)
-    print(f"Loaded {len(all_poems)} poems from {json_file}")
-
-    # Filter out NO_POEM entries
-    filtered_poems = [poem for poem in all_poems if not (
-        len(poem.get("poem", [])) == 1 and (
-            poem.get("poem", [""])[0] == "\"NO_POEM\"" or
-            "NO_POEM" in poem.get("poem", [""])[0]
+def sort_records(records: List[dict]) -> List[dict]:
+    def key(r):
+        return (
+            r.get("repo", "").lower(),
+            int(r.get("pr_number", 0) or 0),
+            r.get("created_at", ""),
         )
-    )]
+    return sorted(records, key=key)
 
-    # Also filter out entries where any line contains NO_POEM
-    filtered_poems = [poem for poem in filtered_poems if not any(
-        "NO_POEM" in line for line in poem.get("poem", [])
-    )]
 
-    print(f"Filtered out {len(all_poems) - len(filtered_poems)} NO_POEM entries")
-    print(f"Remaining poems: {len(filtered_poems)}")
+def main(argv=None) -> int:
+    p = argparse.ArgumentParser(prog="cleanup_poems")
+    p.add_argument("--input", type=str, default=str(DEFAULT_OUTPUT_DIR / "poems.json"))
+    p.add_argument("--output", type=str, default=None, help="Default: overwrite input.")
+    p.add_argument("--verbose", "-v", action="store_true")
+    args = p.parse_args(argv)
 
-    # Save filtered poems back to JSON
-    save_poems(filtered_poems, json_file)
-    print(f"Saved {len(filtered_poems)} poems to {json_file}")
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        datefmt="%H:%M:%S",
+    )
 
-    # Generate markdown file
-    generate_markdown(filtered_poems, md_file)
-    print(f"Generated markdown file: {md_file}")
+    in_path = Path(args.input)
+    if not in_path.exists():
+        log.error("Input file not found: %s", in_path)
+        return 1
+
+    data = json.loads(in_path.read_text(encoding="utf-8"))
+    records = data.get("poems", []) if isinstance(data, dict) else data
+    log.info("Loaded %d records from %s", len(records), in_path)
+
+    cleaned = sort_records(dedupe(records))
+
+    out_path = Path(args.output) if args.output else in_path
+    out_data = {
+        "generated_at": data.get("generated_at") if isinstance(data, dict) else None,
+        "count": len(cleaned),
+        "poems": cleaned,
+    }
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(out_data, indent=2, ensure_ascii=False), encoding="utf-8")
+    log.info("Wrote %d cleaned records to %s", len(cleaned), out_path)
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
